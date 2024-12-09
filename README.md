@@ -25,6 +25,8 @@ The target audience for this program includes casual DnD players and groups who 
 ### Technologies and Platforms:
 The specific technologies or platforms are still being considered for building this program but the focus will be on creating a user-friendly interface that can be easily integrated into DnD sessions.
 
+Currently using: Electron, React, and a very simple implementation of Electron Store
+
 ### Comparison with Existing Solutions:
 Although there are written rules for other free-form magic systems, there are no existing programs that automate and simplify this process for players. This program fills that gap, providing a unique tool that enhances the DnD experience.
 
@@ -33,7 +35,7 @@ My initial goal with this is simply to develop a functional program that can be 
 
 ### Roadmap:
 
-WIP
+See the roadmap [here](./ROADMAP.md).
 
 ### Release Notes:
 
