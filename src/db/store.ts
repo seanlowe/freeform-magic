@@ -12,7 +12,7 @@ class SimpleElectronStore {
     // this.filePath = path.join( userDataPath, fileName )
 
     const { app } = remote
-    const userDataPath = app.getAppPath()
+    const userDataPath = app.getAppPath() + '/storage'
     this.filePath = path.join( userDataPath, fileName )
 
     try {
