@@ -6,8 +6,23 @@
   - [ ] rust
   - [x] electron (it's built on JS/TS and that's what I know best)
 - [x] Decide on basic user experience, (TUI vs. **GUI**)
-- [ ] Decide on which framework(s) to use, if any
-- [ ] Decide on storage / database options
+- [x] Decide on which tools / framework(s) to use, if any
+  - [x] vite
+  - [x] electron-forge
+  - [x] electron
+  - [x] react
+  - [x] typescript
+- [x] Decide on storage / database options
+  - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts)
 - [ ] Come up with a list of possible features and use cases
-- [ ] Create a barebones executable
-- [ ] 
+- [x] Create a barebones executable
+- [ ] Get user login / logout working
+- [ ] Get user role-specific homepages working
+  - [ ] DM page
+  - [ ] Player page
+- [ ] get spell import working
+- [ ] get spell components working
+  - [ ] get custom spell component creation working
+- [ ] get spell creation working
+- [ ] get dice rolling working
+- [ ] get character sheet working
