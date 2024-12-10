@@ -1,7 +1,8 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import started from 'electron-squirrel-startup'
 import { registerHandlers } from './main/handlers'
+import { registerStore } from './db'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if ( started ) {
@@ -36,7 +37,8 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then( async () => {
+  await registerStore()
   registerHandlers()
 
   createWindow()

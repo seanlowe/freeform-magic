@@ -1,36 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Login from './registration/Login'
-import Header from './header/banner'
+import Banner from './header/banner'
 
 const App: React.FC = () => {
   const [ username, setUsername ] = useState<string | null>( '' )
+  
+  useEffect(() => {
+    // Fetch the logged-in user's data from the database or local storage
+    const fetchUser = async () => {
+      const user = await window.api.auth.getCurrentUser()
 
-  // useEffect(() => {
-  //   // Fetch the logged-in user's data from the database or local storage
-  //   const fetchUser = async () => {
-  //     const user = await window.database.getUsers();
-  //     if (user && user.length > 0) {
-  //       setUsername(user[0].username);
-  //     }
-  //   };
-  //   fetchUser();
-  // }, []);
+      if ( user && user.length > 0 ) {
+        setUsername( user[0].username )
+      }
+    }
 
-  const handleLogin = ( username: string | null ) => {
-    setUsername( username )
-  }
-
-  const handleLogout = () => {
-    // Clear user data and reset username
-    // window.database.clearUser();
-    setUsername( null )
-  }
+    fetchUser()
+  }, [] )
 
   return (
     <>
-      {/* <Header username={username} onLogout={handleLogout} /> */}
+      <Banner username={username} />
       <div>
-        <Login onLogin={handleLogin} />
+        <Login />
       </div>
     </>
   )

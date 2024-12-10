@@ -72,8 +72,4 @@ class SimpleElectronStore {
   }
 }
 
-
-
-const store = new SimpleElectronStore()
-
-export { SimpleElectronStore, store }
+export { SimpleElectronStore }

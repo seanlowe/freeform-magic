@@ -1,15 +1,10 @@
 // wrapper for interacting with the SimpleElectronStore for user data
 
-import { checkStoreExistsOrThrow } from '../../db/utilities'
-import { store, SimpleElectronStore } from '../../db/store'
+import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
 import { User } from './user.object'
 
 class UserRepository {
-  private static store: SimpleElectronStore
-
-  constructor() {
-    UserRepository.store = store
-  }
+  private static store: SimpleElectronStore = global.store
 
   static async getUser( username: string ): Promise<User | null> {
     checkStoreExistsOrThrow( this.store )
@@ -21,13 +16,13 @@ class UserRepository {
   static async createUser( user: User ): Promise<void> {
     checkStoreExistsOrThrow( this.store )
 
-    await this.store.set( user.username, user )
+    this.store.set( user.username, user )
   }
 
   static async deleteUser( username: string ): Promise<void> {
     checkStoreExistsOrThrow( this.store )
 
-    await this.store.delete( username )
+    this.store.delete( username )
   }
 }
 

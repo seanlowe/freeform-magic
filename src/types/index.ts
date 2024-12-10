@@ -17,5 +17,4 @@ export interface LoginFormData {
 
 export interface BannerProps {
   username: string | null;
-  onLogout: () => void;
 }

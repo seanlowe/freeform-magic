@@ -1,5 +1,8 @@
+/* eslint-disable no-var */
+
+import { SimpleElectronStore } from './db/store'
+
 export interface IElectronAPI {
-  // loadPreferences: () => Promise<void>,
   auth: {
     login: ( username: string, password: string ) => Promise<void>,
     logout: () => Promise<void>,
@@ -13,6 +16,7 @@ export interface IElectronAPI {
 }
 
 declare global {
+  var store: SimpleElectronStore
   interface Window {
     api: IElectronAPI
   }

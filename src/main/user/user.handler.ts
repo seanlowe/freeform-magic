@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ipcMain } from 'electron'
 import { CreateUserDto } from './create-user.dto'
 import { User } from './user.object'

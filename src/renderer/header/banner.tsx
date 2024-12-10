@@ -9,14 +9,11 @@ import {
   dropdownButtonStyle,
   placeholderStyle
 } from './styles'
-import UserRepository from '../../main/user/user.repository'
 
-const Banner: React.FC<BannerProps> = async ({ username, onLogout }) => {
+const Banner: React.FC<BannerProps> = ({ username }) => {
   const [ dropdownOpen, setDropdownOpen ] = useState( false )
 
-  // const currentUser = window.api.database.invoke()
-  const currentUser = await UserRepository.getUser( username ?? '' )
-  const un = currentUser?.username ?? username
+  const un = username
 
   const toggleDropdown = () => {
     return setDropdownOpen( !dropdownOpen ) 
@@ -32,7 +29,7 @@ const Banner: React.FC<BannerProps> = async ({ username, onLogout }) => {
           </span>
           {dropdownOpen && (
             <div style={dropdownStyle}>
-              <button onClick={onLogout} style={dropdownButtonStyle}>
+              <button onClick={window.api.auth.logout} style={dropdownButtonStyle}>
                 Log Out
               </button>
             </div>

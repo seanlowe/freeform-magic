@@ -3,7 +3,7 @@ import { LoginFormData } from '../../types'
 import { User } from '../../main/user/user.object'
 
 const Login: React.FC = () => {
-  const [ formData, setFormData ] = useState<LoginFormData | null>( null )
+  const [ formData, setFormData ] = useState<LoginFormData>({ username: '', password: '' })
   const [ currentUser, setCurrentUser ] = useState<User | null>( null )
   const [ error, setError ] = useState<string>( '' )
 
@@ -17,13 +17,9 @@ const Login: React.FC = () => {
     e.preventDefault()
 
     const { name, value } = e.target
-    setFormData(( prevState ) => {
-      if ( prevState ) {
-        return {
-          ...prevState,
-          [name]: value,
-        }
-      }
+    setFormData({
+      ...formData,
+      [name]: value,
     })
   }
 
@@ -35,7 +31,6 @@ const Login: React.FC = () => {
     }
 
     const { username, password } = formData
-
     if ( !username || !password ) {
       return setError( 'Please enter a username and password' )
     }
@@ -50,7 +45,10 @@ const Login: React.FC = () => {
 
   const handleLogout = async () => {
     setError( '' )
-    setFormData( null )
+    setFormData({
+      username: '',
+      password: '',
+    })
 
     window.api.auth.logout().then(() => {
       return console.log( 'success' ) 
