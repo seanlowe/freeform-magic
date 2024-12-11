@@ -212,7 +212,7 @@ const Auth: React.FC = () => {
         )}
         <button
           type='submit'
-          disabled={!passwordsMatch}
+          disabled={view === 'register' && !passwordsMatch}
         >
           {view === 'login' ? 'Login' : 'Register'}
         </button>
