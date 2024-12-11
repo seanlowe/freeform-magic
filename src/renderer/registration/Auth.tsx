@@ -9,7 +9,7 @@ const Auth: React.FC = () => {
     username: '',
     password: '',
   })
-  const [ view, setView ] = useState<'login' | 'register'>( 'login' )
+  const [ view, setView ] = useState<'hidden' | 'login' | 'register'>( 'login' )
   // const [ currentUser, setCurrentUser ] = useState<User | null>( null )
   const [ confirmPassword, setConfirmPassword ] = useState( '' )
   const [ passwordsMatch, setPasswordsMatch ] = useState( false )
@@ -54,6 +54,7 @@ const Auth: React.FC = () => {
 
     // login the new user
     await window.api.auth.login( newUser.username, newUser.password )
+    setView( 'hidden' )
 
     return
   }
@@ -87,7 +88,8 @@ const Auth: React.FC = () => {
       return
     }
 
-    window.api.auth.login( username, password )
+    await window.api.auth.login( username, password )
+    setView( 'hidden' )
   }
 
   // const handleLogout = async () => {
@@ -151,6 +153,10 @@ const Auth: React.FC = () => {
         {passwordsMatch ? '✓' : '✗'}
       </span>
     )
+  }
+
+  if ( view === 'hidden' ) {
+    return <></>
   }
 
   return (
@@ -217,7 +223,7 @@ const Auth: React.FC = () => {
           {view === 'login' ? 'Login' : 'Register'}
         </button>
         {view === 'login' ? displayRegisterLink() : displayLoginLink()}
-        {error && <div className='error'>{error}</div>}
+        {error && <div className='error' style={{ color: 'red' }}>{error}</div>}
       </form>
     </div>
   )
