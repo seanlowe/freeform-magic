@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { BannerProps } from '../../types'
+import React, { useEffect, useState } from 'react'
 import {
   headerStyle,
   titleStyle,
@@ -10,10 +9,22 @@ import {
   placeholderStyle
 } from './styles'
 
-const Banner: React.FC<BannerProps> = ({ username }) => {
+const Banner: React.FC = () => {
   const [ dropdownOpen, setDropdownOpen ] = useState( false )
+  const [ username, setUsername ] = useState<string | null>( '' )
+  
+  useEffect(() => {
+    // Fetch the logged-in user's data from the database or local storage
+    const fetchUser = async () => {
+      const user = await window.api.auth.getCurrentUser()
 
-  const un = username
+      if ( user && user.length > 0 ) {
+        setUsername( user[0].username )
+      }
+    }
+
+    fetchUser()
+  }, [] )
 
   const toggleDropdown = () => {
     return setDropdownOpen( !dropdownOpen ) 
@@ -22,10 +33,10 @@ const Banner: React.FC<BannerProps> = ({ username }) => {
   return (
     <header style={headerStyle}>
       <h1 style={titleStyle}>D&D Spell Helper</h1>
-      {un ? (
+      {username ? (
         <div style={userContainerStyle}>
           <span onClick={toggleDropdown} style={usernameStyle}>
-            {un} ▾
+            {username} ▾
           </span>
           {dropdownOpen && (
             <div style={dropdownStyle}>

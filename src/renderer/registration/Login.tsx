@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { LoginFormData } from '../../types'
+import { AuthProps, LoginFormData } from '../../types'
 import { User } from '../../main/user/user.object'
+import ErrorObject from '../../main/error/error.object'
 
-const Login: React.FC = () => {
+const Login: React.FC<AuthProps> = ({ toggleView }) => {
   const [ formData, setFormData ] = useState<LoginFormData>({ username: '', password: '' })
   const [ currentUser, setCurrentUser ] = useState<User | null>( null )
   const [ error, setError ] = useState<string>( '' )
 
-  useEffect(() => {  
+  useEffect(() => {
     window.api.auth.getCurrentUser().then(( user ) => {
-      setCurrentUser( user )
+      if ( user ) {
+        setCurrentUser( user )
+      }
     })
   }, [] )
 
@@ -26,10 +29,6 @@ const Login: React.FC = () => {
   const handleSubmit = async ( e: React.FormEvent ) => {
     e.preventDefault()
 
-    if ( !formData ) {
-      return setError( 'Please enter a username and password' )
-    }
-
     const { username, password } = formData
     if ( !username || !password ) {
       return setError( 'Please enter a username and password' )
@@ -38,9 +37,19 @@ const Login: React.FC = () => {
     // hash password before login
     // const hashedPassword = await crypto.hash( formData.password, 10 )
 
-    window.api.auth.login( username, password ).then(() => {
-      return console.log( 'success' )
-    })
+    const user = await window.api.database.users.getUser( username )
+    // if ( user === undefined ) {
+    //   // jump to registration page with username prefilled
+    //  return
+    // }
+
+    console.log({ user, blah: user instanceof ErrorObject })
+    if ( user instanceof ErrorObject ) {
+      setError( 'that user cannot be found' )
+      return
+    }
+
+    window.api.auth.login( username, password )
   }
 
   const handleLogout = async () => {
@@ -51,7 +60,7 @@ const Login: React.FC = () => {
     })
 
     window.api.auth.logout().then(() => {
-      return console.log( 'success' ) 
+      return console.log( 'logout' ) 
     })
   }
 
@@ -87,6 +96,11 @@ const Login: React.FC = () => {
             />
           </div>
           <button type='submit'>Login</button>
+          <p> Need an account? <strong><a onClick={() => {
+            return toggleView( 'register' ) 
+          }} style={{ marginLeft: '16px', cursor: 'pointer' }}>
+            Register
+          </a></strong></p>
           {error && <div className='error'>{error}</div>}
         </form>
       )}

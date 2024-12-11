@@ -1,10 +1,3 @@
-// export interface User {
-//   id: string;
-//   username: string;
-//   passwordHash: string; // Store hashed passwords
-//   role: 'Player' | 'Dungeon Master';
-// }
-
 export enum userRole {
   player = 'player',
   dungeonMaster = 'dungeonMaster'
@@ -15,6 +8,10 @@ export interface LoginFormData {
   password: string;
 }
 
-export interface BannerProps {
-  username: string | null;
+export interface RegisterFormData extends LoginFormData{
+  name: string;
+}
+
+export interface AuthProps {
+  toggleView: ( view: 'login' | 'register' ) => void;
 }
