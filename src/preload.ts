@@ -22,8 +22,8 @@ contextBridge.exposeInMainWorld( 'api', {
   database: {
     // user.handler.ts
     users: {
-      getUser: async () => {
-        return await emitSignal( 'user:getUser' )
+      getUser: async ( username: string ) => {
+        return await emitSignal( 'user:getUser', username )
       },
       createUser: async ( createUserDto: CreateUserDto ) => {
         return await emitSignal( 'user:createUser', createUserDto )
