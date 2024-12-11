@@ -14,7 +14,6 @@
   - [x] typescript
 - [x] Decide on storage / database options
   - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts)
-- [ ] Come up with a list of possible features and use cases
 - [x] Create a barebones executable
 - [ ] Get user login / logout working
 - [ ] Get user role-specific homepages working
