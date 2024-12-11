@@ -13,13 +13,13 @@ import { connectToSignal } from '../handlers/utilities'
 
 // NOTE - keep in parity with preload.ts and interface.d.ts
 ipcMain.handle( 'user:getUser', async ( event, username: string ) => {
-  return await UserRepository.getUser( username )
+  return UserRepository.getUser( username )
 })
 
 connectToSignal( 'user:createUser', async ( event, createUserDto: CreateUserDto ) => {
-  return await UserRepository.createUser( createUserDto )
+  return UserRepository.createUser( createUserDto )
 })
 
-ipcMain.handle( 'user:deleteUser', async ( event, username: string ) => {
-  await UserRepository.deleteUser( username )
+connectToSignal( 'user:deleteUser', async ( event, username: string ) => {
+  return UserRepository.deleteUser( username )
 })

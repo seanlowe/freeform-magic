@@ -8,14 +8,15 @@ import { CreateUserDto } from './create-user.dto'
 class UserRepository {
   private static store: SimpleElectronStore = global.store
 
-  static async getUser( username: string ): Promise<User | null> {
+  static getUser( username: string ): User | null {
     checkStoreExistsOrThrow( this.store )
 
-    const user = await this.store.get( username )
+    const user = this.store.get( username )
+
     return user
   }
 
-  static async createUser( userInput: CreateUserDto ): Promise<User> {
+  static createUser( userInput: CreateUserDto ): User {
     checkStoreExistsOrThrow( this.store )
 
     const [ first, last ] = userInput.name.split( ' ' )
@@ -31,7 +32,7 @@ class UserRepository {
     return user
   }
 
-  static async deleteUser( username: string ): Promise<void> {
+  static deleteUser( username: string ): void {
     checkStoreExistsOrThrow( this.store )
 
     this.store.delete( username )

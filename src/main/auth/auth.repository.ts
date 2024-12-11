@@ -10,16 +10,16 @@ class AuthRepository {
   private static store: SimpleElectronStore = global.store
 
   // get current session user
-  static async getCurrentUser(): Promise<User | null> {
+  static getCurrentUser(): User | null {
     checkStoreExistsOrThrow( this.store )
 
-    const result = await this.store.get( 'currentUser' )
+    const result = this.store.get( 'currentUser' )
     if ( !result ) {
       console.log( 'no current user' )
       return null
     }
 
-    const user = await UserRepository.getUser( result )
+    const user = UserRepository.getUser( result )
     if ( !user ) {
       throw new Error( 'user not found' )
     }
@@ -28,10 +28,10 @@ class AuthRepository {
   }
 
   // set current session user
-  static async setCurrentUser( username: string ): Promise<ErrorObject | void> {
+  static setCurrentUser( username: string ): ErrorObject | void {
     checkStoreExistsOrThrow( this.store )
 
-    const user = await UserRepository.getUser( username )
+    const user = UserRepository.getUser( username )
     if ( !user ) {
       // throw new Error( 'user not found' )
       return new ErrorObject( '[ AUTH.REPOS ] User cannot be found' )
@@ -41,7 +41,7 @@ class AuthRepository {
   }
 
   // clear current session user
-  static async clearCurrentUser(): Promise<void> {
+  static clearCurrentUser(): void {
     checkStoreExistsOrThrow( this.store )
 
     this.store.delete( 'currentUser' )
