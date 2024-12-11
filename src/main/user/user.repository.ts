@@ -18,10 +18,11 @@ class UserRepository {
   static async createUser( userInput: CreateUserDto ): Promise<User> {
     checkStoreExistsOrThrow( this.store )
 
+    const [ first, last ] = userInput.name.split( ' ' )
     const user = new User(
-      userInput.name,
       userInput.username,
-      userInput.password,
+      first,
+      last ?? '',
       userRole.player,
     )
 
