@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld( 'api', {
       })
     },
     logout: async () => {
-      return await ipcRenderer.invoke( 'auth:logout' )
+      return await emitSignal( 'auth:logout' )
     },
     getCurrentUser: async () => {
       return await ipcRenderer.invoke( 'auth:getCurrentUser' )

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AuthFormData } from '../../types'
 // import { User } from '../../main/user/user.object'
 import ErrorObject from '../../main/error/error.object'
+import { useAuth } from '../utilities/hooks/useAuth'
 
 const Auth: React.FC = () => {
   const [ formData, setFormData ] = useState<AuthFormData>({
@@ -14,6 +15,7 @@ const Auth: React.FC = () => {
   const [ confirmPassword, setConfirmPassword ] = useState( '' )
   const [ passwordsMatch, setPasswordsMatch ] = useState( false )
   const [ error, setError ] = useState<string>( '' )
+  const { dispatch } = useAuth()
 
   // useEffect(() => {
   //   window.api.auth.getCurrentUser().then(( user ) => {
@@ -50,10 +52,14 @@ const Auth: React.FC = () => {
 
     // create the new user
     const newUser = await window.api.database.users.createUser( formData )
-    console.log({ newUser })
+    // console.log({ newUser })
 
     // login the new user
-    await window.api.auth.login( newUser.username, newUser.password )
+    await window.api.auth.login( newUser.username, formData.password )
+    dispatch({ type: 'LOGIN', payload: {
+      username: newUser.username,
+      password: formData.password
+    } })
     setView( 'hidden' )
 
     return

@@ -4,11 +4,11 @@ import { connectToSignal } from '../handlers/utilities'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 connectToSignal( 'auth:login', async ( event, username: string, password: string ) => {
-  AuthRepository.setCurrentUser( username )
+  return AuthRepository.setCurrentUser( username )
 })
 
 connectToSignal( 'auth:logout', async () => {
-  AuthRepository.clearCurrentUser()
+  return AuthRepository.clearCurrentUser()
 })
 
 ipcMain.handle( 'auth:getCurrentUser', async () => {

@@ -20,6 +20,7 @@ const titleStyle: React.CSSProperties = {
 const userContainerStyle: React.CSSProperties = {
   position: 'relative',
   cursor: 'pointer',
+  marginRight: '5vw',
 }
 
 const usernameStyle: React.CSSProperties = {
@@ -47,6 +48,7 @@ const dropdownButtonStyle: React.CSSProperties = {
 
 const placeholderStyle: React.CSSProperties = {
   color: '#ccc',
+  marginRight: '5vw',
 }
 
 export {
