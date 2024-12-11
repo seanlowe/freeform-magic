@@ -1,12 +1,13 @@
 import { ipcMain } from 'electron'
 import AuthRepository from './auth.repository'
+import { connectToSignal } from '../handlers/utilities'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-ipcMain.handle( 'auth:login', async ( event, username: string, password: string ) => {
+connectToSignal( 'auth:login', async ( event, username: string, password: string ) => {
   AuthRepository.setCurrentUser( username )
 })
-  
-ipcMain.handle( 'auth:logout', async () => {
+
+connectToSignal( 'auth:logout', async () => {
   AuthRepository.clearCurrentUser()
 })
 

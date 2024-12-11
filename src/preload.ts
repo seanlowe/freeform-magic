@@ -1,14 +1,17 @@
-// See the Electron documentation for details on how to use preload scripts:
-// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-
-
 import { contextBridge, ipcRenderer } from 'electron'
 import { CreateUserDto } from './main/user/create-user.dto'
+import ErrorObject from './main/error/error.object'
+import { emitSignal } from './main/handlers/utilities'
 
+// NOTE - did you edit interface.d.ts as well?
 contextBridge.exposeInMainWorld( 'api', {
+  // auth.handler.ts
   auth: {
     login: async ( username: string, password: string ) => {
-      return await ipcRenderer.invoke( 'auth:login', username, password )
+      await ipcRenderer.invoke( 'auth:login', username, password ).catch(( err ) => {
+        console.log( '\n\n PRELOAD -- auth > login' )
+        throw err
+      })
     },
     logout: async () => {
       return await ipcRenderer.invoke( 'auth:logout' )
@@ -18,15 +21,16 @@ contextBridge.exposeInMainWorld( 'api', {
     }
   },
   database: {
+    // user.handler.ts
     users: {
-      getUsers: async () => {
-        return await ipcRenderer.invoke( 'users:getUsers' )
+      getUser: async () => {
+        return await emitSignal( 'user:getUser' )
       },
       createUser: async ( createUserDto: CreateUserDto ) => {
-        return await ipcRenderer.invoke( 'users:createUser', createUserDto )
+        return await ipcRenderer.invoke( 'user:createUser', createUserDto )
       },
       deleteUser: async ( username: string ) => {
-        return await ipcRenderer.invoke( 'users:deleteUser', username )
+        return await ipcRenderer.invoke( 'user:deleteUser', username )
       },
     }
   }

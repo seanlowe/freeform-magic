@@ -2,6 +2,7 @@
 // i.e. auth and the logged in user
 
 import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
+import ErrorObject from '../error/error.object'
 import { User } from '../user/user.object'
 import UserRepository from '../user/user.repository'
 
@@ -20,18 +21,23 @@ class AuthRepository {
 
     const user = await UserRepository.getUser( result )
     if ( !user ) {
-      console.log( 'user not found' )
-      return null 
+      throw new Error( 'user not found' )
     }
 
     return user
   }
 
   // set current session user
-  static async setCurrentUser( username: string ): Promise<void> {
+  static async setCurrentUser( username: string ): Promise<ErrorObject | void> {
     checkStoreExistsOrThrow( this.store )
 
-    this.store.set( 'currentUser', username )
+    const user = await UserRepository.getUser( username )
+    if ( !user ) {
+      // throw new Error( 'user not found' )
+      return new ErrorObject( '[ AUTH.REPOS ] User cannot be found' )
+    }
+
+    this.store.set( 'currentUser', user.username )
   }
 
   // clear current session user

@@ -2,6 +2,7 @@
 
 import { SimpleElectronStore } from './db/store'
 
+// NOTE - did you edit preload.ts as well?
 export interface IElectronAPI {
   auth: {
     login: ( username: string, password: string ) => Promise<void>,
@@ -10,7 +11,7 @@ export interface IElectronAPI {
   },
   database: {
     users: {
-      getUsers: () => Promise<User[]>
+      getUser: ( username: string ) => Promise<User[]>
     }
   }
 }
