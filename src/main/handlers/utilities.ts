@@ -6,15 +6,17 @@ import ErrorObject from '../error/error.object'
 // new version of connectToSignal that allows returning a value?
 export const connectToSignal = async (
   channel: string,
-  callback: ( ...args: any[] ) => Promise<ErrorObject | void>,
-): Promise<ErrorObject | void> => {
-  ipcMain.handle( channel, async () => {
+  callback: ( ...args: any[] ) => Promise<any | ErrorObject | void>,
+): Promise<any | void> => {
+  ipcMain.handle( channel, async ( ...args ) => {
     try {
-      const result = await callback()
+      const result = await callback( ...args )
 
       if ( result instanceof ErrorObject ) {
         throw result
       }
+
+      return result
     } catch ( err ) {
       console.log( '\n\n connectToSignal --> callback error', err )
 
@@ -26,13 +28,15 @@ export const connectToSignal = async (
 export const emitSignal = async (
   channel: string,
   ...args: any[]
-): Promise<ErrorObject | void> => {
+): Promise<any | void> => {
   try {
     const result = await ipcRenderer.invoke( channel, ...args )
 
     if ( result instanceof ErrorObject ) {
       throw result
     }
+
+    return result
   } catch ( err ) {
     console.log( '\n\n emitSignal --> ipcRenderer.invoke error', err )
 

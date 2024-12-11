@@ -1,6 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { CreateUserDto } from './main/user/create-user.dto'
-import ErrorObject from './main/error/error.object'
 import { emitSignal } from './main/handlers/utilities'
 
 // NOTE - did you edit interface.d.ts as well?
@@ -27,7 +26,7 @@ contextBridge.exposeInMainWorld( 'api', {
         return await emitSignal( 'user:getUser' )
       },
       createUser: async ( createUserDto: CreateUserDto ) => {
-        return await ipcRenderer.invoke( 'user:createUser', createUserDto )
+        return await emitSignal( 'user:createUser', createUserDto )
       },
       deleteUser: async ( username: string ) => {
         return await ipcRenderer.invoke( 'user:deleteUser', username )

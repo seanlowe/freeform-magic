@@ -3,6 +3,7 @@ import { ipcMain } from 'electron'
 import { CreateUserDto } from './create-user.dto'
 import { User } from './user.object'
 import UserRepository from './user.repository'
+import { connectToSignal } from '../handlers/utilities'
 
 // --------------------------------
 // user:getUser    -> UserRepository.getUser
@@ -15,9 +16,8 @@ ipcMain.handle( 'user:getUser', async ( event, username: string ) => {
   return await UserRepository.getUser( username )
 })
 
-ipcMain.handle( 'user:createUser', async ( event, createUserDto: CreateUserDto ) => {
-  // const user = new User( createUserDto.username, createUserDto.password )
-  // await UserRepository.createUser( user )
+connectToSignal( 'user:createUser', async ( event, createUserDto: CreateUserDto ) => {
+  return await UserRepository.createUser( createUserDto )
 })
 
 ipcMain.handle( 'user:deleteUser', async ( event, username: string ) => {

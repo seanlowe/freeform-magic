@@ -1,9 +1,6 @@
-export class CreateUserDto {
-  constructor( username: string, password: string ) {
-    this.username = username
-    this.password = password
-  }
-
-  public username: string
-  public password: string
+// data required for creating a new user
+export interface CreateUserDto {
+  name: string
+  username: string
+  password: string
 }

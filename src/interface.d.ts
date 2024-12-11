@@ -11,7 +11,9 @@ export interface IElectronAPI {
   },
   database: {
     users: {
-      getUser: ( username: string ) => Promise<User[]>
+      getUser: ( username: string ) => Promise<User | null>
+      createUser: ( createUserDto: CreateUserDto ) => Promise<User>
+      deleteUser: ( username: string ) => Promise<void>
     }
   }
 }

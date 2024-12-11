@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AuthFormData } from '../../types'
-import { User } from '../../main/user/user.object'
+// import { User } from '../../main/user/user.object'
 import ErrorObject from '../../main/error/error.object'
 
 const Auth: React.FC = () => {
@@ -10,18 +10,18 @@ const Auth: React.FC = () => {
     password: '',
   })
   const [ view, setView ] = useState<'login' | 'register'>( 'login' )
-  const [ currentUser, setCurrentUser ] = useState<User | null>( null )
+  // const [ currentUser, setCurrentUser ] = useState<User | null>( null )
   const [ confirmPassword, setConfirmPassword ] = useState( '' )
   const [ passwordsMatch, setPasswordsMatch ] = useState( false )
   const [ error, setError ] = useState<string>( '' )
 
-  useEffect(() => {
-    window.api.auth.getCurrentUser().then(( user ) => {
-      if ( user ) {
-        setCurrentUser( user )
-      }
-    })
-  }, [] )
+  // useEffect(() => {
+  //   window.api.auth.getCurrentUser().then(( user ) => {
+  //     if ( user ) {
+  //       setCurrentUser( user )
+  //     }
+  //   })
+  // }, [] )
 
   useEffect(() => {
     if ( view === 'register' ) {
@@ -43,13 +43,18 @@ const Auth: React.FC = () => {
     // make sure the user has valid data
 
     // check if the username is already taken
-    // window.api.auth.getUser
+    const user = await window.api.database.users.getUser( formData.username )
+    if ( user ) {
+      setError( 'a user with that username already exists' )
+    }
 
     // create the new user
-    // window.api.auth.createUser
+    const newUser = await window.api.database.users.createUser( formData )
+    console.log({ newUser })
 
     // login the new user
-    // window.api.auth.login
+    await window.api.auth.login( newUser.username, newUser.password )
+
     return
   }
 

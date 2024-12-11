@@ -1,7 +1,9 @@
 // wrapper for interacting with the SimpleElectronStore for user data
 
+import { userRole } from '../../types'
 import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
 import { User } from './user.object'
+import { CreateUserDto } from './create-user.dto'
 
 class UserRepository {
   private static store: SimpleElectronStore = global.store
@@ -13,10 +15,19 @@ class UserRepository {
     return user
   }
 
-  static async createUser( user: User ): Promise<void> {
+  static async createUser( userInput: CreateUserDto ): Promise<User> {
     checkStoreExistsOrThrow( this.store )
 
+    const user = new User(
+      userInput.name,
+      userInput.username,
+      userInput.password,
+      userRole.player,
+    )
+
     this.store.set( user.username, user )
+
+    return user
   }
 
   static async deleteUser( username: string ): Promise<void> {
