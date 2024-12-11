@@ -3,6 +3,7 @@ import path from 'path'
 import started from 'electron-squirrel-startup'
 import { registerHandlers } from './main/handlers'
 import { registerStore } from './db'
+import AuthRepository from './main/auth/auth.repository'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if ( started ) {
@@ -49,6 +50,7 @@ app.whenReady().then( async () => {
 // explicitly with Cmd + Q.
 app.on( 'window-all-closed', () => {
   if ( process.platform !== 'darwin' ) {
+    AuthRepository.clearCurrentUser()
     app.quit()
   }
 })
