@@ -1,12 +1,12 @@
 import React from 'react'
-import AuthToggle from './registration/AuthToggle'
+import Auth from './registration/Auth'
 
 const App: React.FC = () => {
   return (
     <>
       {/* <Banner /> */}
       <div>
-        <AuthToggle />
+        <Auth />
       </div>
     </>
   )

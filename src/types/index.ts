@@ -3,13 +3,10 @@ export enum userRole {
   dungeonMaster = 'dungeonMaster'
 }
 
-export interface LoginFormData {
+export interface AuthFormData {
+  name: string;
   username: string;
   password: string;
-}
-
-export interface RegisterFormData extends LoginFormData{
-  name: string;
 }
 
 export interface AuthProps {
