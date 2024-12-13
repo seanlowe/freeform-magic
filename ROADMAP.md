@@ -15,7 +15,8 @@
 - [x] Decide on storage / database options
   - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts)
 - [x] Create a barebones executable
-- [ ] Get user login / logout working
+- [x] Get user login / logout working
+- [ ] Get user role picked at user creation working
 - [ ] Get user role-specific homepages working
   - [ ] DM page
   - [ ] Player page
