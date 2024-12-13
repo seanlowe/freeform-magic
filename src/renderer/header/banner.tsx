@@ -6,7 +6,6 @@ import {
   usernameStyle,
   dropdownStyle,
   dropdownButtonStyle,
-  placeholderStyle
 } from './styles'
 import { AuthContext } from '../utilities/contexts/auth.context'
 
@@ -21,7 +20,7 @@ const Banner: React.FC<{username: string}> = ({ username }) => {
   return (
     <header style={headerStyle}>
       <h1 style={titleStyle}>D&D Spell Helper</h1>
-      {username ? (
+      {username && (
         <div style={userContainerStyle}>
           <span onClick={toggleDropdown} style={usernameStyle}>
             {username} ▾
@@ -30,7 +29,10 @@ const Banner: React.FC<{username: string}> = ({ username }) => {
             <div style={dropdownStyle}>
               <button 
                 onClick={() => {
-                  return dispatch({ type: 'LOGOUT' }) 
+                  toggleDropdown()
+                  dispatch({ type: 'LOGOUT' }) 
+
+                  return 
                 }}
                 style={dropdownButtonStyle}
               >
@@ -39,8 +41,6 @@ const Banner: React.FC<{username: string}> = ({ username }) => {
             </div>
           )}
         </div>
-      ) : (
-        <span style={placeholderStyle}>Not logged in</span>
       )}
     </header>
   )

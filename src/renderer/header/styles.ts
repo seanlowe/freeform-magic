@@ -46,11 +46,6 @@ const dropdownButtonStyle: React.CSSProperties = {
   textAlign: 'left',
 }
 
-const placeholderStyle: React.CSSProperties = {
-  color: '#ccc',
-  marginRight: '5vw',
-}
-
 export {
   headerStyle,
   titleStyle,
@@ -58,5 +53,4 @@ export {
   usernameStyle,
   dropdownStyle,
   dropdownButtonStyle,
-  placeholderStyle,
 }
