@@ -1,12 +1,25 @@
-import { useContext } from 'react'
-import { AuthContext } from '../contexts/auth.context'
+import { useState } from 'react'
+import { AuthReducer } from '../reducers/auth.reducer'
+import { AuthAction, AuthState } from '../../../types'
 
-export const useAuth = () => {
-  const context = useContext( AuthContext )
+const useAuth = ( reducer: AuthReducer, initialState: AuthState ) => {
+  const [ state, setState ] = useState<AuthState>( initialState )
 
-  if ( !context ) {
-    throw new Error( 'useUser must be used within a UserProvider' )
+  const dispatch = async ( action: AuthAction ) => {
+    const result = reducer( state, action )
+    if ( typeof result.then === 'function' ) {
+      try {
+        const newState = await result
+        setState( newState )
+      } catch ( err: unknown ) {
+        console.error( err )
+      }
+    } else {
+      console.error( 'reducer did not return a promise' )
+    }
   }
 
-  return context
+  return { state, dispatch }
 }
+
+export default useAuth

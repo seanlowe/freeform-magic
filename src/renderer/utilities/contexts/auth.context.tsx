@@ -1,13 +1,15 @@
 import { createContext } from 'react'
 import { AuthAction, AuthState } from '../../../types'
 
-const loggedOutState: AuthState = {
+export const initialAuthState: AuthState = {
   currentUser: null,
 }
 
-const AuthContext = createContext<{
+const initialAuthDispatch: React.Dispatch<AuthAction> = () => {
+  return null
+}
+
+export const AuthContext = createContext<{
   state: AuthState
   dispatch: React.Dispatch<AuthAction>
-} | null>( null )
-
-export { AuthContext, loggedOutState }
+}>({ state: initialAuthState, dispatch: initialAuthDispatch })

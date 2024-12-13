@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge } from 'electron'
 import { CreateUserDto } from './main/user/create-user.dto'
 import { emitSignal } from './main/handlers/utilities'
 
@@ -6,17 +6,14 @@ import { emitSignal } from './main/handlers/utilities'
 contextBridge.exposeInMainWorld( 'api', {
   // auth.handler.ts
   auth: {
-    login: async ( username: string, password: string ) => {
-      await ipcRenderer.invoke( 'auth:login', username, password ).catch(( err ) => {
-        console.log( '\n\n PRELOAD -- auth > login' )
-        throw err
-      })
+    login: async ( ...args: any[] ) => {
+      return await emitSignal( 'auth:login', ...args )
     },
     logout: async () => {
       return await emitSignal( 'auth:logout' )
     },
     getCurrentUser: async () => {
-      return await ipcRenderer.invoke( 'auth:getCurrentUser' )
+      return await emitSignal( 'auth:getCurrentUser' )
     }
   },
   database: {
@@ -29,7 +26,7 @@ contextBridge.exposeInMainWorld( 'api', {
         return await emitSignal( 'user:createUser', createUserDto )
       },
       deleteUser: async ( username: string ) => {
-        return await ipcRenderer.invoke( 'user:deleteUser', username )
+        return await emitSignal( 'user:deleteUser', username )
       },
     }
   }

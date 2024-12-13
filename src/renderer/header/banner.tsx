@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-// import React, { useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   headerStyle,
   titleStyle,
@@ -9,26 +8,11 @@ import {
   dropdownButtonStyle,
   placeholderStyle
 } from './styles'
-import { useAuth } from '../utilities/hooks/useAuth'
+import { AuthContext } from '../utilities/contexts/auth.context'
 
-const Banner: React.FC = () => {
+const Banner: React.FC<{username: string}> = ({ username }) => {
   const [ dropdownOpen, setDropdownOpen ] = useState( false )
-  // const [ username, setUsername ] = useState<string | null>( '' )
-
-  const { state, dispatch } = useAuth()
-  
-  // useEffect(() => {
-  //   // Fetch the logged-in user's data from the database or local storage
-  //   const fetchUser = async () => {
-  //     const user = await window.api.auth.getCurrentUser()
-
-  //     if ( user && user.length > 0 ) {
-  //       setUsername( user[0].username )
-  //     }
-  //   }
-
-  //   fetchUser()
-  // }, [] )
+  const { dispatch } = useContext( AuthContext )
 
   const toggleDropdown = () => {
     return setDropdownOpen( !dropdownOpen ) 
@@ -37,10 +21,10 @@ const Banner: React.FC = () => {
   return (
     <header style={headerStyle}>
       <h1 style={titleStyle}>D&D Spell Helper</h1>
-      {state.currentUser?.username ? (
+      {username ? (
         <div style={userContainerStyle}>
           <span onClick={toggleDropdown} style={usernameStyle}>
-            {state.currentUser?.username} ▾
+            {username} ▾
           </span>
           {dropdownOpen && (
             <div style={dropdownStyle}>

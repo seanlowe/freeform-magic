@@ -4,10 +4,10 @@ import { ipcMain, ipcRenderer } from 'electron'
 import ErrorObject from '../error/error.object'
 
 // new version of connectToSignal that allows returning a value?
-export const connectToSignal = async (
+export const connectToSignal = (
   channel: string,
   callback: ( ...args: any[] ) => Promise<any | ErrorObject | void>,
-): Promise<any | void> => {
+): any | void => {
   ipcMain.handle( channel, async ( ...args ) => {
     try {
       const result = await callback( ...args )

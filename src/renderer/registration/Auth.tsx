@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AuthFormData } from '../../types'
-// import { User } from '../../main/user/user.object'
 import ErrorObject from '../../main/error/error.object'
-import { useAuth } from '../utilities/hooks/useAuth'
+import { AuthContext } from '../utilities/contexts/auth.context'
 
 const Auth: React.FC = () => {
   const [ formData, setFormData ] = useState<AuthFormData>({
@@ -11,19 +10,10 @@ const Auth: React.FC = () => {
     password: '',
   })
   const [ view, setView ] = useState<'hidden' | 'login' | 'register'>( 'login' )
-  // const [ currentUser, setCurrentUser ] = useState<User | null>( null )
   const [ confirmPassword, setConfirmPassword ] = useState( '' )
   const [ passwordsMatch, setPasswordsMatch ] = useState( false )
   const [ error, setError ] = useState<string>( '' )
-  const { dispatch } = useAuth()
-
-  // useEffect(() => {
-  //   window.api.auth.getCurrentUser().then(( user ) => {
-  //     if ( user ) {
-  //       setCurrentUser( user )
-  //     }
-  //   })
-  // }, [] )
+  const { dispatch } = useContext( AuthContext )
 
   useEffect(() => {
     if ( view === 'register' ) {
@@ -41,21 +31,22 @@ const Auth: React.FC = () => {
     })
   }
 
-  const handleRegister = async () => {
+  const handleRegister = () => {
     // make sure the user has valid data
+    if ( !formData.username || !formData.password || !formData.name ) {
+      return setError( 'Please enter a username and password' )
+    }
 
     // check if the username is already taken
-    const user = await window.api.database.users.getUser( formData.username )
+    const user = window.api.database.users.getUser( formData.username )
     if ( user ) {
       setError( 'a user with that username already exists' )
     }
 
     // create the new user
-    const newUser = await window.api.database.users.createUser( formData )
-    // console.log({ newUser })
+    const newUser = window.api.database.users.createUser( formData )
 
     // login the new user
-    await window.api.auth.login( newUser.username, formData.password )
     dispatch({ type: 'LOGIN', payload: {
       username: newUser.username,
       password: formData.password
@@ -65,7 +56,7 @@ const Auth: React.FC = () => {
     return
   }
 
-  const handleSubmit = async ( e: React.FormEvent ) => {
+  const handleSubmit = ( e: React.FormEvent ) => {
     e.preventDefault()
 
     if ( view === 'register' ) {
@@ -81,34 +72,24 @@ const Auth: React.FC = () => {
     // hash password before login
     // const hashedPassword = await crypto.hash( formData.password, 10 )
 
-    const user = await window.api.database.users.getUser( username )
+    const user = window.api.database.users.getUser( username )
     if ( user === undefined ) {
       // jump to registration page with username prefilled
       setView( 'register' )
       return
     }
 
-    console.log({ user, blah: user instanceof ErrorObject })
     if ( user instanceof ErrorObject ) {
       setError( 'that user cannot be found' )
       return
     }
 
-    await window.api.auth.login( username, password )
+    dispatch({ type: 'LOGIN', payload: {
+      username: username,
+      password: password
+    } })
     setView( 'hidden' )
   }
-
-  // const handleLogout = async () => {
-  //   setError( '' )
-  //   setFormData({
-  //     username: '',
-  //     password: '',
-  //   })
-
-  //   window.api.auth.logout().then(() => {
-  //     return console.log( 'logout' ) 
-  //   })
-  // }
 
   const displayRegisterLink = () => {
     return (
