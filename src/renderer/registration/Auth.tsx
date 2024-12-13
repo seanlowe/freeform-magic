@@ -13,7 +13,14 @@ const Auth: React.FC = () => {
   const [ confirmPassword, setConfirmPassword ] = useState( '' )
   const [ passwordsMatch, setPasswordsMatch ] = useState( false )
   const [ error, setError ] = useState<string>( '' )
-  const { dispatch } = useContext( AuthContext )
+  const { state, dispatch } = useContext( AuthContext )
+
+  useEffect(() => {
+    if ( !state.currentUser ) {
+      setView( 'login' )
+    }
+
+  }, [ state.currentUser ] )
 
   useEffect(() => {
     if ( view === 'register' ) {
@@ -31,32 +38,49 @@ const Auth: React.FC = () => {
     })
   }
 
-  const handleRegister = () => {
+  const clearFormData = () => {
+    setConfirmPassword( '' )
+    setPasswordsMatch( false )
+    setFormData({
+      name: '',
+      username: '',
+      password: '',
+    })
+  }
+
+  const doLogin = ( username: string, password: string ) => {
+    dispatch({ type: 'LOGIN', payload: {
+      username: username,
+      password: password
+    } })
+
+    clearFormData()
+    setView( 'hidden' )
+  }
+
+  const handleRegister = async () => {
     // make sure the user has valid data
     if ( !formData.username || !formData.password || !formData.name ) {
       return setError( 'Please enter a username and password' )
     }
 
     // check if the username is already taken
-    const user = window.api.database.users.getUser( formData.username )
+    const user = await window.api.database.users.getUser( formData.username )
     if ( user ) {
       setError( 'a user with that username already exists' )
+      return
     }
 
     // create the new user
-    const newUser = window.api.database.users.createUser( formData )
+    const newUser = await window.api.database.users.createUser( formData )
 
     // login the new user
-    dispatch({ type: 'LOGIN', payload: {
-      username: newUser.username,
-      password: formData.password
-    } })
-    setView( 'hidden' )
+    doLogin( newUser.username, formData.password )
 
     return
   }
 
-  const handleSubmit = ( e: React.FormEvent ) => {
+  const handleSubmit = async ( e: React.FormEvent ) => {
     e.preventDefault()
 
     if ( view === 'register' ) {
@@ -66,13 +90,14 @@ const Auth: React.FC = () => {
 
     const { username, password } = formData
     if ( !username || !password ) {
-      return setError( 'Please enter a username and password' )
+      setError( 'Please enter a username and password' )
+      return
     }
 
     // hash password before login
     // const hashedPassword = await crypto.hash( formData.password, 10 )
 
-    const user = window.api.database.users.getUser( username )
+    const user = await window.api.database.users.getUser( username )
     if ( user === undefined ) {
       // jump to registration page with username prefilled
       setView( 'register' )
@@ -84,11 +109,7 @@ const Auth: React.FC = () => {
       return
     }
 
-    dispatch({ type: 'LOGIN', payload: {
-      username: username,
-      password: password
-    } })
-    setView( 'hidden' )
+    doLogin( username, password )
   }
 
   const displayRegisterLink = () => {
@@ -109,16 +130,10 @@ const Auth: React.FC = () => {
           <strong>
             <a
               onClick={() => {
-                // clear the form data
-                setConfirmPassword( '' )
-                setPasswordsMatch( false )
-                setFormData({
-                  name: '',
-                  username: '',
-                  password: '',
-                })
+                clearFormData()
+                setView( 'login' )
 
-                return setView( 'login' )
+                return
               }}
               style={{ marginLeft: '16px', cursor: 'pointer' }}
             >
