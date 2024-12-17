@@ -91,7 +91,7 @@ const HomePage = () => {
       return spell.id === spellId
     })
 
-    if ( !chosenSpell ) {
+    if ( !chosenSpell || chosenSpell === selectedSpell ) {
       return setSelectedSpell( null )
     }
 
