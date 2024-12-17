@@ -10,7 +10,7 @@ const CharacterSwitcher = ({
   onSwitch: ( characterId: number ) => void
 }) => {
   return (
-    <div style={{ borderBottom: '1px solid #ccc', padding: '16px' }}>
+    <div style={{ padding: '16px' }}>
       <h3>Character Selector</h3>
       <p>Select your character:</p>
       <select
