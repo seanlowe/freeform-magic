@@ -37,8 +37,16 @@ const CompendiumPage = ({
     return newRecentlyViewed
   }
 
+  const addToFavorites = ( spell: Spell ) => {
+    if ( !favorites.find(( fav ) => {
+      return fav.id === spell.id 
+    })) {
+      setFavorites( [ ...favorites, spell ] )
+    }
+  }
+
   return (
-    <div style={{ padding: '1rem', position: 'relative', top: '-4.3rem' }}>
+    <div style={{ padding: '1rem' }}>
       {/* Header Section */}
       <div
         style={{
@@ -47,6 +55,10 @@ const CompendiumPage = ({
           alignItems: 'center',
           marginBottom: '1rem',
           flexDirection: 'row-reverse',
+          position: 'absolute',
+          right: '0',
+          top: '5rem',
+          padding: '0 1rem',
         }}
       >
         <div>
@@ -175,6 +187,22 @@ const CompendiumPage = ({
               </button>
               <h3>{selectedSpell.name}</h3>
               <p>{selectedSpell.description}</p>
+              <button
+                style={{
+                  padding: '0.5rem',
+                  backgroundColor: '#FF5733',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  marginTop: '1rem',
+                }}
+                onClick={() => {
+                  return addToFavorites( selectedSpell ) 
+                }}
+              >
+                Add to Favorites
+              </button>
             </div>
           ) : (
             <>
