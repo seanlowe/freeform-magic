@@ -59,6 +59,11 @@ const sampleSpells: Record<number, Spell[]> = {
   ],
 }
 
+const allSpells: Spell[] = []
+Object.keys( sampleSpells ).forEach(( spell ) => {
+  return allSpells.push( ...sampleSpells[parseInt( spell )] )
+})
+
 const sampleStats: CharacterStatistics = {
   strength: 10,
   dexterity: 10,
@@ -149,7 +154,9 @@ const HomePage = () => {
     switch ( page ) {
     // home is the default page and handled in the JSX
     case 'Compendium':
-      return <CompendiumPage />
+      return <CompendiumPage spells={allSpells} setSpells={() => {
+        console.log( 'setSpells' ) 
+      }} />
     case 'Characters':
       return <CharactersPage />
     default:
