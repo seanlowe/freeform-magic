@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../utilities/contexts/auth.context'
-import { Spell, Character } from '../../types'
+import { Spell, Character, CharacterStatistics, CharacterProficiencies } from '../../types'
 import CharacterSwitcher from './CharacterSwitcher'
 import SpellDetails from './SpellDetails'
 import SpellList from './SpellList'
+import PageDropdown from './PageDropdown'
+import CompendiumPage from './Compendium'
+import CharactersPage from './CharactersPage'
 
 // Record<character.id, spell[]>
 const sampleSpells: Record<number, Spell[]> = {
@@ -56,10 +59,49 @@ const sampleSpells: Record<number, Spell[]> = {
   ],
 }
 
+const sampleStats: CharacterStatistics = {
+  strength: 10,
+  dexterity: 10,
+  constitution: 10,
+  intelligence: 10,
+  wisdom: 10,
+  charisma: 10,
+}
+
+const sampleProficiencies: CharacterProficiencies = {
+  // Strength
+  athletics: 10,
+
+  // Dexterity
+  acrobatics: 10,
+  sleightOfHand: 10,
+  stealth: 10,
+  
+  // Intelligence
+  arcana: 10,
+  history: 10,
+  investigation: 10,
+  nature: 10,
+  religion: 10,
+  
+  // Wisdom
+  animalHandling: 10,
+  insight: 10,
+  medicine: 10,
+  perception: 10,
+  survival: 10,
+  
+  // Charisma
+  deception: 10,
+  intimidation: 10,
+  performance: 10,
+  persuasion: 10,
+}
+
 const sampleCharacters: Character[] = [
-  { id: 1, name: 'Aragorn' },
-  { id: 2, name: 'Gandalf' },
-  { id: 3, name: 'Legolas' },
+  { id: 1, name: 'Aragorn', stats: sampleStats, proficiencies: sampleProficiencies },
+  { id: 2, name: 'Gandalf', stats: sampleStats, proficiencies: sampleProficiencies },
+  { id: 3, name: 'Legolas', stats: sampleStats, proficiencies: sampleProficiencies },
 ]
 
 const HomePage = () => {
@@ -68,6 +110,7 @@ const HomePage = () => {
   const [ spells, setSpells ] = useState<Spell[]>( [] )
   const [ selectedCharacter, setSelectedCharacter ] = useState<number | null>( null )
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
+  const [ selectedPage, setSelectedPage ] = useState<string>( 'Home' )
 
   const getCharacters = async () => {
     // const characters = await window.api.database.characters.
@@ -98,6 +141,22 @@ const HomePage = () => {
     return setSelectedSpell( chosenSpell )
   }
 
+  const onPageSelect = ( page: string ) => {
+    setSelectedPage( page )
+  }
+
+  const renderSelectedPage = ( page: string ): React.ReactElement => {
+    switch ( page ) {
+    // home is the default page and handled in the JSX
+    case 'Compendium':
+      return <CompendiumPage />
+    case 'Characters':
+      return <CharactersPage />
+    default:
+      return <div>Page not found</div>
+    }
+  }
+
   useEffect(() => {
     getCharacters()
   }, [] )
@@ -115,21 +174,27 @@ const HomePage = () => {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <SpellList
-        spells={spells}
-        selectedSpell={selectedSpell}
-        onSelect={onSpellSelect}
-      />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <CharacterSwitcher
-          characters={sampleCharacters}
-          selectedCharacterId={selectedCharacter}
-          onSwitch={onCharacterSwitch}
-        />
-        <SpellDetails selectedSpell={selectedSpell} />
-      </div>
-    </div>
+    <>
+      <PageDropdown selectedPage={selectedPage} setSelectedPage={onPageSelect} />
+      { selectedPage === 'Home' && (
+        <div style={{ display: 'flex', height: '100vh' }}>
+          <SpellList
+            spells={spells}
+            selectedSpell={selectedSpell}
+            onSelect={onSpellSelect}
+          />
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <CharacterSwitcher
+              characters={sampleCharacters}
+              selectedCharacterId={selectedCharacter}
+              onSwitch={onCharacterSwitch}
+            />
+            <SpellDetails selectedSpell={selectedSpell} />
+          </div>
+        </div>
+      )}
+      { renderSelectedPage( selectedPage ) }
+    </>
   )
 }
 
