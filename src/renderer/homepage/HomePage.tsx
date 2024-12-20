@@ -8,6 +8,9 @@ import PageDropdown from './PageDropdown'
 import CompendiumPage from './Compendium'
 import CharactersPage from './CharactersPage'
 
+
+// SAMPLE DATA STARTS HERE
+
 // Record<character.id, spell[]>
 const sampleSpells: Record<number, Spell[]> = {
   1: [
@@ -109,6 +112,8 @@ const sampleCharacters: Character[] = [
   { id: 3, name: 'Legolas', stats: sampleStats, proficiencies: sampleProficiencies },
 ]
 
+// COMPONENT STARTS HERE
+
 const HomePage = () => {
   const { state: { currentUser } } = useContext( AuthContext )
   const [ characters, setCharacters ] = useState<Character[]>( [] )
@@ -120,8 +125,8 @@ const HomePage = () => {
   const getCharacters = async () => {
     // const characters = await window.api.database.characters.
     //getCharactersByUser( currentUser.username )
-    setCharacters( characters )
-    setSelectedCharacter( characters[0].id )
+    setCharacters( sampleCharacters )
+    setSelectedCharacter( sampleCharacters[0].id )
   }
 
   const getSpellsForCharacter = async ( characterId: number ) => {
@@ -195,7 +200,7 @@ const HomePage = () => {
           />
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <CharacterSwitcher
-              characters={sampleCharacters}
+              characters={characters}
               selectedCharacterId={selectedCharacter}
               onSwitch={onCharacterSwitch}
             />
