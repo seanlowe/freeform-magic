@@ -1,21 +1,27 @@
 import React, { useState } from 'react'
 import { Spell } from '../../types'
+import AddSpellForm from '../components/AddSpellForm'
+import SpellDetailsCompendium from '../components/SpellDetailCompendium'
+import AllSpells from '../components/AllSpells'
 
 const CompendiumPage = ({
   spells,
-  setSpells
+  onAddSpell
 }: {
   spells: Spell[],
-  setSpells: ( spells: Spell[] ) => void
+  onAddSpell: ( newSpells: Spell ) => void
 }) => {
-  const [ searchQuery, setSearchQuery ] = useState( '' )
+  // const [ searchQuery, setSearchQuery ] = useState( '' )
   const [ favorites, setFavorites ] = useState<Spell[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<Spell[]>( [] )
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
 
-  const addSpell = () => {
-    // todo: add logic to add a new spell
-    console.log( 'Add spell button clicked' )
+  const [ isAddingSpell, setIsAddingSpell ] = useState( false )
+
+  const handleAddSpell = ( newSpell: Spell ) => {
+    onAddSpell( newSpell )
+
+    setIsAddingSpell( false )
   }
 
   const filterSpells = () => {
@@ -53,6 +59,39 @@ const CompendiumPage = ({
     }
 
     setFavorites( newFavorites )
+  }
+
+  const renderMainSection = () => {
+    if ( isAddingSpell ) {
+      return (
+        <AddSpellForm
+          onSpellAdd={handleAddSpell}
+          closeForm={() => {
+            return setIsAddingSpell( false ) 
+          }}
+        />
+      )
+    }
+
+    if ( selectedSpell ) {
+      return (
+        <SpellDetailsCompendium
+          isFavorite={isFavorite}
+          selectedSpell={selectedSpell}
+          setSelectedSpell={setSelectedSpell}
+          toggleFavorite={toggleFavorite}
+        />
+      )
+    } else {
+      return (
+        <AllSpells
+          spells={spells}
+          setSelectedSpell={setSelectedSpell}
+          updateRecentlyViewed={updateRecentlyViewed}
+          setRecentlyViewed={setRecentlyViewed}
+        />
+      )
+    }
   }
 
   return (
@@ -94,7 +133,10 @@ const CompendiumPage = ({
               height: '30px',
               width: '30px',
             }}
-            onClick={addSpell}
+            // onClick={addSpell}
+            onClick={() => {
+              return setIsAddingSpell( true ) 
+            }}
           >
             +
           </button>
@@ -181,79 +223,7 @@ const CompendiumPage = ({
 
         {/* Main Section */}
         <section style={{ padding: '0 1rem', width: '70%' }}>
-          {selectedSpell ? (
-            <div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  margin: '1rem 0',
-                }}
-              >
-                <button
-                  onClick={() => {
-                    return setSelectedSpell( null ) 
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    marginRight: '1rem',
-                    transform: 'scale(2.5)',
-                    position: 'relative',
-                    top: '-0.4rem',
-                  }}
-                >
-                  ←
-                </button>
-                <h3 style={{ margin: 0 }}>{selectedSpell.name}</h3>
-              </div>
-              <p>{selectedSpell.description}</p>
-              <button
-                style={{
-                  padding: '0.5rem',
-                  backgroundColor: '#FF5733',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  marginTop: '1rem',
-                }}
-                onClick={() => {
-                  return toggleFavorite( selectedSpell ) 
-                }}
-              >
-                {isFavorite( selectedSpell ) ? 'Remove from Favorites' : 'Add to Favorites'}
-              </button>
-            </div>
-          ) : (
-            <>
-              <h3>All Spells</h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                {spells.map(( spell ) => {
-                  return (
-                    <div
-                      key={spell.id}
-                      style={{
-                        padding: '0.5rem',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => {
-                        const newRecentlyViewed = updateRecentlyViewed( spell )
-
-                        setRecentlyViewed( newRecentlyViewed )
-                        setSelectedSpell( spell )
-                      }}
-                    >
-                      {spell.name}
-                    </div>
-                  ) 
-                })}
-              </div>
-            </>
-          )}
+          { renderMainSection() }
         </section>
       </div>
     </div>

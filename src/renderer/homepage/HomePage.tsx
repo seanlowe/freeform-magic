@@ -150,13 +150,16 @@ const HomePage = () => {
     setSelectedPage( page )
   }
 
+  const onAddSpell = ( newSpell: Spell ) => {
+    // setSpells( [ ...spells, newSpell ] )
+    allSpells.push( newSpell )
+  }
+
   const renderSelectedPage = ( page: string ): React.ReactElement => {
     switch ( page ) {
     // home is the default page and handled in the JSX
     case 'Compendium':
-      return <CompendiumPage spells={allSpells} setSpells={() => {
-        console.log( 'setSpells' ) 
-      }} />
+      return <CompendiumPage spells={allSpells} onAddSpell={onAddSpell} />
     case 'Characters':
       return <CharactersPage />
     default:
