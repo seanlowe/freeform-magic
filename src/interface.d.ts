@@ -15,6 +15,10 @@ export interface IElectronAPI {
       getCharacters: () => Character[]
       getCharactersByUser: ( username: string ) => Character[]
     },
+    // spells: {
+    //   getSpells: () => Spell[]
+    //   getSpellsByCharacter: ( characterId: number ) => Spell[]
+    // },
     users: {
       getUser: ( username: string ) => User | null
       createUser: ( createUserDto: CreateUserDto ) => User
