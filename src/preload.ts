@@ -17,6 +17,12 @@ contextBridge.exposeInMainWorld( 'api', {
     }
   },
   database: {
+    // character.handler.ts
+    characters: {
+      getCharactersByUser: async ( username: string ) => {
+        return await emitSignal( 'character:getCharactersByUser', username )
+      },
+    },
     // user.handler.ts
     users: {
       getUser: async ( username: string ) => {
@@ -28,6 +34,6 @@ contextBridge.exposeInMainWorld( 'api', {
       deleteUser: async ( username: string ) => {
         return await emitSignal( 'user:deleteUser', username )
       },
-    }
+    },
   }
 })

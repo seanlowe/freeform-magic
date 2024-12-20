@@ -11,6 +11,10 @@ export interface IElectronAPI {
     getCurrentUser: () => User | null
   },
   database: {
+    characters: {
+      getCharacters: () => Character[]
+      getCharactersByUser: ( username: string ) => Character[]
+    },
     users: {
       getUser: ( username: string ) => User | null
       createUser: ( createUserDto: CreateUserDto ) => User
