@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../utilities/contexts/auth.context'
-import { Spell, Character, CharacterStatistics, CharacterProficiencies } from '../../../types'
+import { Spell, Character } from '../../../types'
 import CharacterSwitcher from './CharacterSwitcher'
 import SpellDetails from './SpellDetails'
 import SpellList from './SpellList'
@@ -66,51 +66,6 @@ Object.keys( sampleSpells ).forEach(( spell ) => {
   return allSpells.push( ...sampleSpells[parseInt( spell )] )
 })
 
-const sampleStats: CharacterStatistics = {
-  strength: 10,
-  dexterity: 10,
-  constitution: 10,
-  intelligence: 10,
-  wisdom: 10,
-  charisma: 10,
-}
-
-const sampleProficiencies: CharacterProficiencies = {
-  // Strength
-  athletics: 10,
-
-  // Dexterity
-  acrobatics: 10,
-  sleightOfHand: 10,
-  stealth: 10,
-  
-  // Intelligence
-  arcana: 10,
-  history: 10,
-  investigation: 10,
-  nature: 10,
-  religion: 10,
-  
-  // Wisdom
-  animalHandling: 10,
-  insight: 10,
-  medicine: 10,
-  perception: 10,
-  survival: 10,
-  
-  // Charisma
-  deception: 10,
-  intimidation: 10,
-  performance: 10,
-  persuasion: 10,
-}
-
-const sampleCharacters: Character[] = [
-  { id: 1, name: 'Aragorn', stats: sampleStats, proficiencies: sampleProficiencies },
-  { id: 2, name: 'Gandalf', stats: sampleStats, proficiencies: sampleProficiencies },
-  { id: 3, name: 'Legolas', stats: sampleStats, proficiencies: sampleProficiencies },
-]
-
 // COMPONENT STARTS HERE
 
 const HomePage = () => {
@@ -121,11 +76,12 @@ const HomePage = () => {
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
   const [ selectedPage, setSelectedPage ] = useState<string>( 'Home' )
 
-  const getCharacters = async () => {
-    // const characters = await window.api.database.characters.
-    //getCharactersByUser( currentUser.username )
-    setCharacters( sampleCharacters )
-    setSelectedCharacter( sampleCharacters[0].id )
+  const getCharacters = async ( username: string ) => {
+    const characters =
+      await window.api.database.characters.getCharactersByUser( username )
+
+    setCharacters( characters )
+    setSelectedCharacter( characters[0].id )
   }
 
   const getSpellsForCharacter = async ( characterId: number ) => {
@@ -172,8 +128,12 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    getCharacters()
-  }, [] )
+    if ( !currentUser ) {
+      return
+    }
+
+    getCharacters( currentUser.username )
+  }, [ currentUser ] )
 
   useEffect(() => {
     if ( !selectedCharacter ) {
