@@ -45,6 +45,7 @@ class UserRepository {
       first,
       last ?? '',
       userRole.player,
+      [],
     )
 
     users[userInput.username] = user
