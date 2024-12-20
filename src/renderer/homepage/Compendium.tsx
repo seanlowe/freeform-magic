@@ -24,9 +24,6 @@ const CompendiumPage = ({
   }
 
   const updateRecentlyViewed = ( newSpell: Spell ): Spell[] => {
-    // update recently viewed
-    console.log( 'Update recently viewed button clicked' )
-
     const newRecentlyViewed = [
       newSpell,
       ...recentlyViewed.filter(( s ) => {
@@ -37,12 +34,25 @@ const CompendiumPage = ({
     return newRecentlyViewed
   }
 
-  const addToFavorites = ( spell: Spell ) => {
-    if ( !favorites.find(( fav ) => {
+  const isFavorite = ( spell: Spell ) => {
+    return favorites.some(( fav ) => {
       return fav.id === spell.id 
-    })) {
-      setFavorites( [ ...favorites, spell ] )
+    }) 
+  }
+
+  const toggleFavorite = ( spell: Spell ) => {
+    const spellIsFavorite = isFavorite( spell )
+
+    let newFavorites: Spell[] = []
+    if ( spellIsFavorite ) {
+      newFavorites = favorites.filter(( fav ) => {
+        return fav.id !== spell.id 
+      })
+    } else {
+      newFavorites = [ ...favorites, spell ]
     }
+
+    setFavorites( newFavorites )
   }
 
   return (
@@ -81,6 +91,8 @@ const CompendiumPage = ({
               backgroundColor: '#4CAF50',
               color: 'white',
               border: 'none',
+              height: '30px',
+              width: '30px',
             }}
             onClick={addSpell}
           >
@@ -171,21 +183,31 @@ const CompendiumPage = ({
         <section style={{ padding: '0 1rem', width: '70%' }}>
           {selectedSpell ? (
             <div>
-              <button
-                onClick={() => {
-                  return setSelectedSpell( null ) 
-                }}
+              <div
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'blue',
-                  cursor: 'pointer',
-                  marginBottom: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  margin: '1rem 0',
                 }}
               >
-                ← Back
-              </button>
-              <h3>{selectedSpell.name}</h3>
+                <button
+                  onClick={() => {
+                    return setSelectedSpell( null ) 
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    marginRight: '1rem',
+                    transform: 'scale(2.5)',
+                    position: 'relative',
+                    top: '-0.4rem',
+                  }}
+                >
+                  ←
+                </button>
+                <h3 style={{ margin: 0 }}>{selectedSpell.name}</h3>
+              </div>
               <p>{selectedSpell.description}</p>
               <button
                 style={{
@@ -198,10 +220,10 @@ const CompendiumPage = ({
                   marginTop: '1rem',
                 }}
                 onClick={() => {
-                  return addToFavorites( selectedSpell ) 
+                  return toggleFavorite( selectedSpell ) 
                 }}
               >
-                Add to Favorites
+                {isFavorite( selectedSpell ) ? 'Remove from Favorites' : 'Add to Favorites'}
               </button>
             </div>
           ) : (
