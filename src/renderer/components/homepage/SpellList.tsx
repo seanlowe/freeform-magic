@@ -1,4 +1,4 @@
-import { Spell } from '../../types'
+import { Spell } from '../../../types'
 
 const SpellList = ({
   spells,

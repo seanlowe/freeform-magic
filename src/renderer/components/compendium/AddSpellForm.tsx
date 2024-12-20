@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Spell } from '../../types'
+import { Spell } from '../../../types'
 
 const AddSpellForm = ({
   onSpellAdd,

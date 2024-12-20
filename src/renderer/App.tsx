@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import Auth from './registration/Auth'
 import Banner from './header/banner'
-import HomePage from './homepage/HomePage'
+import HomePage from './components/homepage/HomePage'
 import Providers from './utilities/providers'
 import { AuthContext } from './utilities/contexts/auth.context'
 
