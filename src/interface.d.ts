@@ -1,6 +1,8 @@
 /* eslint-disable no-var */
 
-import { SimpleElectronStore } from './db/store'
+import { PrismaClient } from '@prisma/client'
+
+import { SimpleElectronStore } from './db'
 import type { User } from './main/user/user.object'
 
 // NOTE - did you edit preload.ts as well?
@@ -28,7 +30,8 @@ export interface IElectronAPI {
 }
 
 declare global {
-  var store: SimpleElectronStore
+  var store: SimpleElectronStore // for emulating localStorage
+  var db: PrismaClient
   interface Window {
     api: IElectronAPI
   }

@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  // fields
+  username  String @unique
+  password  String
+  firstName String
+  lastName  String
+  role      String @default("player")
+
+  // references
+  characters Character[] // Each user can have multiple characters
+}
+
+model Character {
+  id Int @id @default(autoincrement())
+
+  // fields
+  name          String
+  stats         CharacterStatistics    @relation(fields: [statsId], references: [id])
+  proficiencies CharacterProficiencies @relation(fields: [proficienciesId], references: [id])
+
+  // referenced by
+  user User @relation(fields: [userId], references: [id])
+
+  // references
+  proficienciesId Int @unique // Foreign key for CharacterProficiencies
+  statsId         Int @unique // Foreign key for CharacterStatistics
+  userId          Int // Foreign key to associate a character with a user
+}
+
+model CharacterStatistics {
+  id           Int @id @default(autoincrement())
+  strength     Int
+  dexterity    Int
+  constitution Int
+  intelligence Int
+  wisdom       Int
+  charisma     Int
+
+  // referenced by
+  character Character?
+}
+
+model CharacterProficiencies {
+  id             Int @id @default(autoincrement())
+  athletics      Int
+  acrobatics     Int
+  sleightOfHand  Int
+  stealth        Int
+  arcana         Int
+  history        Int
+  investigation  Int
+  nature         Int
+  religion       Int
+  animalHandling Int
+  insight        Int
+  medicine       Int
+  perception     Int
+  survival       Int
+  deception      Int
+  intimidation   Int
+  performance    Int
+  persuasion     Int
+
+  // referenced by
+  character Character?
+}
