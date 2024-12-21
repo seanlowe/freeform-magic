@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react'
-import authReducer from './reducers/auth.reducer'
-import useAuth from './hooks/useAuth'
+
 import { AuthContext, initialAuthState } from './contexts/auth.context'
+import useAuth from './hooks/useAuth'
+import authReducer from './reducers/auth.reducer'
 
 const Providers: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { state, dispatch } = useAuth( authReducer, initialAuthState )

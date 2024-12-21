@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ipcMain, ipcRenderer } from 'electron'
+
 import ErrorObject from '../error/error.object'
 
 // new version of connectToSignal that allows returning a value?

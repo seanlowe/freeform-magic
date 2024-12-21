@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Spell } from '../../../types'
+
 import AddSpellForm from './AddSpellForm'
-import SpellDetailsCompendium from './SpellDetailCompendium'
 import AllSpells from './AllSpells'
+import SpellDetailsCompendium from './SpellDetailCompendium'
+import { Spell } from '../../../types'
 
 const CompendiumPage = ({
   spells,

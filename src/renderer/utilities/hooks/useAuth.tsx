@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { AuthReducer } from '../reducers/auth.reducer'
+
 import { AuthAction, AuthState } from '../../../types'
+import { AuthReducer } from '../reducers/auth.reducer'
 
 const useAuth = ( reducer: AuthReducer, initialState: AuthState ) => {
   const [ state, setState ] = useState<AuthState>( initialState )

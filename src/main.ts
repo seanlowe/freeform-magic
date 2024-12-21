@@ -1,9 +1,11 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
+
 import started from 'electron-squirrel-startup'
-import { registerHandlers } from './main/handlers'
+
 import { registerStore } from './db'
 import AuthRepository from './main/auth/auth.repository'
+import { registerHandlers } from './main/handlers'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if ( started ) {

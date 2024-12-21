@@ -1,6 +1,7 @@
 import { contextBridge } from 'electron'
-import { CreateUserDto } from './main/user/create-user.dto'
+
 import { emitSignal } from './main/handlers/utilities'
+import { CreateUserDto } from './main/user/create-user.dto'
 
 // NOTE - did you edit interface.d.ts as well?
 contextBridge.exposeInMainWorld( 'api', {

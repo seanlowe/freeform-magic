@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AuthFormData } from '../../types'
+
 import ErrorObject from '../../main/error/error.object'
+import { AuthFormData } from '../../types'
 import { AuthContext } from '../utilities/contexts/auth.context'
 
 const Auth: React.FC = () => {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import remote from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
-import remote from 'electron'
 
 class SimpleElectronStore {
   private data: Record<string, any>

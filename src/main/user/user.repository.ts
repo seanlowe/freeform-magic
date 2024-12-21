@@ -1,9 +1,9 @@
 // wrapper for interacting with the SimpleElectronStore for user data
 
-import { userRole } from '../../types'
-import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
-import { User } from './user.object'
 import { CreateUserDto } from './create-user.dto'
+import { User } from './user.object'
+import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
+import { userRole } from '../../types'
 
 /**
  * The user "database" is a key called "users" in the store

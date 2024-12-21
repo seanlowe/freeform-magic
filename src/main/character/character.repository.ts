@@ -1,7 +1,6 @@
-import { Character } from '../../types'
 import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
+import { Character } from '../../types'
 import ErrorObject from '../error/error.object'
-
 import UserRepository from '../user/user.repository'
 
 class CharacterRepository {

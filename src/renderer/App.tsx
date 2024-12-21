@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
-import Auth from './registration/Auth'
-import Banner from './header/banner'
+
 import HomePage from './components/homepage/HomePage'
-import Providers from './utilities/providers'
+import Banner from './header/banner'
+import Auth from './registration/Auth'
 import { AuthContext } from './utilities/contexts/auth.context'
+import Providers from './utilities/providers'
 
 const App: React.FC = () => {
   return (

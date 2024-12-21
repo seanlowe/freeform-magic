@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../../utilities/contexts/auth.context'
-import { Spell, Character } from '../../../types'
+
 import CharacterSwitcher from './CharacterSwitcher'
+import PageDropdown from './PageDropdown'
 import SpellDetails from './SpellDetails'
 import SpellList from './SpellList'
-import PageDropdown from './PageDropdown'
-import CompendiumPage from '../compendium/Compendium'
+import { Spell, Character } from '../../../types'
+import { AuthContext } from '../../utilities/contexts/auth.context'
 import CharactersPage from '../CharactersPage'
+import CompendiumPage from '../compendium/Compendium'
 
 // SAMPLE DATA STARTS HERE
 
