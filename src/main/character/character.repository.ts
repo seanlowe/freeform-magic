@@ -1,27 +1,43 @@
-import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
+import { PrismaClient } from '@prisma/client'
+
+import { checkExistsOrThrow } from '../../db'
 import { Character } from '../../types'
 import ErrorObject from '../error/error.object'
 import UserRepository from '../user/user.repository'
 
 class CharacterRepository {
-  private static store: SimpleElectronStore = global.store
+  private static db: PrismaClient = global.db
+
+  private static includeSelector = {
+    include: {
+      stats: true,
+      proficiencies: true,
+    }
+  }
 
   // get all characters
-  static getCharacters(): Character[] {
-    checkStoreExistsOrThrow( this.store )
+  static async getCharacters(): Promise<Character[]> {
+    checkExistsOrThrow( this.db )
 
-    const characters = this.store.get( 'characters' )
+    const characters = await this.db.character.findMany({
+      ...this.includeSelector,
+    })
 
     return characters
   }
 
   // get a single character
-  static getCharacter( id: number ): Character | null {
-    checkStoreExistsOrThrow( this.store )
+  static async getCharacter( id: number ): Promise<Character | null> {
+    checkExistsOrThrow( this.db )
 
-    const characters = this.getCharacters()
-    const character = characters.find(( character ) => {
-      return character.id === id
+    const character = await this.db.character.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        stats: true,
+        proficiencies: true,
+      }
     })
 
     if ( !character ) {
@@ -32,55 +48,23 @@ class CharacterRepository {
   }
 
   // get all characters for a user
-  static getCharactersByUser( username: string ): Character[] {
-    checkStoreExistsOrThrow( this.store )
+  static async getCharactersByUser( username: string ): Promise<Character[]> {
+    checkExistsOrThrow( this.db )
     
-    const user = UserRepository.getUser( username )
+    const user = await UserRepository.getUser( username )
     if ( !user ) {
-      throw new ErrorObject( 'User not found' )
+      throw new ErrorObject( 'user not found' )
     }
-    
-    const { characterIds } = user
-    const characters: Character[] = []
 
-    characterIds.forEach(( id ) => {
-      const character = this.getCharacter( id )
-      if ( character ) {
-        characters.push( character )
-      }
+    const characters = await this.db.character.findMany({
+      where: {
+        userId: user.id,
+      },
+      ...this.includeSelector,
     })
 
     return characters
   }
-  
-  // static createCharacter( character: Character ): Character {
-  //   checkStoreExistsOrThrow( this.store )
-  //
-  //   const characters = this.getCharacters()
-  //
-  //   const [ first, last ] = character.name.split( ' ' )
-  //   const newCharacter: Character = {
-  //     id: Math.random(),
-  //     name: character.name,
-  //     stats: character.stats,
-  //     proficiencies: character.proficiencies,
-  //   }
-  //
-  //   characters[character.id] = newCharacter
-  //
-  //   this.store.set( 'characters', characters )
-  //
-  //   return newCharacter
-  // }
-  //
-  // static deleteCharacter( id: number ): void {
-  //   checkStoreExistsOrThrow( this.store )
-  //
-  //   const characters = this.getCharacters()
-  //   delete characters[id]
-  //
-  //   this.store.set( 'characters', characters )
-  // }
 }
 
 export default CharacterRepository

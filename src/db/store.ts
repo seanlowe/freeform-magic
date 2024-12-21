@@ -8,18 +8,15 @@ class SimpleElectronStore {
   private filePath: string
 
   constructor( fileName = 'store.json' ) {
-    // const userDataPath = path.resolve( '.' ) // or app.getPath('userData') 
-    // this.filePath = path.join( userDataPath, fileName )
-
     const { app } = remote
     const userDataPath = app.getAppPath() + '/storage'
     this.filePath = path.join( userDataPath, fileName )
 
     try {
-      // Try to read the file and parse it as JSON
+      // try to read the file and parse it as JSON
       this.data = JSON.parse( fs.readFileSync( this.filePath, 'utf-8' ))
     } catch ( error ) {
-      // If file read or parse fails, start with an empty object
+      // if file read or parse fails, start with an empty object
       this.data = {}
     }
   }

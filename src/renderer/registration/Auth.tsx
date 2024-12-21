@@ -50,6 +50,7 @@ const Auth: React.FC = () => {
   }
 
   const doLogin = ( username: string, password: string ) => {
+    // password should be the user input, not the hashed password
     dispatch({ type: 'LOGIN', payload: {
       username: username,
       password: password
@@ -95,11 +96,9 @@ const Auth: React.FC = () => {
       return
     }
 
-    // hash password before login
-    // const hashedPassword = await crypto.hash( formData.password, 10 )
-
     const user = await window.api.database.users.getUser( username )
-    if ( user === undefined ) {
+    console.log( 'user', user )
+    if ( user === undefined || user === null ) {
       // jump to registration page with username prefilled
       setView( 'register' )
       return

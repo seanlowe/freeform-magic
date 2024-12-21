@@ -16,6 +16,7 @@ const authReducer: AuthReducer = async (
   }
   case 'LOGOUT': {
     await window.api.auth.logout()
+
     return { currentUser: null }
   }
   default:

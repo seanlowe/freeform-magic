@@ -2,7 +2,6 @@
 import { ipcMain } from 'electron'
 
 import { CreateUserDto } from './create-user.dto'
-import { User } from './user.object'
 import UserRepository from './user.repository'
 import { connectToSignal } from '../handlers/utilities'
 

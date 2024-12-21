@@ -1,40 +1,47 @@
-// wrapper for interacting with the SimpleElectronStore for session data
-// i.e. auth and the logged in user
+import {  PrismaClient, User } from '@prisma/client'
 
-import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
+import AuthService from './auth.service'
+import { SimpleElectronStore, checkExistsOrThrow } from '../../db'
 import ErrorObject from '../error/error.object'
-import { User } from '../user/user.object'
 import UserRepository from '../user/user.repository'
 
 class AuthRepository {
+  private static db: PrismaClient = global.db
   private static store: SimpleElectronStore = global.store
 
   // get current session user
-  static getCurrentUser(): User | null {
-    checkStoreExistsOrThrow( this.store )
+  static async getCurrentUser(): Promise<User | null> {
+    checkExistsOrThrow( this.db )
+    checkExistsOrThrow( this.store )
 
-    const result = this.store.get( 'currentUser' )
-    if ( !result ) {
-      console.log( 'no current user' )
+    const username = this.store.get( 'currentUser' )
+
+    if ( !username ) {
+      console.log( '[ AUTH.REPOS ] No current user in session' )
       return null
     }
 
-    const user = UserRepository.getUser( result )
+    const user = await UserRepository.getUser( username )
     if ( !user ) {
-      throw new Error( 'user not found' )
+      throw new ErrorObject( 'user not found' )
     }
 
     return user
   }
 
   // set current session user
-  static setCurrentUser( username: string ): ErrorObject | void {
-    checkStoreExistsOrThrow( this.store )
+  static async setCurrentUser( username: string, password: string ): Promise<ErrorObject | void> {
+    checkExistsOrThrow( this.db )
+    checkExistsOrThrow( this.store )
 
-    const user = UserRepository.getUser( username )
+    const user = await UserRepository.getUser( username )
     if ( !user ) {
-      // throw new Error( 'user not found' )
       return new ErrorObject( '[ AUTH.REPOS ] User cannot be found' )
+    }
+
+    const passwordsMatch = await AuthService.verifyPassword( password, user.password )
+    if ( !passwordsMatch ) {
+      return new ErrorObject( '[ AUTH.REPOS ] Password does not match' )
     }
 
     this.store.set( 'currentUser', user.username )
@@ -42,7 +49,7 @@ class AuthRepository {
 
   // clear current session user
   static clearCurrentUser(): void {
-    checkStoreExistsOrThrow( this.store )
+    checkExistsOrThrow( this.store )
 
     this.store.delete( 'currentUser' )
   }

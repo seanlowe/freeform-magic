@@ -1,32 +1,29 @@
-// wrapper for interacting with the SimpleElectronStore for user data
+import { PrismaClient, User } from '@prisma/client'
 
 import { CreateUserDto } from './create-user.dto'
-import { User } from './user.object'
-import { SimpleElectronStore, checkStoreExistsOrThrow } from '../../db'
+import { checkExistsOrThrow } from '../../db'
 import { userRole } from '../../types'
+import AuthService from '../auth/auth.service'
 
-/**
- * The user "database" is a key called "users" in the store
- * which is a Record<string, User[]> where the key is 
- * the username and the value is an array of users
- */
 class UserRepository {
-  private static store: SimpleElectronStore = global.store
+  private static db: PrismaClient = global.db
 
-  static getUsers(): Record<string, User> {
-    checkStoreExistsOrThrow( this.store )
+  static async getUsers(): Promise<User[]> {
+    checkExistsOrThrow( this.db )
 
-    const users = this.store.get( 'users' )
+    const users = await this.db.user.findMany()
 
     return users
   }
 
-  static getUser( username: string ): User | null {
-    checkStoreExistsOrThrow( this.store )
+  static async getUser( username: string ): Promise<User | null> {
+    checkExistsOrThrow( this.db )
 
-    const users = this.getUsers()
-
-    const user = users[username]
+    const user = await this.db.user.findFirst({
+      where: {
+        username,
+      },
+    })
     if ( !user ) {
       return null
     }
@@ -34,34 +31,43 @@ class UserRepository {
     return user
   }
 
-  static createUser( userInput: CreateUserDto ): User {
-    checkStoreExistsOrThrow( this.store )
+  static async createUser( userInput: CreateUserDto ): Promise<User> {
+    checkExistsOrThrow( this.db )
 
-    const users = this.getUsers()
+    // we save the hashed password in the database
+    // and only ever compare that against the user's input
+    // which means the password is never stored in plain text
+    const hashedPassword = await AuthService.hashPassword( userInput.password )
+
+    console.log({ hashedPassword, userInput })
 
     const [ first, last ] = userInput.name.split( ' ' )
-    const user = new User(
-      userInput.username,
-      first,
-      last ?? '',
-      userRole.player,
-      [],
-    )
-
-    users[userInput.username] = user
-
-    this.store.set( 'users', users )
+    const user = await this.db.user.create({
+      data: {
+        username: userInput.username,
+        password: hashedPassword,
+        firstName: first,
+        lastName: last ?? '',
+        role: userRole.player,
+        // characters: {
+        //   createMany: {
+        //     data: [],
+        //   },
+        // },
+      }
+    })
 
     return user
   }
 
-  static deleteUser( username: string ): void {
-    checkStoreExistsOrThrow( this.store )
+  static async deleteUser( username: string ): Promise<void> {
+    checkExistsOrThrow( this.db )
 
-    const users = this.getUsers()
-    delete users[username]
-
-    this.store.set( 'users', users )
+    await this.db.user.delete({
+      where: {
+        username,
+      },
+    })
   }
 }
 
