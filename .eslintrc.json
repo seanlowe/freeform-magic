@@ -45,7 +45,30 @@
     "prefer-const": ["error", { "destructuring": "all" }],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "semi": ["error", "never"],
-    "space-in-parens": ["error", "always", { "exceptions": ["{}", "()"] }]
+    "space-in-parens": ["error", "always", { "exceptions": ["{}", "()"] }],
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal"],
+        "pathGroups": [
+          {
+            "pattern": "~",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "~/**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
   },
   "settings": {
     "react": {
