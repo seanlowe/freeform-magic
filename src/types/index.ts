@@ -1,4 +1,4 @@
-import { User } from '../main/user/user.object'
+import { User } from '@prisma/client'
 
 export enum userRole {
   player = 'player',
