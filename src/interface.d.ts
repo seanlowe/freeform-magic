@@ -8,7 +8,7 @@ import type { User } from './main/user/user.object'
 // NOTE - did you edit preload.ts as well?
 export interface IElectronAPI {
   auth: {
-    login: ( username: string, password: string ) => void,
+    login: ( username: string, password: string ) => ErrorObject | void,
     logout: () => void,
     getCurrentUser: () => User | null
   },

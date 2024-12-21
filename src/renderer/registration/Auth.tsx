@@ -49,15 +49,21 @@ const Auth: React.FC = () => {
     })
   }
 
-  const doLogin = ( username: string, password: string ) => {
-    // password should be the user input, not the hashed password
-    dispatch({ type: 'LOGIN', payload: {
+  const doLogin = async ( username: string, password: string ) => {
+    const didLogin = await dispatch({ type: 'LOGIN', payload: {
       username: username,
       password: password
     } })
 
+    // if the login failed, set the error
+    if ( didLogin !== undefined && typeof didLogin === 'object' ) {
+      setError(( didLogin as ErrorObject ).message )
+      return
+    }
+
     clearFormData()
     setView( 'hidden' )
+    setError( '' )
   }
 
   const handleRegister = async () => {
@@ -77,7 +83,7 @@ const Auth: React.FC = () => {
     const newUser = await window.api.database.users.createUser( formData )
 
     // login the new user
-    doLogin( newUser.username, formData.password )
+    await doLogin( newUser.username, formData.password )
 
     return
   }
@@ -97,7 +103,6 @@ const Auth: React.FC = () => {
     }
 
     const user = await window.api.database.users.getUser( username )
-    console.log( 'user', user )
     if ( user === undefined || user === null ) {
       // jump to registration page with username prefilled
       setView( 'register' )
@@ -109,7 +114,7 @@ const Auth: React.FC = () => {
       return
     }
 
-    doLogin( username, password )
+    await doLogin( username, password )
   }
 
   const displayRegisterLink = () => {

@@ -39,8 +39,6 @@ class UserRepository {
     // which means the password is never stored in plain text
     const hashedPassword = await AuthService.hashPassword( userInput.password )
 
-    console.log({ hashedPassword, userInput })
-
     const [ first, last ] = userInput.name.split( ' ' )
     const user = await this.db.user.create({
       data: {

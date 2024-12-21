@@ -1,5 +1,6 @@
 import { contextBridge } from 'electron'
 
+import ErrorObject from './main/error/error.object'
 import { emitSignal } from './main/handlers/utilities'
 import { CreateUserDto } from './main/user/create-user.dto'
 
@@ -7,8 +8,14 @@ import { CreateUserDto } from './main/user/create-user.dto'
 contextBridge.exposeInMainWorld( 'api', {
   // auth.handler.ts
   auth: {
-    login: async ( ...args: any[] ) => {
-      return await emitSignal( 'auth:login', ...args )
+    login: async ( ...args: any[] ): Promise<ErrorObject | void> => {
+      const r = await emitSignal( 'auth:login', ...args )
+
+      if ( r !== undefined && typeof r === 'object' ) {
+        return r as ErrorObject
+      }
+
+      return
     },
     logout: async () => {
       return await emitSignal( 'auth:logout' )

@@ -1,3 +1,4 @@
+import ErrorObject from '../../../main/error/error.object'
 import { AuthAction, AuthState } from '../../../types'
 
 export type AuthReducer = ( state: AuthState, action: AuthAction ) => Promise<AuthState>
@@ -9,7 +10,12 @@ const authReducer: AuthReducer = async (
 ): Promise<AuthState> => {
   switch ( action.type ) {  
   case 'LOGIN': {
-    await window.api.auth.login( action.payload.username, action.payload.password )
+    const response = await window.api.auth.login( action.payload.username, action.payload.password )
+
+    if ( response !== undefined && typeof response === 'object' ) {
+      throw new ErrorObject( '[ AUTH.REDUCER ] Login failed' )
+    }
+
     const user = await window.api.database.users.getUser( action.payload.username )
     
     return { currentUser: user }

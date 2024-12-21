@@ -12,7 +12,7 @@ import { connectToSignal } from '../handlers/utilities'
 // --------------------------------
 
 // NOTE - keep in parity with preload.ts and interface.d.ts
-ipcMain.handle( 'user:getUser', async ( event, username: string ) => {
+connectToSignal( 'user:getUser', async ( event, username: string ) => {
   return UserRepository.getUser( username )
 })
 
