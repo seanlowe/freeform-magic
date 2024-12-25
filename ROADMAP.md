@@ -13,13 +13,26 @@
   - [x] react
   - [x] typescript
 - [x] Decide on storage / database options
-  - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts)
+  - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts, for "local storage")
+  - [x] prisma client with sqlite (for true database operations)
 - [x] Create a barebones executable
 - [x] Get user login / logout working
 - [ ] Get user role picked at user creation working
 - [ ] Get user role-specific homepages working
   - [ ] DM page
   - [ ] Player page
+- [ ] get spell compendium working
+  - [ ] basic compendium page
+    - [x] all spells list working
+    - [x] favorites list
+      - [x] add spell to favorites
+      - [x] remove spell from favorites
+      - [ ] persist favorites?
+    - [ ] spell search form
+    - [x] recently viewed list
+    - [x] add spells form
+      - [ ] persist user spells to db
+    - [ ] spell search working
 - [ ] get spell import working
 - [ ] get spell components working
   - [ ] get custom spell component creation working
