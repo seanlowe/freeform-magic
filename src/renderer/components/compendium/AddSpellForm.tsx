@@ -33,7 +33,7 @@ const AddSpellForm = ({
         handleAddSpell()
       }}>
         <div style={{ marginBottom: '1rem' }}>
-          <label>
+          <label style={{ display: 'flex' }}>
             Spell Name:
             <input
               type='text'
@@ -47,7 +47,7 @@ const AddSpellForm = ({
           </label>
         </div>
         <div style={{ marginBottom: '1rem' }}>
-          <label>
+          <label style={{ display: 'flex' }}>
               Description:
             <textarea
               value={newSpellDescription}
@@ -65,36 +65,43 @@ const AddSpellForm = ({
             />
           </label>
         </div>
-        <button
-          type='submit'
-          style={{
-            padding: '0.5rem',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          Add Spell
-        </button>
+        <div style={{
+          marginBottom: '0.5rem',
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}>
+          <button
+            style={{
+              // marginTop: '1rem',
+              padding: '0.5rem',
+              backgroundColor: '#ccc',
+              color: 'black',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              return closeForm() 
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            type='submit'
+            style={{
+              padding: '0.5rem',
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginLeft: '0.5rem',
+            }}
+          >
+            Add Spell
+          </button>
+        </div>
       </form>
-      <button
-        style={{
-          marginTop: '1rem',
-          padding: '0.5rem',
-          backgroundColor: '#ccc',
-          color: 'black',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}
-        onClick={() => {
-          return closeForm() 
-        }}
-      >
-        Cancel
-      </button>
     </div>
   )
 }
