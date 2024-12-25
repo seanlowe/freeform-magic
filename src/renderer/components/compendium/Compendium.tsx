@@ -208,7 +208,10 @@ const CompendiumPage = ({
                         cursor: 'pointer',
                       }}
                       onClick={() => {
-                        return setSelectedSpell( spell ) 
+                        const newRecentlyViewed = updateRecentlyViewed( spell )
+
+                        setRecentlyViewed( newRecentlyViewed )
+                        setSelectedSpell( spell )
                       }}
                     >
                       {spell.name}
