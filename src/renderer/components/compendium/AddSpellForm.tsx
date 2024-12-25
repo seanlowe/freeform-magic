@@ -72,7 +72,6 @@ const AddSpellForm = ({
         }}>
           <button
             style={{
-              // marginTop: '1rem',
               padding: '0.5rem',
               backgroundColor: '#ccc',
               color: 'black',
