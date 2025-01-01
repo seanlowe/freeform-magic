@@ -78,3 +78,10 @@ model CharacterProficiencies {
   // referenced by
   character Character?
 }
+
+model Spell {
+  id          Int              @id @default(autoincrement())
+  name        String
+  description String
+  components  String // JSON string - sqlite does not support JSON natively
+}
