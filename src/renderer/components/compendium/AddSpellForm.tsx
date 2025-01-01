@@ -1,6 +1,6 @@
+import { Spell } from '@prisma/client'
 import { useState } from 'react'
 
-import { Spell } from '../../../types'
 
 const AddSpellForm = ({
   onSpellAdd,

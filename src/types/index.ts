@@ -32,12 +32,6 @@ export type AuthAction =
   | { type: 'LOGIN'; payload: { username: string, password: string } }
   | { type: 'LOGOUT' }
 
-export interface Spell {
-  name: string;
-  description: string;
-  id: number;
-}
-
 export interface CharacterStatistics {
   strength: number
   dexterity: number

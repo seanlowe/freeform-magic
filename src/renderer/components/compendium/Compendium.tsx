@@ -1,9 +1,9 @@
+import { Spell } from '@prisma/client'
 import React, { useState } from 'react'
 
 import AddSpellForm from './AddSpellForm'
 import AllSpells from './AllSpells'
 import SpellDetailsCompendium from './SpellDetailCompendium'
-import { Spell } from '../../../types'
 
 const CompendiumPage = ({
   spells,
