@@ -34,6 +34,7 @@ const dropdownStyle: React.CSSProperties = {
   backgroundColor: '#444',
   border: '1px solid #555',
   padding: '5px',
+  width: '110px',
 }
 
 const dropdownButtonStyle: React.CSSProperties = {

@@ -1,10 +1,11 @@
+import { Spell } from '@prisma/client'
 import { useContext, useEffect, useState } from 'react'
 
 import CharacterSwitcher from './CharacterSwitcher'
 import PageDropdown from './PageDropdown'
 import SpellDetails from './SpellDetails'
 import SpellList from './SpellList'
-import { Spell, Character } from '../../../types'
+import { Character } from '../../../types'
 import { AuthContext } from '../../utilities/contexts/auth.context'
 import CharactersPage from '../CharactersPage'
 import CompendiumPage from '../compendium/Compendium'
@@ -69,18 +70,24 @@ Object.keys( sampleSpells ).forEach(( spell ) => {
 
 // COMPONENT STARTS HERE
 
-const HomePage = () => {
+const HomePage = ({
+  location,
+  onPageSelect
+}: {
+  location: string | null,
+  onPageSelect: ( page: string ) => void
+}) => {
   const { state: { currentUser } } = useContext( AuthContext )
   const [ characters, setCharacters ] = useState<Character[]>( [] )
   const [ spells, setSpells ] = useState<Spell[]>( [] )
   const [ selectedCharacter, setSelectedCharacter ] = useState<number | null>( null )
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
-  const [ selectedPage, setSelectedPage ] = useState<string>( 'Home' )
 
   const getCharacters = async ( username: string ) => {
     const characters =
       await window.api.database.characters.getCharactersByUser( username )
 
+    console.log( characters )
     setCharacters( characters )
     setSelectedCharacter( characters[0].id )
   }
@@ -105,10 +112,6 @@ const HomePage = () => {
     }
 
     return setSelectedSpell( chosenSpell )
-  }
-
-  const onPageSelect = ( page: string ) => {
-    setSelectedPage( page )
   }
 
   const onAddSpell = ( newSpell: Spell ) => {
@@ -144,14 +147,14 @@ const HomePage = () => {
     getSpellsForCharacter( selectedCharacter )
   }, [ selectedCharacter ] )
 
-  if ( !currentUser ) {
+  if ( !currentUser || !location ) {
     return null
   }
 
   return (
     <>
-      <PageDropdown selectedPage={selectedPage} setSelectedPage={onPageSelect} />
-      { selectedPage === 'Home' && (
+      <PageDropdown selectedPage={location} setSelectedPage={onPageSelect} />
+      { location === 'Home' && (
         <div style={{ display: 'flex', height: '100vh' }}>
           <SpellList
             spells={spells}
@@ -168,7 +171,7 @@ const HomePage = () => {
           </div>
         </div>
       )}
-      { renderSelectedPage( selectedPage ) }
+      { renderSelectedPage( location ) }
     </>
   )
 }

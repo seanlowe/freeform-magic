@@ -10,7 +10,7 @@ import {
 } from './styles'
 import { AuthContext } from '../utilities/contexts/auth.context'
 
-const Banner: React.FC<{username: string}> = ({ username }) => {
+const Banner: React.FC<{username: string, location: string | null}> = ({ username, location }) => {
   const [ dropdownOpen, setDropdownOpen ] = useState( false )
   const { dispatch } = useContext( AuthContext )
 
@@ -28,6 +28,19 @@ const Banner: React.FC<{username: string}> = ({ username }) => {
           </span>
           {dropdownOpen && (
             <div style={dropdownStyle}>
+              { location === 'Compendium' && (
+                <>
+                  <button
+                    onClick={() => {
+                      return console.log( 'import d&d5e spells' ) 
+                    }}
+                    style={dropdownButtonStyle}
+                  >
+                  import spells
+                  </button>
+                  <hr />
+                </>
+              )}
               <button 
                 onClick={() => {
                   toggleDropdown()

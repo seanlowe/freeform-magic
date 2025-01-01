@@ -4,6 +4,7 @@ import HomePage from './components/homepage/HomePage'
 import Banner from './header/banner'
 import Auth from './registration/Auth'
 import { AuthContext } from './utilities/contexts/auth.context'
+import { LocationContext } from './utilities/contexts/location.context'
 import Providers from './utilities/providers'
 
 const App: React.FC = () => {
@@ -16,13 +17,17 @@ const App: React.FC = () => {
 
 const InnerAppWrapper: React.FC = () => {
   const { state: { currentUser } } = useContext( AuthContext )
+  const { state: location, dispatch: locationDispatch } = useContext( LocationContext )
 
   return (
     <>
-      <Banner username={currentUser?.username ?? ''} />
+      <Banner
+        location={location} 
+        username={currentUser?.username ?? ''}
+      />
       <div className='content'>
         <Auth />
-        <HomePage />
+        <HomePage location={location} onPageSelect={locationDispatch} />
       </div>
     </>
   )
