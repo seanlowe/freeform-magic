@@ -22,7 +22,7 @@ const SpellDetailsCompendium = ({
       >
         <button
           onClick={() => {
-            return setSelectedSpell( null ) 
+            return setSelectedSpell( null )
           }}
           style={{
             background: 'none',
@@ -39,6 +39,18 @@ const SpellDetailsCompendium = ({
         <h3 style={{ margin: 0 }}>{selectedSpell.name}</h3>
       </div>
       <p>{selectedSpell.description}</p>
+      <section>
+        <h3>Components</h3>
+        <ul>
+          {selectedSpell.components.map(( component ) => {
+            return (
+              <li key={component.id} >
+                <strong>{component.type}: </strong> {component.value}
+              </li>
+            )
+          })}
+        </ul>
+      </section>
       <button
         style={{
           padding: '0.5rem',
@@ -50,7 +62,7 @@ const SpellDetailsCompendium = ({
           marginTop: '1rem',
         }}
         onClick={() => {
-          return toggleFavorite( selectedSpell ) 
+          return toggleFavorite( selectedSpell )
         }}
       >
         {isFavorite( selectedSpell ) ? 'Remove from Favorites' : 'Add to Favorites'}
