@@ -20,8 +20,8 @@ model User {
   lastName  String
   role      String @default("player")
 
-  // references
-  characters Character[] // Each user can have multiple characters
+  // relationships
+  characters Character[] // 1-many, each user can have multiple characters
 }
 
 model Character {
@@ -35,10 +35,11 @@ model Character {
   // referenced by
   user User @relation(fields: [userId], references: [id])
 
-  // references
-  proficienciesId Int @unique // Foreign key for CharacterProficiencies
-  statsId         Int @unique // Foreign key for CharacterStatistics
-  userId          Int // Foreign key to associate a character with a user
+  // relationships
+  proficienciesId Int     @unique // 1-1, one character has 1 set of proficiencies
+  statsId         Int     @unique // 1-1, one character has 1 set of stats
+  userId          Int // ---------// many-1, one character has 1 associated user
+  spells          Spell[] // -----// many-many, each character can have many spells
 }
 
 model CharacterStatistics {
@@ -80,8 +81,11 @@ model CharacterProficiencies {
 }
 
 model Spell {
-  id          Int              @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
   description String
   components  String // JSON string - sqlite does not support JSON natively
+
+  // relationships
+  Character Character[] // spells can be associated with any number of characters (or no characters)
 }
