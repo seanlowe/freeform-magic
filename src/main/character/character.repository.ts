@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
+// import { Character, Prisma, PrismaClient } from '@prisma/client'
 
 import { checkExistsOrThrow } from '../../db'
 import { Character } from '../../types'
@@ -8,11 +9,10 @@ import UserRepository from '../user/user.repository'
 class CharacterRepository {
   private static db: PrismaClient = global.db
 
-  private static includeSelector = {
-    include: {
-      stats: true,
-      proficiencies: true,
-    }
+  private static includeSelector: Prisma.CharacterSelect = {
+    stats: true,
+    proficiencies: true,
+    spells: true,
   }
 
   // get all characters
@@ -20,7 +20,7 @@ class CharacterRepository {
     checkExistsOrThrow( this.db )
 
     const characters = await this.db.character.findMany({
-      ...this.includeSelector,
+      select: this.includeSelector
     })
 
     return characters
@@ -34,10 +34,7 @@ class CharacterRepository {
       where: {
         id,
       },
-      include: {
-        stats: true,
-        proficiencies: true,
-      }
+      include: this.includeSelector,
     })
 
     if ( !character ) {
@@ -60,7 +57,7 @@ class CharacterRepository {
       where: {
         userId: user.id,
       },
-      ...this.includeSelector,
+      include: this.includeSelector,
     })
 
     return characters

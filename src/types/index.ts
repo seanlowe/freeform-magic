@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { Spell, User } from '@prisma/client'
 
 export enum userRole {
   player = 'player',
@@ -76,4 +76,5 @@ export interface Character {
   name: string
   stats: CharacterStatistics
   proficiencies: CharacterProficiencies
+  spells: Spell[]
 }
