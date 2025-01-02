@@ -1,23 +1,34 @@
 import { Spell } from '@prisma/client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import AddSpellForm from './AddSpellForm'
 import AllSpells from './AllSpells'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 
-const CompendiumPage = ({
-  spells,
-  onAddSpell
-}: {
-  spells: Spell[],
-  onAddSpell: ( newSpells: Spell ) => void
-}) => {
+const CompendiumPage = () => {
   // const [ searchQuery, setSearchQuery ] = useState( '' )
   const [ favorites, setFavorites ] = useState<Spell[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<Spell[]>( [] )
+  const [ allSpells, setAllSpells ] = useState<Spell[]>( [] )
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
 
   const [ isAddingSpell, setIsAddingSpell ] = useState( false )
+
+  const getAllSpells = async () => {
+    const spells = await window.api.database.spells.getSpells()
+
+    setAllSpells( spells )
+  }
+
+  useEffect(() => {
+    getAllSpells()
+  }, [] )
+
+  const onAddSpell = ( newSpell: Spell ) => {
+    // await window.api.database.spells.createSpell( newSpell )
+    setAllSpells( [ ...allSpells, newSpell ] )
+    // allSpells.push( newSpell )
+  }
 
   const handleAddSpell = ( newSpell: Spell ) => {
     onAddSpell( newSpell )
@@ -86,7 +97,7 @@ const CompendiumPage = ({
     } else {
       return (
         <AllSpells
-          spells={spells}
+          spells={allSpells}
           setSelectedSpell={setSelectedSpell}
           updateRecentlyViewed={updateRecentlyViewed}
           setRecentlyViewed={setRecentlyViewed}
