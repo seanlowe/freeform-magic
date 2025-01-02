@@ -10,66 +10,6 @@ import { AuthContext } from '../../utilities/contexts/auth.context'
 import CharactersPage from '../CharactersPage'
 import CompendiumPage from '../compendium/Compendium'
 
-// SAMPLE DATA STARTS HERE
-
-// Record<character.id, spell[]>
-const sampleSpells: Record<number, Spell[]> = {
-  1: [
-    {
-      id: 1,
-      name: 'Fireball',
-      description: 'A bright streak flashes from your pointing finger to a point you choose...',
-    },
-    {
-      id: 2,
-      name: 'Lightning Bolt',
-      description: 'A bright streak flashes from your pointing finger to a point you choose...',
-    }
-  ],
-  2: [ 
-    {
-      id: 3,
-      name: 'Cure Wounds',
-      description: 'A creature you touch regains hit points equal to...',
-    },
-    {
-      id: 4,
-      name: 'Greater Cure Wounds',
-      description: 'A stronger version of cure wounds.',
-    },
-    {
-      id: 5,
-      name: 'Antidote',
-      description:
-      'Dispel poison, disease, blindness, paralysis, and sickness on a creature you touch.',
-    },
-  ],
-  3: [ 
-    {
-      id: 6,
-      name: 'Mage Hand',
-      description: 'A spectral, floating hand appears at a point you choose...',
-    },
-    {
-      id: 7,
-      name: 'Mage Foot',
-      description: 'A spectral, floating foot appears at a point you choose...',
-    },
-    {
-      id: 8,
-      name: 'Mage Head',
-      description: 'A spectral, floating head appears around eye level at a point you choose...',
-    },
-  ],
-}
-
-const allSpells: Spell[] = []
-Object.keys( sampleSpells ).forEach(( spell ) => {
-  return allSpells.push( ...sampleSpells[parseInt( spell )] )
-})
-
-// COMPONENT STARTS HERE
-
 const HomePage = ({
   location,
   onPageSelect
@@ -80,7 +20,7 @@ const HomePage = ({
   const { state: { currentUser } } = useContext( AuthContext )
   const [ characters, setCharacters ] = useState<Character[]>( [] )
   const [ spells, setSpells ] = useState<Spell[]>( [] )
-  const [ selectedCharacter, setSelectedCharacter ] = useState<number | null>( null )
+  const [ selectedCharacter, setSelectedCharacter ] = useState<Character | null>( null )
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
 
   const getCharacters = async ( username: string ) => {
@@ -89,17 +29,17 @@ const HomePage = ({
 
     console.log( characters )
     setCharacters( characters )
-    setSelectedCharacter( characters[0].id )
+    setSelectedCharacter( characters[0] )
   }
 
-  const getSpellsForCharacter = async ( characterId: number ) => {
-    // const spells = await window.api.database.spells.getSpellsByCharacter( characterId )
-    setSpells( sampleSpells[characterId] )
+  const getSpellsForCharacter = async () => {
+    setSpells( selectedCharacter?.spells ?? [] )
   }
 
-  const onCharacterSwitch = ( characterId: number ) => {
+  const onCharacterSwitch = ( character: Character ) => {
     setSelectedSpell( null )
-    setSelectedCharacter( characterId )
+    setSelectedCharacter( character )
+    getSpellsForCharacter()
   }
 
   const onSpellSelect = ( spellId: number ) => {
@@ -115,15 +55,15 @@ const HomePage = ({
   }
 
   const onAddSpell = ( newSpell: Spell ) => {
-    // setSpells( [ ...spells, newSpell ] )
-    allSpells.push( newSpell )
+    setSpells( [ ...spells, newSpell ] )
+    // allSpells.push( newSpell )
   }
 
   const renderSelectedPage = ( page: string ): React.ReactElement => {
     switch ( page ) {
     // home is the default page and handled in the JSX
     case 'Compendium':
-      return <CompendiumPage spells={allSpells} onAddSpell={onAddSpell} />
+      return <CompendiumPage spells={spells} onAddSpell={onAddSpell} />
     case 'Characters':
       return <CharactersPage />
     default:
@@ -144,7 +84,7 @@ const HomePage = ({
       return
     }
     
-    getSpellsForCharacter( selectedCharacter )
+    getSpellsForCharacter()
   }, [ selectedCharacter ] )
 
   if ( !currentUser || !location ) {
@@ -164,7 +104,7 @@ const HomePage = ({
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <CharacterSwitcher
               characters={characters}
-              selectedCharacterId={selectedCharacter}
+              selectedCharacter={selectedCharacter}
               onSwitch={onCharacterSwitch}
             />
             <SpellDetails selectedSpell={selectedSpell} />
