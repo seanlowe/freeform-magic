@@ -19,7 +19,7 @@ const HomePage = ({
 }) => {
   const { state: { currentUser } } = useContext( AuthContext )
   const [ characters, setCharacters ] = useState<Character[]>( [] )
-  const [ spells, setSpells ] = useState<Spell[]>( [] )
+  const [ spellsForCharacter, setSpellsForCharacter ] = useState<Spell[]>( [] )
   const [ selectedCharacter, setSelectedCharacter ] = useState<Character | null>( null )
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
 
@@ -33,7 +33,7 @@ const HomePage = ({
   }
 
   const getSpellsForCharacter = async () => {
-    setSpells( selectedCharacter?.spells ?? [] )
+    setSpellsForCharacter( selectedCharacter?.spells ?? [] )
   }
 
   const onCharacterSwitch = ( character: Character ) => {
@@ -43,7 +43,7 @@ const HomePage = ({
   }
 
   const onSpellSelect = ( spellId: number ) => {
-    const chosenSpell = spells.find(( spell ) => {
+    const chosenSpell = spellsForCharacter.find(( spell ) => {
       return spell.id === spellId
     })
 
@@ -54,16 +54,11 @@ const HomePage = ({
     return setSelectedSpell( chosenSpell )
   }
 
-  const onAddSpell = ( newSpell: Spell ) => {
-    setSpells( [ ...spells, newSpell ] )
-    // allSpells.push( newSpell )
-  }
-
   const renderSelectedPage = ( page: string ): React.ReactElement => {
     switch ( page ) {
     // home is the default page and handled in the JSX
     case 'Compendium':
-      return <CompendiumPage spells={spells} onAddSpell={onAddSpell} />
+      return <CompendiumPage />
     case 'Characters':
       return <CharactersPage />
     default:
@@ -97,7 +92,7 @@ const HomePage = ({
       { location === 'Home' && (
         <div style={{ display: 'flex', height: '100vh' }}>
           <SpellList
-            spells={spells}
+            spells={spellsForCharacter}
             selectedSpell={selectedSpell}
             onSelect={onSpellSelect}
           />
