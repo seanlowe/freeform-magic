@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-const useLocation = ( initialState: string | null ) => {
-  const [ state, setState ] = useState<string | null>( initialState )
+const useLocation = ( initialState: string ) => {
+  const [ state, setState ] = useState<string>( initialState )
 
   const dispatch = ( page: string ) => {
     setState( page )
