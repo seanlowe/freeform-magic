@@ -2,12 +2,12 @@ import { Character } from '../../../types'
 
 const CharacterSwitcher = ({
   characters,
-  selectedCharacterId,
+  selectedCharacter,
   onSwitch
 }: {
   characters: Character[],
-  selectedCharacterId: number | null,
-  onSwitch: ( characterId: number ) => void
+  selectedCharacter: Character | null,
+  onSwitch: ( character: Character ) => void
 }) => {
   return (
     <div style={{ padding: '16px' }}>
@@ -15,9 +15,9 @@ const CharacterSwitcher = ({
       <p>Select your character:</p>
       <select
         onChange={( e ) => {
-          return onSwitch( Number( e.target.value ))
+          return onSwitch( characters[parseInt( e.target.value )] )
         }}
-        value={selectedCharacterId || ''}
+        value={selectedCharacter?.id || ''}
       >
         <option value='' disabled>Select a character</option>
         {characters.map(( character ) => {
