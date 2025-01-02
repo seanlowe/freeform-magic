@@ -5,12 +5,21 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "clear && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "lint:fix": "eslint --ext .ts,.tsx . --fix"
+    "lint:fix": "eslint --ext .ts,.tsx . --fix",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
+    "db:seed": "npx prisma db seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0",
+    "electron-squirrel-startup": "^1.0.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.0",
@@ -34,22 +43,20 @@
     "eslint-plugin-react": "^7.37.2",
     "prisma": "^6.1.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^5.4.11"
   },
   "overrides": {
     "typescript": "^5.7.2"
   },
+  "prisma": {
+    "seed": "tsx ./prisma/seed.ts"
+  },
   "keywords": [],
   "author": {
     "name": "Sean Lowe",
     "email": "35589586+seanlowe@users.noreply.github.com"
   },
-  "license": "MIT",
-  "dependencies": {
-    "@prisma/client": "^6.1.0",
-    "electron-squirrel-startup": "^1.0.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  }
+  "license": "MIT"
 }

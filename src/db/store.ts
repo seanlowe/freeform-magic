@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import remote from 'electron'
+// import remote from 'electron'
+import * as electron from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -8,8 +9,17 @@ class SimpleElectronStore {
   private filePath: string
 
   constructor( fileName = 'store.json' ) {
-    const { app } = remote
-    const userDataPath = app.getAppPath() + '/storage'
+    // const { app } = remote
+    const { app } = electron
+    let userDataPath: string
+    
+    if ( !app ) {
+      // we might be running in a command where the rest of the app is not running
+      userDataPath = process.cwd() + '/storage'
+    } else {
+      userDataPath = app.getAppPath() + '/storage'
+    }
+
     this.filePath = path.join( userDataPath, fileName )
 
     try {

@@ -52,12 +52,20 @@ const checkStoreExistsOrThrow = ( store: SimpleElectronStore ): void => {
   }
 }
 
-const registerStore = async () => {
+const registerSomething = async ( thingToRegister: string ) => {
   await Promise.resolve( new Promise(( resolve ) => {
     return setTimeout( resolve, 1000 ) 
   }))
 
-  console.log( 'registerStore' )
+  console.log( `Registering the ${thingToRegister}. . .` )
 }
 
-export { db, store, registerStore, checkExistsOrThrow }
+const registerStore = async () => {
+  await registerSomething( 'store' )
+}
+
+const registerDb = async () => {
+  await registerSomething( 'db' )
+}
+
+export { db, store, registerStore, registerDb, checkExistsOrThrow }
