@@ -18,7 +18,7 @@ export interface IElectronAPI {
       getCharactersByUser: ( username: string ) => Character[]
     },
     spells: {
-      // getSpells: () => Spell[]
+      getSpells: () => Spell[]
       getSpellsByCharacter: ( characterId: number ) => Spell[]
     },
     users: {
