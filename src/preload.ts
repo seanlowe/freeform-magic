@@ -34,7 +34,11 @@ contextBridge.exposeInMainWorld( 'api', {
       },
     },
     // spell.handler.ts
-    spells: {},
+    spells: {
+      getSpellsByCharacter: async ( characterId: number ) => {
+        return await emitSignal( 'spell:getSpellsByCharacter', characterId )
+      },
+    },
     // user.handler.ts
     users: {
       getUser: async ( username: string ) => {
