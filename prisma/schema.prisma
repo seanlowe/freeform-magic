@@ -87,5 +87,5 @@ model Spell {
   components  String // JSON string - sqlite does not support JSON natively
 
   // relationships
-  Character Character[] // spells can be associated with any number of characters (or no characters)
+  character Character[] // spells can be associated with any number of characters (or no characters)
 }
