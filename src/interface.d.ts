@@ -20,6 +20,7 @@ export interface IElectronAPI {
     spells: {
       getSpells: () => Spell[]
       getSpellsByCharacter: ( characterId: number ) => Spell[]
+      importSpells: () => void
     },
     users: {
       getUser: ( username: string ) => User | null
