@@ -1,5 +1,7 @@
 import { Spell } from '@prisma/client'
 
+import { SpellComponent, SpellForApp } from '../../../types/spells.types'
+
 const SpellDetailsCompendium = ({
   isFavorite,
   selectedSpell,
@@ -11,6 +13,50 @@ const SpellDetailsCompendium = ({
   setSelectedSpell: ( spell: Spell | null ) => void,
   toggleFavorite: ( spell: Spell ) => void
 }) => {
+  const convertedSpell: SpellForApp = {
+    ...selectedSpell,
+    components: JSON.parse( JSON.stringify( selectedSpell.components )),
+  }
+
+  const renderComponents = ( components: SpellComponent[] ) => {
+    if ( !components.length ) {
+      return null
+    }
+
+    let toRender = `
+      <section>
+        <h3>Components</h3>
+        <ul>
+    `
+
+    let componentCounter = 0
+    toRender += components.map(( component ) => {
+      let currentComponentToRender = null
+      const { type, value } = component
+      if ( !type || !value ) {
+        return currentComponentToRender
+      }
+
+      currentComponentToRender = `<li key=${componentCounter}>`
+
+      if ( Object.keys( value ).length ) {
+        currentComponentToRender += `<strong>${type}: </strong>`
+        for ( const [ key, val ] of Object.entries( value )) {
+          currentComponentToRender += `${key}: ${val}, `
+        }
+      } else {
+        currentComponentToRender += `<strong>${type}: </strong> ${value}`
+      }
+   
+      componentCounter++
+      currentComponentToRender += '</li>'
+
+      return currentComponentToRender
+    })
+
+    return toRender + '</section></ul>'
+  }
+
   return (
     <div>
       <div
@@ -39,18 +85,7 @@ const SpellDetailsCompendium = ({
         <h3 style={{ margin: 0 }}>{selectedSpell.name}</h3>
       </div>
       <p>{selectedSpell.description}</p>
-      <section>
-        <h3>Components</h3>
-        <ul>
-          {selectedSpell.components.map(( component ) => {
-            return (
-              <li key={component.id} >
-                <strong>{component.type}: </strong> {component.value}
-              </li>
-            )
-          })}
-        </ul>
-      </section>
+      { renderComponents( convertedSpell.components )}
       <button
         style={{
           padding: '0.5rem',

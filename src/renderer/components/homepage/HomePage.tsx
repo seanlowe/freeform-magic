@@ -27,7 +27,6 @@ const HomePage = ({
     const characters =
       await window.api.database.characters.getCharactersByUser( username )
 
-    console.log( characters )
     setCharacters( characters )
     setSelectedCharacter( characters[0] )
   }
