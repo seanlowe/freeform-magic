@@ -8,14 +8,23 @@ import {
   dropdownStyle,
   dropdownButtonStyle,
 } from './styles'
+import { ActionsContext } from '../utilities/contexts/actions.context'
 import { AuthContext } from '../utilities/contexts/auth.context'
 
 const Banner: React.FC<{username: string, location: string | null}> = ({ username, location }) => {
+  const { dispatch: authDispatch } = useContext( AuthContext )
+  const { dispatch: actionsDispatch } = useContext( ActionsContext )
+
   const [ dropdownOpen, setDropdownOpen ] = useState( false )
-  const { dispatch } = useContext( AuthContext )
 
   const toggleDropdown = () => {
-    return setDropdownOpen( !dropdownOpen ) 
+    return setDropdownOpen( !dropdownOpen )
+  }
+
+  const import5eSpells = async () => {
+    toggleDropdown()
+    await window.api.database.spells.importSpells()
+    actionsDispatch( true )
   }
 
   return (
@@ -24,29 +33,25 @@ const Banner: React.FC<{username: string, location: string | null}> = ({ usernam
       {username && (
         <div style={userContainerStyle}>
           <span onClick={toggleDropdown} style={usernameStyle}>
+            {/* TODO - animate this arrow like on the page switcher */}
             {username} ▾
           </span>
           {dropdownOpen && (
             <div style={dropdownStyle}>
               { location === 'Compendium' && (
                 <>
-                  <button
-                    onClick={() => {
-                      return console.log( 'import d&d5e spells' ) 
-                    }}
-                    style={dropdownButtonStyle}
-                  >
-                  import spells
+                  <button onClick={import5eSpells} style={dropdownButtonStyle}>
+                    Import Spells from 5e
                   </button>
                   <hr />
                 </>
               )}
-              <button 
+              <button
                 onClick={() => {
                   toggleDropdown()
-                  dispatch({ type: 'LOGOUT' }) 
+                  authDispatch({ type: 'LOGOUT' })
 
-                  return 
+                  return
                 }}
                 style={dropdownButtonStyle}
               >

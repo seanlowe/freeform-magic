@@ -18,7 +18,6 @@ interface DifficultyClassOption {
  * don't use this type directly. Use either SpellForDB or SpellForApp
  */
 export interface Spell {
-  // id: number
   name: string
   description: string
 }
