@@ -1,11 +1,14 @@
 import { Spell } from '@prisma/client'
-import React, { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './AddSpellForm'
 import AllSpells from './AllSpells'
 import SpellDetailsCompendium from './SpellDetailCompendium'
+import { ActionsContext } from '../../utilities/contexts/actions.context'
 
 const CompendiumPage = () => {
+  const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
+
   // const [ searchQuery, setSearchQuery ] = useState( '' )
   const [ favorites, setFavorites ] = useState<Spell[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<Spell[]>( [] )
@@ -18,11 +21,22 @@ const CompendiumPage = () => {
     const spells = await window.api.database.spells.getSpells()
 
     setAllSpells( spells )
+    actionsDispatch( false )
   }
 
+  // run on first render
   useEffect(() => {
     getAllSpells()
   }, [] )
+
+  useEffect(() => {
+    // don't do anything if we just finished an action and marked this as false
+    if ( !needsRefresh ) {
+      return 
+    }
+
+    getAllSpells()
+  }, [ needsRefresh ] )
 
   const onAddSpell = ( newSpell: Spell ) => {
     // await window.api.database.spells.createSpell( newSpell )

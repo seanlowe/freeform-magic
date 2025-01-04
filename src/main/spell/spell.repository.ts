@@ -70,6 +70,33 @@ class SpellRepository {
       },
     })
   }
+
+  static async upsertSpell( spell: SpellForDB ): Promise<void> {
+    checkExistsOrThrow( this.db )
+
+    // because we don't always have IDs on the spells in the application, we cannot use
+    // Prisma's upsert method. Instead, we'll check if the spell exists, and if it does,
+    // update it. If it doesn't, create it.
+
+    const existingSpell = await this.db.spell.findFirst({
+      where: {
+        name: spell.name,
+      },
+    })
+
+    if ( !existingSpell ) {
+      await this.db.spell.create({
+        data: spell,
+      })
+    } else {
+      await this.db.spell.update({
+        where: {
+          id: existingSpell.id,
+        },
+        data: spell,
+      })
+    }
+  }
 }
 
 export default SpellRepository

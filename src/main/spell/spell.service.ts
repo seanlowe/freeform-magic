@@ -1,10 +1,9 @@
-import { 
+import SpellRepository from './spell.repository'
+import {
   AllSpellsResponse,
   SpellDetailResponse,
-  // SpellDurationResponse,
   SpellRangeResponse
 } from '../../types/api.types'
-// import { AttributeOption } from '../../types/characters.types'
 import {
   AreaTypeOption,
   DamageOption,
@@ -14,6 +13,7 @@ import {
   ElementOption,
   SpellComponent,
   SpellForApp,
+  SpellForDB,
   TargetOption
 } from '../../types/spells.types'
 
@@ -28,6 +28,18 @@ export async function importAll5eSpells() {
   const importedSpells: SpellDetailResponse[] = await import5eSpells()
 
   const spells: SpellForApp[] = convert5eSpellsToAppSpells( importedSpells )
+
+  const spellsToSave: SpellForDB[] = spells.map(( spell ) => {
+    return {
+      name: spell.name,
+      description: spell.description,
+      components: JSON.stringify( spell.components ),
+    }
+  })
+
+  for ( const spell of spellsToSave ) {
+    await SpellRepository.upsertSpell( spell )
+  }
 
   return spells
 }
@@ -44,11 +56,15 @@ function convert5eSpellsToAppSpells( importedSpells: SpellDetailResponse[] ): Sp
   return spells
 }
 
-function mapResponseToDamageOption( response: SpellDetailResponse ): DamageOption {
+function mapResponseToDamageOption( response: SpellDetailResponse ): DamageOption | null {
   const elementOptions = Object.values( ElementOption ) as string[]
   const damageTypeOptions = Object.values( DamageTypeOption ) as string[]
 
-  const damageType = response.damage.damage_type.index as string
+  const damageType = response.damage.damage_type?.index as string ?? null
+
+  if ( !damageType ) {
+    return null
+  }
 
   if ( damageTypeOptions.includes( damageType )) {
     if ( damageType === DamageTypeOption.Elemental ) {
@@ -210,7 +226,7 @@ function convertDurationToSpellComponents( spell: SpellDetailResponse ): SpellCo
   }
 
   durationComponent.value = timeAmount
-  
+
   if ( concentration ) {
     durationTypeComponent.value = DurationOption.Ongoing
   }
@@ -250,9 +266,16 @@ function buildSpellComponents( spell: SpellDetailResponse ): SpellComponent[] {
     case 'attack_type':
       components.push( ...convertAttackTypeToSpellComponents( spell ))
       break
-    case 'damage':
-      components.push({ type: 'damage', value: mapResponseToDamageOption( spell ) })
+    case 'damage': {
+      const damageOption = mapResponseToDamageOption( spell )
+
+      if ( !damageOption ) {
+        break
+      }
+
+      components.push({ type: 'damage', value: damageOption })
       break
+    }
     case 'dc':
       components.push({
         type: 'difficultyClass',

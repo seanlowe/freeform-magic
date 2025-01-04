@@ -13,9 +13,11 @@ const SpellDetailsCompendium = ({
   setSelectedSpell: ( spell: Spell | null ) => void,
   toggleFavorite: ( spell: Spell ) => void
 }) => {
+  console.log({ selectedSpell })
+
   const convertedSpell: SpellForApp = {
     ...selectedSpell,
-    components: JSON.parse( JSON.stringify( selectedSpell.components )),
+    components: selectedSpell.components ? JSON.parse( selectedSpell.components ) : '',
   }
 
   const renderComponents = ( components: SpellComponent[] ) => {
@@ -23,38 +25,53 @@ const SpellDetailsCompendium = ({
       return null
     }
 
-    let toRender = `
-      <section>
-        <h3>Components</h3>
-        <ul>
-    `
-
+    const toRenderArray = [ <h3>Components</h3> ]
     let componentCounter = 0
-    toRender += components.map(( component ) => {
-      let currentComponentToRender = null
+
+    const internalComponentsArray = components.map(( component ) => {
+      let currentComponentToRender: React.ReactElement
       const { type, value } = component
       if ( !type || !value ) {
-        return currentComponentToRender
+        return <></>
       }
 
-      currentComponentToRender = `<li key=${componentCounter}>`
+      if ( typeof value === 'object' && Object.keys( value ).length ) {
+        const componentElements: React.ReactElement[] = [ <strong>{type}: </strong> ]
 
-      if ( Object.keys( value ).length ) {
-        currentComponentToRender += `<strong>${type}: </strong>`
         for ( const [ key, val ] of Object.entries( value )) {
-          currentComponentToRender += `${key}: ${val}, `
+          console.log( key, val, value )
+          componentElements.push(
+            <>
+              {key}: {val}
+              <br />
+            </>
+          )
         }
-      } else {
-        currentComponentToRender += `<strong>${type}: </strong> ${value}`
-      }
-   
-      componentCounter++
-      currentComponentToRender += '</li>'
 
+        currentComponentToRender = <li key={componentCounter}>{...componentElements}</li>
+      } else {
+        currentComponentToRender = (
+          <>
+            <li key={componentCounter}>
+              <strong>{type}: </strong> {value.toString()}
+            </li>
+          </>
+        )
+      }
+
+      componentCounter++
       return currentComponentToRender
     })
 
-    return toRender + '</section></ul>'
+    const unorderedList = <ul> {...internalComponentsArray} </ul>
+    toRenderArray.push( unorderedList )
+    const newComponent = <section> {...toRenderArray} </section>
+
+    return (
+      <>
+        {newComponent}
+      </>
+    )
   }
 
   return (
@@ -82,9 +99,9 @@ const SpellDetailsCompendium = ({
         >
           ←
         </button>
-        <h3 style={{ margin: 0 }}>{selectedSpell.name}</h3>
+        <h3 style={{ margin: 0 }}>{convertedSpell.name}</h3>
       </div>
-      <p>{selectedSpell.description}</p>
+      <p>{convertedSpell.description}</p>
       { renderComponents( convertedSpell.components )}
       <button
         style={{
