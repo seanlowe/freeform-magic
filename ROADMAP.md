@@ -33,8 +33,8 @@
     - [x] add spells form
       - [ ] persist user spells to db
     - [ ] spell search working
-- [ ] get spell import working
-- [ ] get spell components working
+- [x] get spell import working
+- [x] get spell components working
   - [ ] get custom spell component creation working
 - [ ] get spell creation working
 - [ ] get dice rolling working
