@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './AddSpellForm'
 import AllSpells from './AllSpells'
+import SearchChip from './SearchChip'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
 
@@ -10,6 +11,8 @@ const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
   const [ searchQuery, setSearchQuery ] = useState( '' )
+  const [ tempSearchQuery, setTempSearchQuery ] = useState( '' )
+
   const [ favorites, setFavorites ] = useState<Spell[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<Spell[]>( [] )
   const [ allSpells, setAllSpells ] = useState<Spell[]>( [] )
@@ -64,8 +67,14 @@ const CompendiumPage = () => {
       setAllSpells( filteredSpells )
     }
 
-    setSearchQuery( '' )
+    setTempSearchQuery( '' )
     setIsFilteringSpells( false )
+  }
+
+  const removeFilter = () => {
+    setSearchQuery( '' )
+    setTempSearchQuery( '' )
+    actionsDispatch( true )
   }
 
   const updateRecentlyViewed = ( newSpell: Spell ): Spell[] => {
@@ -118,9 +127,15 @@ const CompendiumPage = () => {
           <h3>Filter Spells</h3>
           <input
             type='text'
-            value={searchQuery}
+            value={tempSearchQuery}
             onChange={( e ) => {
-              return setSearchQuery( e.target.value )
+              setTempSearchQuery( e.target.value )
+            }}
+            onKeyDown={( e ) => {
+              if ( e.key === 'Enter' ) {
+                setSearchQuery( tempSearchQuery )
+                filterSpells( tempSearchQuery )
+              }
             }}
             placeholder='Enter spell name'
             style={{ padding: '0.5rem', marginBottom: '1rem' }}
@@ -134,7 +149,8 @@ const CompendiumPage = () => {
                 cursor: 'pointer',
               }}
               onClick={() => {
-                return filterSpells( searchQuery )
+                setSearchQuery( tempSearchQuery )
+                filterSpells( tempSearchQuery )
               }}
             >
             Search
@@ -194,6 +210,9 @@ const CompendiumPage = () => {
         }}
       >
         <div>
+          {searchQuery && !isFilteringSpells && (
+            <SearchChip text={searchQuery} onRemove={removeFilter} />
+          )}
           <button
             style={{
               marginRight: '0.5rem',
