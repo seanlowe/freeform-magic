@@ -9,13 +9,14 @@ import { ActionsContext } from '../../utilities/contexts/actions.context'
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
-  // const [ searchQuery, setSearchQuery ] = useState( '' )
+  const [ searchQuery, setSearchQuery ] = useState( '' )
   const [ favorites, setFavorites ] = useState<Spell[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<Spell[]>( [] )
   const [ allSpells, setAllSpells ] = useState<Spell[]>( [] )
   const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
 
   const [ isAddingSpell, setIsAddingSpell ] = useState( false )
+  const [ isFilteringSpells, setIsFilteringSpells ] = useState( false )
 
   const getAllSpells = async () => {
     const spells = await window.api.database.spells.getSpells()
@@ -32,7 +33,7 @@ const CompendiumPage = () => {
   useEffect(() => {
     // don't do anything if we just finished an action and marked this as false
     if ( !needsRefresh ) {
-      return 
+      return
     }
 
     getAllSpells()
@@ -50,16 +51,28 @@ const CompendiumPage = () => {
     setIsAddingSpell( false )
   }
 
-  const filterSpells = () => {
-    // filter spells based on search query
-    console.log( 'Filter button clicked' )
+  const filterSpells = ( query: string ) => {
+    if ( query === '' ) {
+      // we've "cleared" the search query
+      actionsDispatch( true )
+    } else {
+      // filter spells based on search query
+      const filteredSpells = allSpells.filter(( spell ) => {
+        return spell.name.toLowerCase().includes( query.toLowerCase())
+      })
+      
+      setAllSpells( filteredSpells )
+    }
+
+    setSearchQuery( '' )
+    setIsFilteringSpells( false )
   }
 
   const updateRecentlyViewed = ( newSpell: Spell ): Spell[] => {
     const newRecentlyViewed = [
       newSpell,
       ...recentlyViewed.filter(( s ) => {
-        return s.id !== newSpell.id 
+        return s.id !== newSpell.id
       }),
     ].slice( 0, 5 )
 
@@ -68,8 +81,8 @@ const CompendiumPage = () => {
 
   const isFavorite = ( spell: Spell ) => {
     return favorites.some(( fav ) => {
-      return fav.id === spell.id 
-    }) 
+      return fav.id === spell.id
+    })
   }
 
   const toggleFavorite = ( spell: Spell ) => {
@@ -78,7 +91,7 @@ const CompendiumPage = () => {
     let newFavorites: Spell[] = []
     if ( spellIsFavorite ) {
       newFavorites = favorites.filter(( fav ) => {
-        return fav.id !== spell.id 
+        return fav.id !== spell.id
       })
     } else {
       newFavorites = [ ...favorites, spell ]
@@ -93,9 +106,53 @@ const CompendiumPage = () => {
         <AddSpellForm
           onSpellAdd={handleAddSpell}
           closeForm={() => {
-            return setIsAddingSpell( false ) 
+            return setIsAddingSpell( false )
           }}
         />
+      )
+    }
+
+    if ( isFilteringSpells ) {
+      return (
+        <div style={{ padding: '1rem' }}>
+          <h3>Filter Spells</h3>
+          <input
+            type='text'
+            value={searchQuery}
+            onChange={( e ) => {
+              return setSearchQuery( e.target.value )
+            }}
+            placeholder='Enter spell name'
+            style={{ padding: '0.5rem', marginBottom: '1rem' }}
+          />
+          <div>
+            <button
+              style={{
+                padding: '0.5rem 1rem',
+                marginRight: '1rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                return filterSpells( searchQuery )
+              }}
+            >
+            Search
+            </button>
+            <button
+              style={{
+                padding: '0.5rem 1rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                return setIsFilteringSpells( false )
+              }}
+            >
+            Back
+            </button>
+          </div>
+        </div>
       )
     }
 
@@ -144,7 +201,11 @@ const CompendiumPage = () => {
               borderRadius: '4px',
               cursor: 'pointer',
             }}
-            onClick={filterSpells}
+            onClick={( e ) => {
+              e.preventDefault()
+
+              setIsFilteringSpells( true )
+            }}
           >
             Filter / Search
           </button>
@@ -159,9 +220,8 @@ const CompendiumPage = () => {
               height: '30px',
               width: '30px',
             }}
-            // onClick={addSpell}
             onClick={() => {
-              return setIsAddingSpell( true ) 
+              return setIsAddingSpell( true )
             }}
           >
             +
@@ -209,7 +269,7 @@ const CompendiumPage = () => {
                     >
                       {spell.name}
                     </div>
-                  ) 
+                  )
                 })
               ) : (
                 <p>No favorite spells added yet.</p>
@@ -241,7 +301,7 @@ const CompendiumPage = () => {
                     >
                       {spell.name}
                     </div>
-                  ) 
+                  )
                 })
               ) : (
                 <p>No spells viewed recently.</p>

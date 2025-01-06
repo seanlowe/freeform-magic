@@ -28,11 +28,15 @@
       - [x] add spell to favorites
       - [x] remove spell from favorites
       - [ ] persist favorites?
-    - [ ] spell search form
+    - [x] spell search form
+      - [x] spell search working
+      - [ ] add search query "chips" next to filter button when filtering on search
+        - [ ] auto refresh to full list when removing query chip
+      - [ ] search on hitting enter
+      - [ ] add filtering by component
     - [x] recently viewed list
     - [x] add spells form
       - [ ] persist user spells to db
-    - [ ] spell search working
 - [x] get spell import working
 - [x] get spell components working
   - [ ] get custom spell component creation working

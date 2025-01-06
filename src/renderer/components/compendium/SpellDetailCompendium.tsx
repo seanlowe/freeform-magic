@@ -112,6 +112,7 @@ const SpellDetailsCompendium = ({
           borderRadius: '4px',
           cursor: 'pointer',
           marginTop: '1rem',
+          marginBottom: '1rem',
         }}
         onClick={() => {
           return toggleFavorite( selectedSpell )
