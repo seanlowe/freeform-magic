@@ -17,9 +17,9 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
 }) => {
   const [ tempSearchQuery, setTempSearchQuery ] = useState( '' )
   const [ componentValues, setComponentValues ] = useState<string[]>( [] )
-  
+
   const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
-  
+
   return (
     <div style={{ padding: '1rem' }}>
       <h3>Filter Spells</h3>
@@ -60,14 +60,14 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
 
         {selectedComponents.map(( component ) => {
           switch ( component ) {
-          case AvailableComponents.Area:
-          case AvailableComponents.Damage:
-          case AvailableComponents.Delivery:
-          case AvailableComponents.DifficultyClass:
-          case AvailableComponents.Duration:
-          case AvailableComponents.DurationType:
-          case AvailableComponents.School:
-          case AvailableComponents.Target: 
+          case 'area':
+          case 'damage':
+          case 'delivery':
+          case 'difficultyclass':
+          case 'duration':
+          case 'durationtype':
+          case 'school':
+          case 'target':
             console.log( 'MADE IT IN HERE' )
             return (
               <div
@@ -79,8 +79,8 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
                 <SearchInputField component={component} setComponentValues={setComponentValues} />
               </div>
             )
-          case AvailableComponents.Level:
-          case AvailableComponents.Range:
+          case 'level':
+          case 'range':
           default:
             console.log( 'MADE IT IN ELSE' )
             return null

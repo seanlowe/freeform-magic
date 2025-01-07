@@ -13,7 +13,7 @@ const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
   const [ searchQuery, setSearchQuery ] = useState( '' )
-  const [ tempSearchQuery, setTempSearchQuery ] = useState( '' )
+  // const [ tempSearchQuery, setTempSearchQuery ] = useState( '' )
 
   const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<SpellForApp[]>( [] )
@@ -62,25 +62,44 @@ const CompendiumPage = () => {
     selectedComponents: string[],
     componentValues: string[]
   ) => {
+    let filteredSpells: SpellForApp[] = []
     if ( query === '' ) {
       // we've "cleared" the search query
       actionsDispatch( true )
     } else {
       // filter spells based on search query
-      const filteredSpells = allSpells.filter(( spell ) => {
+      filteredSpells = allSpells.filter(( spell ) => {
         return spell.name.toLowerCase().includes( query.toLowerCase())
       })
-      
-      setAllSpells( filteredSpells )
     }
 
-    setTempSearchQuery( '' )
+    if ( selectedComponents.length > 0 ) {
+      // if we've selected components, add in any spells which have any of the selected components
+      filteredSpells = allSpells.filter(( spell ) => {
+        return selectedComponents.every(( component ) => {
+          // this is wrong
+          // includes( component )
+          console.log({ componentValues })
+          return spell.components.find(( spellComponent: SpellComponent ) => {
+            const hasMatchingComponent = spellComponent.type === component
+            const hasMatchingValue = componentValues.includes( String( spellComponent.value ))
+
+            return hasMatchingComponent && hasMatchingValue
+          })
+        })
+      })
+
+      console.log({ filteredSpells })
+    }
+    
+    // setTempSearchQuery( '' )
+    setAllSpells( filteredSpells )
     setIsFilteringSpells( false )
   }
 
   const removeFilter = () => {
     setSearchQuery( '' )
-    setTempSearchQuery( '' )
+    // setTempSearchQuery( '' )
     actionsDispatch( true )
   }
 

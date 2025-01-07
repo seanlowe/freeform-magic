@@ -1,6 +1,6 @@
 import React, { SetStateAction } from 'react'
 
-import { componentToComponentValuesMap, AvailableComponents } from './constants'
+import { componentToComponentValuesMap } from './constants'
 
 interface SearchInputFieldProps {
   component: string
@@ -11,20 +11,12 @@ const SearchInputField: React.FC<SearchInputFieldProps> = ({
   component,
   setComponentValues
 }) => {
-  const getAvailableComponent = ( componentName: string ): AvailableComponents | undefined => {
-    return AvailableComponents[componentName as keyof typeof AvailableComponents]
-  }
-
-  const convertedComponent = getAvailableComponent( component )
-
-  console.log({ convertedComponent, component })
-
-  if ( !convertedComponent || !componentToComponentValuesMap.has( convertedComponent )) {
+  if ( !component || !componentToComponentValuesMap.has( component )) {
     console.log( 'returing null' )
     return <></>
   }
   
-  const componentValues = componentToComponentValuesMap.get( convertedComponent )
+  const componentValues = componentToComponentValuesMap.get( component )
   
   console.log({ componentValues })
 
