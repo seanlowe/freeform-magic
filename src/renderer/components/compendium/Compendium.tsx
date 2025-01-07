@@ -55,7 +55,11 @@ const CompendiumPage = () => {
     setIsAddingSpell( false )
   }
 
-  const filterSpells = ( query: string ) => {
+  const filterSpells = (
+    query: string,
+    selectedComponents: string[],
+    componentValues: string[]
+  ) => {
     if ( query === '' ) {
       // we've "cleared" the search query
       actionsDispatch( true )
