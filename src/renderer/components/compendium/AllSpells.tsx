@@ -1,4 +1,5 @@
-import { Spell } from '@prisma/client'
+// import { Spell } from '@prisma/client'
+import { SpellForApp } from '../../../types/spells.types'
 
 const AllSpells = ({
   spells,
@@ -6,10 +7,10 @@ const AllSpells = ({
   updateRecentlyViewed,
   setRecentlyViewed
 }: {
-  spells: Spell[],
-  setSelectedSpell: ( spell: Spell | null ) => void,
-  updateRecentlyViewed: ( newSpell: Spell ) => Spell[],
-  setRecentlyViewed: ( spells: Spell[] ) => void
+  spells: SpellForApp[],
+  setSelectedSpell: ( spell: SpellForApp | null ) => void,
+  updateRecentlyViewed: ( newSpell: SpellForApp ) => SpellForApp[],
+  setRecentlyViewed: ( spells: SpellForApp[] ) => void
 }) => {
   return (
     <>
@@ -18,7 +19,7 @@ const AllSpells = ({
         {spells.map(( spell ) => {
           return (
             <div
-              key={spell.id}
+              key={spell.name}
               style={{
                 padding: '0.5rem',
                 border: '1px solid #ccc',

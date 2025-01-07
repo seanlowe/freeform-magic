@@ -1,22 +1,24 @@
-import { Spell } from '@prisma/client'
+// import { Spell } from '@prisma/client'
 import { useState } from 'react'
 
+import { SpellForApp } from '../../../types/spells.types'
 
 const AddSpellForm = ({
   onSpellAdd,
   closeForm
 }: {
-  onSpellAdd: ( spell: Spell ) => void,
+  onSpellAdd: ( spell: SpellForApp ) => void,
   closeForm: () => void
 }) => {
   const [ newSpellName, setNewSpellName ] = useState( '' )
   const [ newSpellDescription, setNewSpellDescription ] = useState( '' )
   
   const handleAddSpell = () => {
-    const newSpell: Spell = {
-      id: Math.random(),
+    const newSpell: SpellForApp = {
+      // id: Math.random(),
       name: newSpellName,
       description: newSpellDescription,
+      components: [],
     }
     
     setNewSpellName( '' )

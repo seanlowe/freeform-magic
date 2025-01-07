@@ -1,6 +1,6 @@
-import { Spell } from '../../../types'
+import { SpellForApp } from '../../../types/spells.types'
 
-const SpellDetails = ({ selectedSpell }: { selectedSpell: Spell | null }) => {
+const SpellDetails = ({ selectedSpell }: { selectedSpell: SpellForApp | null }) => {
   return (
     <div style={{
       padding: '16px',

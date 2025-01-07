@@ -1,5 +1,3 @@
-import { Spell } from '@prisma/client'
-
 import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 
 const SpellDetailsCompendium = ({
@@ -8,18 +6,11 @@ const SpellDetailsCompendium = ({
   setSelectedSpell,
   toggleFavorite
 }: {
-  isFavorite: ( spell: Spell ) => boolean,
-  selectedSpell: Spell,
-  setSelectedSpell: ( spell: Spell | null ) => void,
-  toggleFavorite: ( spell: Spell ) => void
+  isFavorite: ( spell: SpellForApp ) => boolean,
+  selectedSpell: SpellForApp,
+  setSelectedSpell: ( spell: SpellForApp | null ) => void,
+  toggleFavorite: ( spell: SpellForApp ) => void
 }) => {
-  console.log({ selectedSpell })
-
-  const convertedSpell: SpellForApp = {
-    ...selectedSpell,
-    components: selectedSpell.components ? JSON.parse( selectedSpell.components ) : '',
-  }
-
   const renderComponents = ( components: SpellComponent[] ) => {
     if ( !components.length ) {
       return null
@@ -99,10 +90,10 @@ const SpellDetailsCompendium = ({
         >
           ←
         </button>
-        <h3 style={{ margin: 0 }}>{convertedSpell.name}</h3>
+        <h3 style={{ margin: 0 }}>{selectedSpell.name}</h3>
       </div>
-      <p>{convertedSpell.description}</p>
-      { renderComponents( convertedSpell.components )}
+      <p>{selectedSpell.description}</p>
+      { renderComponents( selectedSpell.components )}
       <button
         style={{
           padding: '0.5rem',

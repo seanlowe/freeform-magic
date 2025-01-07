@@ -1,4 +1,3 @@
-import { Spell } from '@prisma/client'
 import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './AddSpellForm'
@@ -6,7 +5,9 @@ import AllSpells from './AllSpells'
 import SearchChip from './SearchChip'
 import SearchSpellsForm from './SearchSpellsForm'
 import SpellDetailsCompendium from './SpellDetailCompendium'
+import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
+import { convertSpellFromPrismaToApp } from '../spells/utilities'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
@@ -14,18 +15,19 @@ const CompendiumPage = () => {
   const [ searchQuery, setSearchQuery ] = useState( '' )
   const [ tempSearchQuery, setTempSearchQuery ] = useState( '' )
 
-  const [ favorites, setFavorites ] = useState<Spell[]>( [] )
-  const [ recentlyViewed, setRecentlyViewed ] = useState<Spell[]>( [] )
-  const [ allSpells, setAllSpells ] = useState<Spell[]>( [] )
-  const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
+  const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
+  const [ recentlyViewed, setRecentlyViewed ] = useState<SpellForApp[]>( [] )
+  const [ allSpells, setAllSpells ] = useState<SpellForApp[]>( [] )
+  const [ selectedSpell, setSelectedSpell ] = useState<SpellForApp | null>( null )
 
   const [ isAddingSpell, setIsAddingSpell ] = useState( false )
   const [ isFilteringSpells, setIsFilteringSpells ] = useState( false )
 
   const getAllSpells = async () => {
     const spells = await window.api.database.spells.getSpells()
+    const convertedSpells = spells.map( convertSpellFromPrismaToApp )
 
-    setAllSpells( spells )
+    setAllSpells( convertedSpells )
     actionsDispatch( false )
   }
 
@@ -43,13 +45,13 @@ const CompendiumPage = () => {
     getAllSpells()
   }, [ needsRefresh ] )
 
-  const onAddSpell = ( newSpell: Spell ) => {
+  const onAddSpell = ( newSpell: SpellForApp ) => {
     // await window.api.database.spells.createSpell( newSpell )
     setAllSpells( [ ...allSpells, newSpell ] )
     // allSpells.push( newSpell )
   }
 
-  const handleAddSpell = ( newSpell: Spell ) => {
+  const handleAddSpell = ( newSpell: SpellForApp ) => {
     onAddSpell( newSpell )
 
     setIsAddingSpell( false )
@@ -82,30 +84,30 @@ const CompendiumPage = () => {
     actionsDispatch( true )
   }
 
-  const updateRecentlyViewed = ( newSpell: Spell ): Spell[] => {
+  const updateRecentlyViewed = ( newSpell: SpellForApp ): SpellForApp[] => {
     const newRecentlyViewed = [
       newSpell,
       ...recentlyViewed.filter(( s ) => {
-        return s.id !== newSpell.id
+        return s.name !== newSpell.name
       }),
     ].slice( 0, 5 )
 
     return newRecentlyViewed
   }
 
-  const isFavorite = ( spell: Spell ) => {
+  const isFavorite = ( spell: SpellForApp ) => {
     return favorites.some(( fav ) => {
-      return fav.id === spell.id
+      return fav.name === spell.name
     })
   }
 
-  const toggleFavorite = ( spell: Spell ) => {
+  const toggleFavorite = ( spell: SpellForApp ) => {
     const spellIsFavorite = isFavorite( spell )
 
-    let newFavorites: Spell[] = []
+    let newFavorites: SpellForApp[] = []
     if ( spellIsFavorite ) {
       newFavorites = favorites.filter(( fav ) => {
-        return fav.id !== spell.id
+        return fav.name !== spell.name
       })
     } else {
       newFavorites = [ ...favorites, spell ]
@@ -236,7 +238,7 @@ const CompendiumPage = () => {
                 favorites.map(( spell ) => {
                   return (
                     <div
-                      key={spell.id}
+                      key={spell.name}
                       style={{
                         padding: '0.5rem',
                         border: '1px solid #ccc',
@@ -268,7 +270,7 @@ const CompendiumPage = () => {
                 recentlyViewed.map(( spell ) => {
                   return (
                     <div
-                      key={spell.id}
+                      key={spell.name}
                       style={{
                         padding: '0.5rem',
                         border: '1px solid #ccc',

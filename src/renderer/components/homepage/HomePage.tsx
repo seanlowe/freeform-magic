@@ -1,4 +1,3 @@
-import { Spell } from '@prisma/client'
 import { useContext, useEffect, useState } from 'react'
 
 import CharacterSwitcher from './CharacterSwitcher'
@@ -6,9 +5,11 @@ import PageDropdown from './PageDropdown'
 import SpellDetails from './SpellDetails'
 import SpellList from './SpellList'
 import { Character } from '../../../types'
+import { SpellForApp } from '../../../types/spells.types'
 import { AuthContext } from '../../utilities/contexts/auth.context'
 import CharactersPage from '../CharactersPage'
 import CompendiumPage from '../compendium/Compendium'
+import { convertSpellFromPrismaToApp } from '../spells/utilities'
 
 const HomePage = ({
   location,
@@ -19,9 +20,9 @@ const HomePage = ({
 }) => {
   const { state: { currentUser } } = useContext( AuthContext )
   const [ characters, setCharacters ] = useState<Character[]>( [] )
-  const [ spellsForCharacter, setSpellsForCharacter ] = useState<Spell[]>( [] )
+  const [ spellsForCharacter, setSpellsForCharacter ] = useState<SpellForApp[]>( [] )
   const [ selectedCharacter, setSelectedCharacter ] = useState<Character | null>( null )
-  const [ selectedSpell, setSelectedSpell ] = useState<Spell | null>( null )
+  const [ selectedSpell, setSelectedSpell ] = useState<SpellForApp | null>( null )
 
   const getCharacters = async ( username: string ) => {
     const characters =
@@ -32,7 +33,14 @@ const HomePage = ({
   }
 
   const getSpellsForCharacter = async () => {
-    setSpellsForCharacter( selectedCharacter?.spells ?? [] )
+    const spells = selectedCharacter?.spells ?? []
+    if ( !spells ) {
+      setSpellsForCharacter( [] )
+      return
+    }
+
+    const convertedSpells = spells.map( convertSpellFromPrismaToApp )
+    setSpellsForCharacter( convertedSpells )
   }
 
   const onCharacterSwitch = ( character: Character ) => {
@@ -41,9 +49,9 @@ const HomePage = ({
     getSpellsForCharacter()
   }
 
-  const onSpellSelect = ( spellId: number ) => {
+  const onSpellSelect = ( spellName: string ) => {
     const chosenSpell = spellsForCharacter.find(( spell ) => {
-      return spell.id === spellId
+      return spell.name.toLowerCase() === spellName.toLowerCase()
     })
 
     if ( !chosenSpell || chosenSpell === selectedSpell ) {
