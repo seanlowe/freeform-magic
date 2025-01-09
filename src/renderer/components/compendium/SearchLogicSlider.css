@@ -1,0 +1,86 @@
+.component {
+  position: relative;
+  border-radius: 300px;
+  height: 40px;
+  width: 80px;
+  cursor: pointer;
+}
+
+.component .overlap-group {
+}
+
+/* .component .ellipse .image {
+  width: 70px;
+  padding: 12px;
+} */
+
+.component .div {
+  align-items: flex-start;
+  display: flex;
+  gap: 10px;
+}
+
+.component .text-wrapper {
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+  cursor: default;
+  margin: unset;
+}
+
+.component .ellipse {
+  background-color: #d9d9d9;
+  border-radius: 50%;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  width: 40px;
+}
+
+.component.AND,
+.component.AND .overlap-group,
+.component.AND .div,
+.component.AND .ellipse,
+.component.AND .ellipse .image,
+
+.component.OR,
+.component.OR .overlap-group,
+.component.OR .div,
+.component.OR .ellipse {
+  transition: 0.3s;
+}
+
+.component.OR {
+  background-color: blue;
+}
+
+.component.AND {
+  background-color: red;
+}
+
+.component.OR .overlap-group {
+  left: 29px;
+}
+
+.component.AND .overlap-group {
+  left: 16px;
+}
+
+.component.OR .div {
+  left: 0;
+}
+
+.component.AND .div {
+  left: 13px;
+}
+
+.component.OR .ellipse {
+  left: 40px;
+}
+
+.component.AND .ellipse {
+  left: 0;
+}

@@ -3,11 +3,17 @@ import { useState } from 'react'
 
 import { AvailableComponents } from './constants'
 import SearchInputField from './SearchInputField'
+import SearchLogicSlider from './SearchLogicSlider'
 
 interface SearchSpellsFormProps {
   setSearchQuery: ( query: string ) => void;
   setIsFilteringSpells: ( isFiltering: boolean ) => void;
-  filterSpells: ( query: string, selectedComponents: string[], componentValues: string[] ) => void;
+  filterSpells: (
+    query: string,
+    selectedComponents: string[],
+    selectedComponentValue: string,
+    filterLogic: 'AND' | 'OR'
+  ) => void;
 }
 
 const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
@@ -15,14 +21,15 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
   setIsFilteringSpells,
   filterSpells
 }) => {
-  const [ tempSearchQuery, setTempSearchQuery ] = useState( '' )
-  const [ componentValues, setComponentValues ] = useState<string[]>( [] )
-
+  const [ tempSearchQuery, setTempSearchQuery ] = useState<string>( '' )
   const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
+  const [ selectedComponentValue, setSelectedComponentValue ] = useState<string>( '' )
+  const [ filterLogic, setFilterLogic ] = useState<'AND' | 'OR'>( 'AND' )
 
   return (
     <div style={{ padding: '1rem' }}>
       <h3>Filter Spells</h3>
+      <SearchLogicSlider filterLogic={filterLogic} setFilterLogic={setFilterLogic} />
       <input
         type='text'
         value={tempSearchQuery}
@@ -32,7 +39,7 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
         onKeyDown={( e ) => {
           if ( e.key === 'Enter' ) {
             setSearchQuery( tempSearchQuery )
-            filterSpells( tempSearchQuery, selectedComponents, componentValues )
+            filterSpells( tempSearchQuery, selectedComponents, selectedComponentValue, filterLogic )
           }
         }}
         placeholder='Enter spell name'
@@ -68,7 +75,6 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           case 'durationtype':
           case 'school':
           case 'target':
-            console.log( 'MADE IT IN HERE' )
             return (
               <div
                 key={component + `-${Math.random()}`}
@@ -76,7 +82,10 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
                 style={{ marginBottom: '1rem' }}
               >
                 <label>{component} Options:</label>
-                <SearchInputField component={component} setComponentValues={setComponentValues} />
+                <SearchInputField
+                  component={component}
+                  setSelectedComponentValue={setSelectedComponentValue}
+                />
               </div>
             )
           case 'level':
@@ -97,7 +106,7 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           }}
           onClick={() => {
             setSearchQuery( tempSearchQuery )
-            filterSpells( tempSearchQuery, selectedComponents, componentValues )
+            filterSpells( tempSearchQuery, selectedComponents, selectedComponentValue, filterLogic )
           }}
         >
           Search

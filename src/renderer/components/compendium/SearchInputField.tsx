@@ -1,85 +1,49 @@
-import React, { SetStateAction } from 'react'
+import React, { useState } from 'react'
 
-import { componentToComponentValuesMap } from './constants'
+import { checkIfComponentIsInMapAndHasValue } from '../spells/utilities'
 
 interface SearchInputFieldProps {
   component: string
-  setComponentValues: ( prev: SetStateAction<string[]> ) => void
+  setSelectedComponentValue: React.Dispatch<React.SetStateAction<string>>
 }
 
 const SearchInputField: React.FC<SearchInputFieldProps> = ({
   component,
-  setComponentValues
+  setSelectedComponentValue,
 }) => {
-  if ( !component || !componentToComponentValuesMap.has( component )) {
-    console.log( 'returing null' )
+  const [ selectedValue, setSelectedValue ] = useState<string>( '' )
+
+  const componentValues = checkIfComponentIsInMapAndHasValue( component )
+  if ( !componentValues ) { 
     return <></>
   }
-  
-  const componentValues = componentToComponentValuesMap.get( component )
-  
-  console.log({ componentValues })
 
   return (
     <select
-      onChange={( e ) => {
-        return setComponentValues(( prev: any ) => {
-          return { ...prev, damage: e.target.value } 
-        }) 
-      }}
+      defaultValue={selectedValue}
       style={{ padding: '0.5rem', width: '100%' }}
+      onClick={( e ) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore yes e.target.value does exist, dummy
+        setSelectedComponentValue( e.target.value )
+      }}
     >
-      {componentValues.map(( value: any ) => {
+      {componentValues.map(( value: string ) => {
         return (
-          <option key={value} value={value}>{value}</option>
+          <option
+            key={value}
+            value={value}
+            onClick={() => {
+              setSelectedComponentValue( value )
+              setSelectedValue( value )
+            }}
+          >
+            {value}
+          </option>
         )
       })}
     </select>
   )
-
-  // return (
-  //   <>
-  //     {component === AvailableComponents.Area && (
-  //       <input
-  //         type='number'
-  //         placeholder='Enter size'
-  //         onChange={( e ) => {
-  //           return setComponentValues(( prev: any ) => {
-  //             return { ...prev, area: e.target.value } 
-  //           }) 
-  //         }}
-  //         style={{ padding: '0.5rem', width: '100%' }}
-  //       />
-  //     )}
-  //     {component === 'damage' && (
-  //       <select
-  //         onChange={( e ) => {
-  //           return setComponentValues(( prev: any ) => {
-  //             return { ...prev, damage: e.target.value } 
-  //           }) 
-  //         }}
-  //         style={{ padding: '0.5rem', width: '100%' }}
-  //       >
-  //         <option value='Bludgeoning'>Bludgeoning</option>
-  //         <option value='Force'>Force</option>
-  //         <option value='Piercing'>Piercing</option>
-  //         <option value='Slashing'>Slashing</option>
-  //         <option value='Elemental'>Elemental</option>
-  //       </select>
-  //     )}
-  //     {component === 'duration' && (
-  //       <input
-  //         type='number'
-  //         placeholder='Enter duration'
-  //         onChange={( e ) => {
-  //           return setComponentValues(( prev: any ) => {
-  //             return { ...prev, duration: e.target.value } 
-  //           }) 
-  //         }}
-  //         style={{ padding: '0.5rem', width: '100%' }}
-  //       />
-  //     )}
-  //   </>
-  // ) 
 }
+
 export default SearchInputField

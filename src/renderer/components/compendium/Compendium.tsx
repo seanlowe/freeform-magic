@@ -7,13 +7,15 @@ import SearchSpellsForm from './SearchSpellsForm'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
-import { convertSpellFromPrismaToApp } from '../spells/utilities'
+import {
+  // checkIfComponentIsInMapAndHasValue,
+  convertSpellFromPrismaToApp
+} from '../spells/utilities'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
   const [ searchQuery, setSearchQuery ] = useState( '' )
-  // const [ tempSearchQuery, setTempSearchQuery ] = useState( '' )
 
   const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<SpellForApp[]>( [] )
@@ -57,11 +59,13 @@ const CompendiumPage = () => {
     setIsAddingSpell( false )
   }
 
-  const filterSpells = (
+  const filterSpells = async (
     query: string,
     selectedComponents: string[],
-    componentValues: string[]
+    selectedComponentValue: string,
+    filterLogic: 'AND' | 'OR'
   ) => {
+    console.log({ filterLogic })
     let filteredSpells: SpellForApp[] = []
     if ( query === '' ) {
       // we've "cleared" the search query
@@ -73,28 +77,48 @@ const CompendiumPage = () => {
       })
     }
 
+    // if we've selected components, add in any spells which have any of the selected components
     if ( selectedComponents.length > 0 ) {
-      // if we've selected components, add in any spells which have any of the selected components
       filteredSpells = allSpells.filter(( spell ) => {
-        return selectedComponents.every(( component ) => {
-          // this is wrong
-          // includes( component )
-          console.log({ componentValues })
-          return spell.components.find(( spellComponent: SpellComponent ) => {
-            const hasMatchingComponent = spellComponent.type === component
-            const hasMatchingValue = componentValues.includes( String( spellComponent.value ))
+        const { components } = spell
+        if ( !components ) {
+          console.log( 'returning false' )
+          return false
+        }
 
-            return hasMatchingComponent && hasMatchingValue
-          })
+        // loop over each spell component and check if it matches any of the selected components
+        return components.some(( spellComponent: SpellComponent ) => {
+          const componentTypeIsSelected = selectedComponents.includes( spellComponent.type )
+          if ( !componentTypeIsSelected ) {
+            return false
+          }
+
+          switch ( typeof spellComponent.value ) {
+          case 'number':
+            return spellComponent.value === parseFloat( selectedComponentValue )
+          case 'string':
+            return spellComponent.value === selectedComponentValue
+          case 'object': {
+            // search the values of the keys of the object for the selected value
+            return Object.keys( spellComponent.value ).some(( key ) => {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore fuck you
+              return spellComponent.value[ key ] === selectedComponentValue.toLowerCase()
+            })
+          }
+          default:
+            console.error( 'get fucked' )
+            break
+          }
         })
       })
-
-      console.log({ filteredSpells })
     }
-    
+
+    console.log({ filteredSpells })
+
     // setTempSearchQuery( '' )
-    setAllSpells( filteredSpells )
-    setIsFilteringSpells( false )
+    await setAllSpells( filteredSpells )
+    await setIsFilteringSpells( false )
   }
 
   const removeFilter = () => {
@@ -166,16 +190,16 @@ const CompendiumPage = () => {
           toggleFavorite={toggleFavorite}
         />
       )
-    } else {
-      return (
-        <AllSpells
-          spells={allSpells}
-          setSelectedSpell={setSelectedSpell}
-          updateRecentlyViewed={updateRecentlyViewed}
-          setRecentlyViewed={setRecentlyViewed}
-        />
-      )
     }
+
+    return (
+      <AllSpells
+        spells={allSpells}
+        setSelectedSpell={setSelectedSpell}
+        updateRecentlyViewed={updateRecentlyViewed}
+        setRecentlyViewed={setRecentlyViewed}
+      />
+    )
   }
 
   return (

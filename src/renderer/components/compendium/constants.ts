@@ -21,8 +21,8 @@ export const AvailableComponents = [
   'target',
 ]
 
-export const componentToComponentValuesMap: Map<string, any> =
- new Map<string, any>( [
+export const componentToComponentValuesMap: Map<string, string[] | null> =
+ new Map<string, string[] | null>( [
    [ 'area', Object.keys( AreaTypeOption ) ],
    [ 'difficultyclass', Object.keys( AttributeOption ) ],
    [ 'damage', Object.keys( DamageTypeOption ) ],
