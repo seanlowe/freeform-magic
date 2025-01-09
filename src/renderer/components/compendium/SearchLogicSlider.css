@@ -2,22 +2,17 @@
   position: relative;
   border-radius: 300px;
   height: 40px;
-  width: 80px;
+  width: 85px;
   cursor: pointer;
 }
-
-.component .overlap-group {
-}
-
-/* .component .ellipse .image {
-  width: 70px;
-  padding: 12px;
-} */
 
 .component .div {
   align-items: flex-start;
   display: flex;
   gap: 10px;
+  position: relative;
+  top: 10px;
+  left: 5px;
 }
 
 .component .text-wrapper {
@@ -29,6 +24,8 @@
   width: fit-content;
   cursor: default;
   margin: unset;
+  color: white;
+  user-select: none;
 }
 
 .component .ellipse {
@@ -54,33 +51,17 @@
 }
 
 .component.OR {
-  background-color: blue;
-}
-
-.component.AND {
   background-color: red;
 }
 
-.component.OR .overlap-group {
-  left: 29px;
-}
-
-.component.AND .overlap-group {
-  left: 16px;
-}
-
-.component.OR .div {
+.component.OR .ellipse {
   left: 0;
 }
 
-.component.AND .div {
-  left: 13px;
-}
-
-.component.OR .ellipse {
-  left: 40px;
+.component.AND {
+  background-color: blue;
 }
 
 .component.AND .ellipse {
-  left: 0;
+  left: 45px;
 }
