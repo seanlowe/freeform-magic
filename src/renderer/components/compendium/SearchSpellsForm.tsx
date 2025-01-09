@@ -24,7 +24,7 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
   const [ tempSearchQuery, setTempSearchQuery ] = useState<string>( '' )
   const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
   const [ selectedComponentValue, setSelectedComponentValue ] = useState<string>( '' )
-  const [ filterLogic, setFilterLogic ] = useState<'AND' | 'OR'>( 'AND' )
+  const [ filterLogic, setFilterLogic ] = useState<'AND' | 'OR'>( 'OR' )
 
   return (
     <div style={{ padding: '1rem' }}>

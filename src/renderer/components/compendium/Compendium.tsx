@@ -7,10 +7,7 @@ import SearchSpellsForm from './SearchSpellsForm'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
-import {
-  // checkIfComponentIsInMapAndHasValue,
-  convertSpellFromPrismaToApp
-} from '../spells/utilities'
+import { convertSpellFromPrismaToApp } from '../spells/utilities'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
@@ -20,6 +17,7 @@ const CompendiumPage = () => {
   const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<SpellForApp[]>( [] )
   const [ allSpells, setAllSpells ] = useState<SpellForApp[]>( [] )
+  const [ filteredSpells, setFilteredSpells ] = useState<SpellForApp[]>( [] )
   const [ selectedSpell, setSelectedSpell ] = useState<SpellForApp | null>( null )
 
   const [ isAddingSpell, setIsAddingSpell ] = useState( false )
@@ -30,6 +28,7 @@ const CompendiumPage = () => {
     const convertedSpells = spells.map( convertSpellFromPrismaToApp )
 
     setAllSpells( convertedSpells )
+    setFilteredSpells( convertedSpells )
     actionsDispatch( false )
   }
 
@@ -65,21 +64,22 @@ const CompendiumPage = () => {
     selectedComponentValue: string,
     filterLogic: 'AND' | 'OR'
   ) => {
-    console.log({ filterLogic })
-    let filteredSpells: SpellForApp[] = []
-    if ( query === '' ) {
-      // we've "cleared" the search query
+    let newFilteredSpells: SpellForApp[] = []
+    if ( query === '' && !selectedComponents ) {
+      // we've "cleared" the search query so we need a refresh
       actionsDispatch( true )
     } else {
       // filter spells based on search query
-      filteredSpells = allSpells.filter(( spell ) => {
+      newFilteredSpells = allSpells.filter(( spell ) => {
         return spell.name.toLowerCase().includes( query.toLowerCase())
       })
     }
 
     // if we've selected components, add in any spells which have any of the selected components
     if ( selectedComponents.length > 0 ) {
-      filteredSpells = allSpells.filter(( spell ) => {
+      newFilteredSpells = (
+        filterLogic === 'AND' ? filteredSpells : allSpells
+      ).filter(( spell ) => {
         const { components } = spell
         if ( !components ) {
           console.log( 'returning false' )
@@ -116,14 +116,12 @@ const CompendiumPage = () => {
 
     console.log({ filteredSpells })
 
-    // setTempSearchQuery( '' )
-    await setAllSpells( filteredSpells )
+    await setFilteredSpells( newFilteredSpells )
     await setIsFilteringSpells( false )
   }
 
   const removeFilter = () => {
     setSearchQuery( '' )
-    // setTempSearchQuery( '' )
     actionsDispatch( true )
   }
 
@@ -194,7 +192,7 @@ const CompendiumPage = () => {
 
     return (
       <AllSpells
-        spells={allSpells}
+        spells={filteredSpells}
         setSelectedSpell={setSelectedSpell}
         updateRecentlyViewed={updateRecentlyViewed}
         setRecentlyViewed={setRecentlyViewed}
