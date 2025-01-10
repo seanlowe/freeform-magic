@@ -33,7 +33,7 @@
       - [x] add search query "chips" next to filter button when filtering on search
         - [x] auto refresh to full list when removing query chip
       - [x] search on hitting enter
-      - [ ] add filtering by component
+      - [x] add filtering by component
     - [x] recently viewed list
     - [ ] recently searched keyword list?
     - [x] add spells form
@@ -44,3 +44,8 @@
 - [ ] get spell creation working
 - [ ] get dice rolling working
 - [ ] get character sheet working
+
+
+Bugs:
+- [ ] have to click component values twice to select them
+- [ ] can't filter by nested component values (e.g. damage -> element -> fire)
