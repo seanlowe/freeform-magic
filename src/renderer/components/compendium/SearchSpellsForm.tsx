@@ -73,6 +73,7 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           case 'difficultyclass':
           case 'duration':
           case 'durationtype':
+          case 'element':
           case 'school':
           case 'target':
             return (

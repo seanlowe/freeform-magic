@@ -114,8 +114,6 @@ const CompendiumPage = () => {
       })
     }
 
-    console.log({ filteredSpells })
-
     await setFilteredSpells( newFilteredSpells )
     await setIsFilteringSpells( false )
   }
