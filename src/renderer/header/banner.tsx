@@ -1,13 +1,5 @@
 import React, { useContext, useState } from 'react'
 
-import {
-  headerStyle,
-  titleStyle,
-  userContainerStyle,
-  usernameStyle,
-  dropdownStyle,
-  dropdownButtonStyle,
-} from './styles'
 import { ActionsContext } from '../utilities/contexts/actions.context'
 import { AuthContext } from '../utilities/contexts/auth.context'
 
@@ -28,19 +20,19 @@ const Banner: React.FC<{username: string, location: string | null}> = ({ usernam
   }
 
   return (
-    <header style={headerStyle}>
-      <h1 style={titleStyle}>D&D Spell Helper</h1>
+    <header className='headerStyle'>
+      <h1 className='titleStyle'>D&D Spell Helper</h1>
       {username && (
-        <div style={userContainerStyle}>
-          <span onClick={toggleDropdown} style={usernameStyle}>
+        <div className='userContainerStyle'>
+          <span onClick={toggleDropdown} className='usernameStyle'>
             {/* TODO - animate this arrow like on the page switcher */}
             {username} ▾
           </span>
           {dropdownOpen && (
-            <div style={dropdownStyle}>
+            <div className='dropdownStyle'>
               { location === 'Compendium' && (
                 <>
-                  <button onClick={import5eSpells} style={dropdownButtonStyle}>
+                  <button onClick={import5eSpells} className='dropdownButtonStyle'>
                     Import Spells from 5e
                   </button>
                   <hr />
@@ -53,7 +45,7 @@ const Banner: React.FC<{username: string, location: string | null}> = ({ usernam
 
                   return
                 }}
-                style={dropdownButtonStyle}
+                className='dropdownButtonStyle'
               >
                 Log Out
               </button>

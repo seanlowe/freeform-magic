@@ -19,7 +19,8 @@
     "@prisma/client": "^6.1.0",
     "electron-squirrel-startup": "^1.0.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sass": "^1.83.4"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.0",

@@ -1,4 +1,3 @@
-// import { Spell } from '@prisma/client'
 import { useState } from 'react'
 
 import { SpellForApp } from '../../../types/spells.types'
@@ -15,7 +14,6 @@ const AddSpellForm = ({
   
   const handleAddSpell = () => {
     const newSpell: SpellForApp = {
-      // id: Math.random(),
       name: newSpellName,
       description: newSpellDescription,
       components: [],

@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react'
-import './SearchLogicSlider.css'
 
 interface SearchLogicSliderProps {
   filterLogic: 'AND' | 'OR'

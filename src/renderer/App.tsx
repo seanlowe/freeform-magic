@@ -7,6 +7,8 @@ import { AuthContext } from './utilities/contexts/auth.context'
 import { LocationContext } from './utilities/contexts/location.context'
 import Providers from './utilities/providers'
 
+import '../styles/global.scss'
+
 const App: React.FC = () => {
   return (
     <Providers>
