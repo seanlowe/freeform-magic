@@ -7,7 +7,7 @@ import SpellList from './SpellList'
 import { Character } from '../../../types'
 import { SpellForApp } from '../../../types/spells.types'
 import { AuthContext } from '../../utilities/contexts/auth.context'
-import CharactersPage from '../CharactersPage'
+import CharactersPage from '../character/CharactersPage'
 import CompendiumPage from '../compendium/Compendium'
 import { convertSpellFromPrismaToApp } from '../spells/utilities'
 
@@ -67,7 +67,7 @@ const HomePage = ({
     case 'Compendium':
       return <CompendiumPage />
     case 'Characters':
-      return <CharactersPage />
+      return <CharactersPage characters={characters} />
     default:
       return <></>
     }
