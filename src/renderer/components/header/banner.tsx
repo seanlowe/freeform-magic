@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 
-import { ActionsContext } from '../utilities/contexts/actions.context'
-import { AuthContext } from '../utilities/contexts/auth.context'
+import { ActionsContext } from '../../utilities/contexts/actions.context'
+import { AuthContext } from '../../utilities/contexts/auth.context'
 
 const Banner: React.FC<{username: string, location: string | null}> = ({ username, location }) => {
   const { dispatch: authDispatch } = useContext( AuthContext )
