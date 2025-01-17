@@ -1,33 +1,36 @@
 #### Timeline for Development progress:
 
-- [x] Decide on Language
-  - [ ] go
-  - [ ] node
-  - [ ] rust
-  - [x] electron (it's built on JS/TS and that's what I know best)
-- [x] Decide on basic user experience, (TUI vs. **GUI**)
-- [x] Decide on which tools / framework(s) to use, if any
-  - [x] vite
-  - [x] electron-forge
-  - [x] electron
-  - [x] react
-  - [x] typescript
-- [x] Decide on storage / database options
-  - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts, for "local storage")
-  - [x] prisma client with sqlite (for true database operations)
-- [x] Create a barebones executable
-- [x] Get user login / logout working
-- [ ] Get user role picked at user creation working
-- [ ] Get user role-specific homepages working
-  - [ ] DM page
-  - [ ] Player page
-- [ ] get spell compendium working
-  - [ ] basic compendium page
+- [x] Platform / Tooling
+  - [x] Decide on Language
+    - [x] electron
+  - [x] Decide on basic user experience, (TUI vs. **GUI**)
+  - [x] Decide on which tools / framework(s) to use, if any
+    - [x] vite
+    - [x] electron-forge
+    - [x] electron
+    - [x] react
+    - [x] typescript
+  - [x] Decide on storage / database options
+    - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts, for "local storage")
+    - [x] prisma client with sqlite (for true database operations)
+  - [x] Create a barebones executable
+
+- [ ] Authentication
+  - [x] Get user login / logout working
+  - [x] add password check / hashing to login and user creation
+  - [ ] add ability to select a role at user creation
+
+- [ ] Home page
+  - [ ] Get user role-specific homepages working
+    - [ ] DM page
+    - [ ] Player page
+
+- [ ] Compendium page
+  - [ ] basic compendium page (compendium v1)
     - [x] all spells list working
     - [x] favorites list
       - [x] add spell to favorites
       - [x] remove spell from favorites
-      - [ ] persist favorites?
     - [x] spell search form
       - [x] spell search working
       - [x] add search query "chips" next to filter button when filtering on search
@@ -35,17 +38,26 @@
       - [x] search on hitting enter
       - [x] add filtering by component
     - [x] recently viewed list
-    - [ ] recently searched keyword list?
-    - [x] add spells form
-      - [ ] persist user spells to db
-- [x] get spell import working
-- [x] get spell components working
+    - [x] get spell import working
+      - [x] get spell components working
+  - [ ] compendium v2
+    - [ ] persist user favorites to db
+    - [ ] recently searched keyword list
+    - [ ] multiple search chips / more complex searching
+
+- [ ] Spell creation
+  - [x] basic spell creation (add spells form)
+  - [ ] persist user spells to db
   - [ ] get custom spell component creation working
-- [ ] get spell creation working
-- [ ] get dice rolling working
-- [ ] get character sheet working
 
+- [ ] Character page
+  - [ ] DnDBeyond character sheet import?
 
-Bugs:
-- [ ] have to click component values twice to select them
+- [ ] Spell casting
+  - [ ] get dice rolling working
+
+---
+
+Currently known bugs:
+- [ ] and / or logic not correct when searching on compendium
 - [ ] can't filter by nested component values (e.g. damage -> element -> fire)
