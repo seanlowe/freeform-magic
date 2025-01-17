@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { AvailableComponents } from './constants'
 import SearchInputField from './SearchInputField'
 import SearchLogicSlider from './SearchLogicSlider'
+import { checkIfComponentIsInMapAndHasValue } from '../spells/utilities'
 
 interface SearchSpellsFormProps {
   setSearchQuery: ( query: string ) => void;
@@ -11,7 +12,7 @@ interface SearchSpellsFormProps {
   filterSpells: (
     query: string,
     selectedComponents: string[],
-    selectedComponentValue: string,
+    selectedComponentValue: { [key: string]: string },
     filterLogic: 'AND' | 'OR'
   ) => void;
 }
@@ -23,8 +24,28 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
 }) => {
   const [ tempSearchQuery, setTempSearchQuery ] = useState<string>( '' )
   const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
-  const [ selectedComponentValue, setSelectedComponentValue ] = useState<string>( '' )
+  const [ selectedComponentValues, setSelectedComponentValues ] = 
+    useState<{ [key: string]: string }>({})
   const [ filterLogic, setFilterLogic ] = useState<'AND' | 'OR'>( 'OR' )
+
+  const handleSelectChange = ( value: { [key: string]: string }) => {
+    setSelectedComponentValues({ ...selectedComponentValues, ...value })
+  }
+
+  const renderedComponentTypeOptions = useMemo(() => {
+    const availableComponents = Object.values( AvailableComponents )
+
+    // remove 'level', 'range', and 'difficultyclass' from the list of available components
+    const filteredAvailableComponents = availableComponents.filter(( component ) => {
+      return component !== 'level' && component !== 'range' && component !== 'difficultyclass'
+    })
+
+    return filteredAvailableComponents.map(( component ) => {
+      return (
+        <option key={component.toString()} value={component}>{component}</option>
+      )
+    })
+  }, [ AvailableComponents ] )
 
   return (
     <div style={{ padding: '1rem' }}>
@@ -39,7 +60,12 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
         onKeyDown={( e ) => {
           if ( e.key === 'Enter' ) {
             setSearchQuery( tempSearchQuery )
-            filterSpells( tempSearchQuery, selectedComponents, selectedComponentValue, filterLogic )
+            filterSpells(
+              tempSearchQuery,
+              selectedComponents,
+              selectedComponentValues,
+              filterLogic,
+            )
           }
         }}
         placeholder='Enter spell name'
@@ -58,11 +84,7 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           }}
           style={{ padding: '0.5rem', width: '100%', marginBottom: '1rem' }}
         >
-          { Object.values( AvailableComponents ).map(( component ) => {
-            return (
-              <option key={component.toString()} value={component}>{component}</option>
-            )
-          })}
+          {renderedComponentTypeOptions}
         </select>
 
         {selectedComponents.map(( component ) => {
@@ -70,7 +92,6 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           case 'area':
           case 'damage':
           case 'delivery':
-          case 'difficultyclass':
           case 'duration':
           case 'durationtype':
           case 'element':
@@ -85,10 +106,13 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
                 <label>{component} Options:</label>
                 <SearchInputField
                   component={component}
-                  setSelectedComponentValue={setSelectedComponentValue}
+                  options={checkIfComponentIsInMapAndHasValue( component )}
+                  selectedValue={selectedComponentValues[component]}
+                  onChange={handleSelectChange}
                 />
               </div>
             )
+          case 'difficultyclass':
           case 'level':
           case 'range':
           default:
@@ -107,7 +131,13 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           }}
           onClick={() => {
             setSearchQuery( tempSearchQuery )
-            filterSpells( tempSearchQuery, selectedComponents, selectedComponentValue, filterLogic )
+            filterSpells(
+              tempSearchQuery,
+              selectedComponents,
+              selectedComponentValues,
+              filterLogic,
+            )
+            setSelectedComponentValues({})
           }}
         >
           Search

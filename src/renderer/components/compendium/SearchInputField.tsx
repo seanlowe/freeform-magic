@@ -1,53 +1,108 @@
-import React, { useState } from 'react'
-
-import { checkIfComponentIsInMapAndHasValue } from '../spells/utilities'
+import React, { useState, useRef, useEffect } from 'react'
 
 interface SearchInputFieldProps {
-  component: string
-  setSelectedComponentValue: React.Dispatch<React.SetStateAction<string>>
+  component: string;
+  options: string[] | null;
+  selectedValue: string;
+  onChange: ( param: { [key: string]: string }) => void;
 }
 
 const SearchInputField: React.FC<SearchInputFieldProps> = ({
   component,
-  setSelectedComponentValue,
+  options,
+  selectedValue,
+  onChange,
 }) => {
-  const componentValues = checkIfComponentIsInMapAndHasValue( component )
-  if ( !componentValues ) { 
+  if ( !options ) {
     return <></>
   }
 
-  const [ selectedValue, setSelectedValue ] = useState<string>( componentValues[ 0 ] )
+  const [ isOpen, setIsOpen ] = useState( false )
+  const selectRef = useRef<HTMLDivElement>( null )
 
-  const renderComponentValues = () => {
-    const options = []
-    for ( const value of componentValues ) {
-      const optionJSX = (
-        <option
-          key={value}
-          value={value}
-          onClick={( e ) => {
-            console.log( 'inside the onclick' )
-            setSelectedComponentValue( e.target.value )
-            setSelectedValue( e.target.value )
-          }}
-        >
-          {value}
-        </option>
-      )
-
-      options.push( optionJSX )
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleOutsideClick = ( event: MouseEvent ) => {
+      if ( selectRef.current && !selectRef.current.contains( event.target as Node )) {
+        setIsOpen( false )
+      }
     }
 
-    return <> {options} </>
+    document.addEventListener( 'mousedown', handleOutsideClick )
+
+    return () => {
+      document.removeEventListener( 'mousedown', handleOutsideClick )
+    }
+  }, [] )
+
+  const handleOptionClick = ( value: string ) => {
+    console.log({ [component]: value, component, value })
+    onChange({ [component]: value }) // Notify parent component
+    setIsOpen( false ) // Close dropdown
   }
 
   return (
-    <select
-      defaultValue={selectedValue}
-      style={{ padding: '0.5rem', width: '100%' }}
+    <div
+      ref={selectRef}
+      style={{
+        position: 'relative',
+        width: '200px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        backgroundColor: '#fff',
+      }}
     >
-      {renderComponentValues()}
-    </select>
+      {/* Selected Value */}
+      <div
+        style={{
+          padding: '0.5rem',
+          cursor: 'pointer',
+          userSelect: 'none',
+        }}
+        onClick={() => {
+          return setIsOpen( !isOpen )
+        }}
+      >
+        {selectedValue || 'Select an option'}
+      </div>
+
+      {/* Dropdown Options */}
+      {isOpen && (
+        <ul
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            margin: 0,
+            padding: 0,
+            listStyle: 'none',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            backgroundColor: '#fff',
+            zIndex: 10,
+          }}
+        >
+          {options.map(( option ) => {
+            return (
+              <li
+                key={option}
+                style={{
+                  padding: '0.5rem',
+                  cursor: 'pointer',
+                  backgroundColor: selectedValue === option ? '#f0f0f0' : '#fff',
+                }}
+                onClick={() => {
+                  return handleOptionClick( option )
+                }}
+              >
+                {option}
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
   )
 }
 

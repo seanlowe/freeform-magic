@@ -61,7 +61,7 @@ const CompendiumPage = () => {
   const filterSpells = async (
     query: string,
     selectedComponents: string[],
-    selectedComponentValue: string,
+    selectedComponentValues: { [key: string]: string},
     filterLogic: 'AND' | 'OR'
   ) => {
     let newFilteredSpells: SpellForApp[] = []
@@ -92,6 +92,8 @@ const CompendiumPage = () => {
           if ( !componentTypeIsSelected ) {
             return false
           }
+
+          const selectedComponentValue = selectedComponentValues[ spellComponent.type ]
 
           switch ( typeof spellComponent.value ) {
           case 'number':
