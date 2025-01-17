@@ -9,6 +9,7 @@
     - [x] electron-forge
     - [x] electron
     - [x] react
+    - [x] sass
     - [x] typescript
   - [x] Decide on storage / database options
     - [x] homebrew version of electron-store (SimpleElectronStore -> src/db/store.ts, for "local storage")
