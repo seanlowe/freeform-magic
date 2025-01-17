@@ -69,7 +69,7 @@ const HomePage = ({
     case 'Characters':
       return <CharactersPage />
     default:
-      return <div>Page not found</div>
+      return <></>
     }
   }
 
