@@ -37,13 +37,10 @@ const CharacterCarosel: React.FC<CharactersPageProps2> = ({
 }
 
 const CharactersPage: React.FC<CharactersPageProps> = ({ characters }) => {
-  // const navigate = useNavigate()
   const [ isShowingCharacterSheet, setIsShowingCharacterSheet ] = useState( false )
   const [ selectedCharacter, setSelectedCharacter ] = useState<Character | null>( null )
 
   const handleSelectCharacter = ( id: number ) => {
-    // navigate( `/character/${id}` )
-    console.log( 'bah' )
     const newlySelectedCharacter = characters.find(( c ) => {
       return c.id === id
     })
@@ -62,7 +59,14 @@ const CharactersPage: React.FC<CharactersPageProps> = ({ characters }) => {
         return <div>No character selected</div>
       }
 
-      return <CharacterSheet character={selectedCharacter} />
+      return (
+        <CharacterSheet
+          character={selectedCharacter}
+          closeModal={() => {
+            return setIsShowingCharacterSheet( false ) 
+          }}
+        />
+      )
     }
 
     return (
