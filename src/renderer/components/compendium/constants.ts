@@ -23,7 +23,7 @@ export const AvailableComponents = [
   'target',
 ] as const
 
-export type AvailableComponent = typeof AvailableComponents[number] | "query"
+export type AvailableComponent = typeof AvailableComponents[number] | 'query'
 
 export const componentToComponentValuesMap: Map<string, string[] | null> =
  new Map<string, string[] | null>( [
@@ -57,7 +57,7 @@ export interface ComponentToValues {
 }
 
 export type ComponentEntry =
-| { type: "query"; value: string }
+| { type: 'query'; value: string }
 | {
     [K in keyof ComponentToValues]: {
       type: K;

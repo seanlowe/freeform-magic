@@ -54,10 +54,10 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
       setSelectedComponents( newSelectedComponents )
     } else {
       // if there is no query component, add it to the selected components
-      setSelectedComponents([
+      setSelectedComponents( [
         ...selectedComponents,
         { type: 'query', value: query }
-      ])
+      ] )
     }
   }
 
@@ -116,36 +116,36 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           {renderedComponentTypeOptions}
         </select>
 
-        {Object.entries(selectedComponents).map(( componentKey, componentValue ) => {
+        {Object.entries( selectedComponents ).map(( componentKey, componentValue ) => {
           // console.log( 'componentkey', componentKey )
           // console.log( 'componentValue', componentValue )
           switch ( componentKey ) {
-          // case 'area':
-          // case 'damage':
-          // case 'delivery':
-          // case 'duration':
-          // case 'durationtype':
-          // case 'element':
-          // case 'school':
-          // case 'target':
-          //   return (
-          //     <div
-          //       key={component + `-${Math.random()}`}
-          //       className='search-spells-form-component'
-          //       style={{ marginBottom: '1rem' }}
-          //     >
-          //       <label>{component} Options:</label>
-          //       <SearchInputField
-          //         component={component}
-          //         options={checkIfComponentIsInMapAndHasValue( component )}
-          //         selectedValue={selectedComponentValues[component]}
-          //         onChange={handleSelectChange}
-          //       />
-          //     </div>
-          //   )
-          // case 'difficultyclass':
-          // case 'level':
-          // case 'range':
+          case 'area':
+          case 'damage':
+          case 'delivery':
+          case 'duration':
+          case 'durationtype':
+          case 'element':
+          case 'school':
+          case 'target':
+            return (
+              <div
+                key={component + `-${Math.random()}`}
+                className='search-spells-form-component'
+                style={{ marginBottom: '1rem' }}
+              >
+                <label>{component} Options:</label>
+                <SearchInputField
+                  component={component}
+                  options={checkIfComponentIsInMapAndHasValue( component )}
+                  selectedValue={selectedComponentValues[component]}
+                  onChange={handleSelectChange}
+                />
+              </div>
+            )
+          case 'difficultyclass':
+          case 'level':
+          case 'range':
           default:
             // console.log( 'MADE IT IN ELSE' )
             return null

@@ -62,3 +62,10 @@
 Currently known bugs:
 - [ ] and / or logic not correct when searching on compendium
 - [ ] can't filter by nested component values (e.g. damage -> element -> fire)
+
+
+current work notes:
+- redoing spell search form
+  - figure out and/or logic with selbox.tsx
+  - add and/or logic to selectbox.tsx
+  - add different forms for non-list components (query, duration, etc)

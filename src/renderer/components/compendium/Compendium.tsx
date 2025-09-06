@@ -2,21 +2,22 @@ import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './add/AddSpellForm'
 import AllSpells from './AllSpells'
+import { ComponentEntry } from './constants'
 import SearchChip from './search/SearchChip'
 import SearchSpellsForm from './search/SearchSpellsForm'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
 import { convertSpellFromPrismaToApp } from '../spells/utilities'
-import { ComponentEntry } from './constants'
+import SearchSpellsForm2 from './search/searchform'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
-  const [ searchQuery, setSearchQuery ] = useState( '' )
-  const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
+  // const [ searchQuery, setSearchQuery ] = useState( '' )
+  // const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
 
-  const [ filterItems, setFilterItems ] = useState<ComponentEntry[]>( [ ] )
+  const [ selectedComponents, setSelectedComponents ] = useState<ComponentEntry[]>( [ ] )
 
   const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<SpellForApp[]>( [] )
@@ -62,22 +63,22 @@ const CompendiumPage = () => {
     setIsAddingSpell( false )
   }
 
-  const filterSpells = async (
-    query: string,
-    selectedComponents: ComponentEntry[],
-    filterLogic: 'AND' | 'OR'
-  ) => {
-    let newFilteredSpells: SpellForApp[] = []
+  // const filterSpells = async (
+  //   query: string,
+  //   selectedComponents: ComponentEntry[],
+  //   filterLogic: 'AND' | 'OR'
+  // ) => {
+  //   let newFilteredSpells: SpellForApp[] = []
 
-    // spells can be filtered by components, query, or both
-    // if filter logic is AND, all components must be present for a spell to be included
-    // if filter logic is OR, at least one component must be present for a spell to be included
+  //   // spells can be filtered by components, query, or both
+  //   // if filter logic is AND, all components must be present for a spell to be included
+  //   // if filter logic is OR, at least one component must be present for a spell to be included
 
-    filterByComponents( allSpells, selectedComponents, filterLogic )
+  //   filterByComponents( allSpells, selectedComponents, filterLogic )
 
-    // await setFilteredSpells( newFilteredSpells )
-    // await setIsFilteringSpells( false )
-  }
+  //   // await setFilteredSpells( newFilteredSpells )
+  //   // await setIsFilteringSpells( false )
+  // }
 
   const filterByComponents = ( listOfSpells: SpellForApp[], componentsToFilterBy: ComponentEntry[], filterLogic: 'AND' | 'OR' ) => {
     // loop over the spells in the list 
@@ -96,10 +97,10 @@ const CompendiumPage = () => {
     })
   }
 
-  const removeFilter = () => {
-    setSearchQuery( '' )
-    actionsDispatch( true )
-  }
+  // const removeFilter = () => {
+  //   setSearchQuery( '' )
+  //   actionsDispatch( true )
+  // }
 
   const updateRecentlyViewed = ( newSpell: SpellForApp ): SpellForApp[] => {
     const newRecentlyViewed = [
@@ -147,13 +148,17 @@ const CompendiumPage = () => {
 
     if ( isFilteringSpells ) {
       return (
-        <SearchSpellsForm
-          setSearchQuery={setSearchQuery}
-          setIsFilteringSpells={setIsFilteringSpells}
-          filterSpells={filterSpells}
+        <SearchSpellsForm2
           selectedComponents={selectedComponents}
           setSelectedComponents={setSelectedComponents}
         />
+        // <SearchSpellsForm
+        //   setSearchQuery={setSearchQuery}
+        //   setIsFilteringSpells={setIsFilteringSpells}
+        //   filterSpells={filterSpells}
+        //   selectedComponents={selectedComponents}
+        //   setSelectedComponents={setSelectedComponents}
+        // />
       )
     }
 
@@ -195,11 +200,13 @@ const CompendiumPage = () => {
         }}
       >
         <div>
-          {searchQuery && !isFilteringSpells && (
+          {/* {searchQuery && !isFilteringSpells && (
             <SearchChip text={searchQuery} onRemove={removeFilter} />
-          )}
-          {selectedComponents.map(selectedComponent => {
-            return <SearchChip text={selectedComponent} onRemove={removeFilter} />
+          )} */}
+          {selectedComponents.map(( selectedComponent ) => {
+            return <SearchChip component={selectedComponent} onRemove={() => {
+              return console.log( 'remove' ) 
+            }} />
           })}
           <button
             style={{

@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { FC } from 'react'
+
+import { ComponentEntry } from '../constants'
 
 interface SearchChipProps {
-  text: string;
+  component: ComponentEntry;
   onRemove: () => void;
 }
 
-const SearchChip: React.FC<SearchChipProps> = ({ text, onRemove }) => {
+const SearchChip: FC<SearchChipProps> = ({ component, onRemove }) => {
+  const { type, value } = component
+  let text = `${type}: ${value}`
+  if ( type === 'query' ) {
+    text = `"${value}"`
+  }
+
   return (
     <div
       style={{
