@@ -91,5 +91,7 @@ typings/
 # Electron-Forge
 out/
 
+dist/
+
 storage/*.json
 storage/*.db
