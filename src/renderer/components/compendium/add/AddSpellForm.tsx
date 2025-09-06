@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { SpellForApp } from '../../../types/spells.types'
+import { SpellForApp } from '../../../../types/spells.types'
 
 const AddSpellForm = ({
   onSpellAdd,

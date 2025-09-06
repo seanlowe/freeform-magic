@@ -36,7 +36,7 @@ const SearchInputField: React.FC<SearchInputFieldProps> = ({
   }, [] )
 
   const handleOptionClick = ( value: string ) => {
-    console.log({ [component]: value, component, value })
+    // console.log({ [component]: value, component, value })
     onChange({ [component]: value }) // Notify parent component
     setIsOpen( false ) // Close dropdown
   }

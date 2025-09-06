@@ -1,18 +1,22 @@
 import { useContext, useEffect, useState } from 'react'
 
-import AddSpellForm from './AddSpellForm'
+import AddSpellForm from './add/AddSpellForm'
 import AllSpells from './AllSpells'
-import SearchChip from './SearchChip'
-import SearchSpellsForm from './SearchSpellsForm'
+import SearchChip from './search/SearchChip'
+import SearchSpellsForm from './search/SearchSpellsForm'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
 import { convertSpellFromPrismaToApp } from '../spells/utilities'
+import { ComponentEntry } from './constants'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
   const [ searchQuery, setSearchQuery ] = useState( '' )
+  const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
+
+  const [ filterItems, setFilterItems ] = useState<ComponentEntry[]>( [ ] )
 
   const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<SpellForApp[]>( [] )
@@ -60,64 +64,36 @@ const CompendiumPage = () => {
 
   const filterSpells = async (
     query: string,
-    selectedComponents: string[],
-    selectedComponentValues: { [key: string]: string},
+    selectedComponents: ComponentEntry[],
     filterLogic: 'AND' | 'OR'
   ) => {
     let newFilteredSpells: SpellForApp[] = []
-    if ( query === '' && !selectedComponents ) {
-      // we've "cleared" the search query so we need a refresh
-      actionsDispatch( true )
-    } else {
-      // filter spells based on search query
-      newFilteredSpells = allSpells.filter(( spell ) => {
-        return spell.name.toLowerCase().includes( query.toLowerCase())
-      })
-    }
 
-    // if we've selected components, add in any spells which have any of the selected components
-    if ( selectedComponents.length > 0 ) {
-      newFilteredSpells = (
-        filterLogic === 'AND' ? filteredSpells : allSpells
-      ).filter(( spell ) => {
-        const { components } = spell
-        if ( !components ) {
-          console.log( 'returning false' )
-          return false
-        }
+    // spells can be filtered by components, query, or both
+    // if filter logic is AND, all components must be present for a spell to be included
+    // if filter logic is OR, at least one component must be present for a spell to be included
 
-        // loop over each spell component and check if it matches any of the selected components
-        return components.some(( spellComponent: SpellComponent ) => {
-          const componentTypeIsSelected = selectedComponents.includes( spellComponent.type )
-          if ( !componentTypeIsSelected ) {
-            return false
-          }
+    filterByComponents( allSpells, selectedComponents, filterLogic )
 
-          const selectedComponentValue = selectedComponentValues[ spellComponent.type ]
+    // await setFilteredSpells( newFilteredSpells )
+    // await setIsFilteringSpells( false )
+  }
 
-          switch ( typeof spellComponent.value ) {
-          case 'number':
-            return spellComponent.value === parseFloat( selectedComponentValue )
-          case 'string':
-            return spellComponent.value === selectedComponentValue
-          case 'object': {
-            // search the values of the keys of the object for the selected value
-            return Object.keys( spellComponent.value ).some(( key ) => {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore fuck you
-              return spellComponent.value[ key ] === selectedComponentValue.toLowerCase()
-            })
-          }
-          default:
-            console.error( 'get fucked' )
-            break
-          }
-        })
-      })
-    }
+  const filterByComponents = ( listOfSpells: SpellForApp[], componentsToFilterBy: ComponentEntry[], filterLogic: 'AND' | 'OR' ) => {
+    // loop over the spells in the list 
+    return listOfSpells.filter(( spell ) => {
+      const { components } = spell
+      // if no components, don't keep spell in list
+      if ( !components ) {
+        console.log( 'returning false' )
+        return false
+      }
+      
+      // and check if they contain any (or all, depending on filter logic) of the components to filter by
+      console.log( 'components', components )
 
-    await setFilteredSpells( newFilteredSpells )
-    await setIsFilteringSpells( false )
+      return false
+    })
   }
 
   const removeFilter = () => {
@@ -175,6 +151,8 @@ const CompendiumPage = () => {
           setSearchQuery={setSearchQuery}
           setIsFilteringSpells={setIsFilteringSpells}
           filterSpells={filterSpells}
+          selectedComponents={selectedComponents}
+          setSelectedComponents={setSelectedComponents}
         />
       )
     }
@@ -220,6 +198,9 @@ const CompendiumPage = () => {
           {searchQuery && !isFilteringSpells && (
             <SearchChip text={searchQuery} onRemove={removeFilter} />
           )}
+          {selectedComponents.map(selectedComponent => {
+            return <SearchChip text={selectedComponent} onRemove={removeFilter} />
+          })}
           <button
             style={{
               marginRight: '0.5rem',

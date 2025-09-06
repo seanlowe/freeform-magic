@@ -1,29 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from 'react'
 
-import { AvailableComponents } from './constants'
+import { AvailableComponents, ComponentEntry } from '../constants'
 import SearchInputField from './SearchInputField'
 import SearchLogicSlider from './SearchLogicSlider'
-import { checkIfComponentIsInMapAndHasValue } from '../spells/utilities'
+import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
 
 interface SearchSpellsFormProps {
   setSearchQuery: ( query: string ) => void;
   setIsFilteringSpells: ( isFiltering: boolean ) => void;
   filterSpells: (
-    query: string,
-    selectedComponents: string[],
-    selectedComponentValue: { [key: string]: string },
+    selectedComponents: ComponentEntry[],
     filterLogic: 'AND' | 'OR'
   ) => void;
+  selectedComponents: ComponentEntry[];
+  setSelectedComponents: ( selectedComponents: ComponentEntry[] ) => void;
 }
 
 const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
   setSearchQuery,
   setIsFilteringSpells,
-  filterSpells
+  filterSpells,
+  selectedComponents,
+  setSelectedComponents
 }) => {
   const [ tempSearchQuery, setTempSearchQuery ] = useState<string>( '' )
-  const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
   const [ selectedComponentValues, setSelectedComponentValues ] = 
     useState<{ [key: string]: string }>({})
   const [ filterLogic, setFilterLogic ] = useState<'AND' | 'OR'>( 'OR' )
@@ -31,6 +32,36 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
   const handleSelectChange = ( value: { [key: string]: string }) => {
     setSelectedComponentValues({ ...selectedComponentValues, ...value })
   }
+
+  const updateQuery = ( query: string ) => {
+    // check if there is a query component in the selected components
+    const queryComponent = selectedComponents.find(( component ) => {
+      return component.type === 'query'
+    })
+
+    if ( queryComponent ) {
+      // if there is a query component, update it with the new query
+      queryComponent.value = query
+
+      // remove the query component from the selected components
+      const newSelectedComponents = selectedComponents.filter(( component ) => {
+        return component.type !== 'query'
+      })
+
+      // add the updated query component back to the selected components
+      newSelectedComponents.push( queryComponent )
+
+      setSelectedComponents( newSelectedComponents )
+    } else {
+      // if there is no query component, add it to the selected components
+      setSelectedComponents([
+        ...selectedComponents,
+        { type: 'query', value: query }
+      ])
+    }
+  }
+
+  console.log( 'selectedComponents', selectedComponents )
 
   const renderedComponentTypeOptions = useMemo(() => {
     const availableComponents = Object.values( AvailableComponents )
@@ -55,15 +86,13 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
         type='text'
         value={tempSearchQuery}
         onChange={( e ) => {
-          setTempSearchQuery( e.target.value )
+          updateQuery( e.target.value )
         }}
         onKeyDown={( e ) => {
           if ( e.key === 'Enter' ) {
             setSearchQuery( tempSearchQuery )
             filterSpells(
-              tempSearchQuery,
               selectedComponents,
-              selectedComponentValues,
               filterLogic,
             )
           }
@@ -87,36 +116,38 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           {renderedComponentTypeOptions}
         </select>
 
-        {selectedComponents.map(( component ) => {
-          switch ( component ) {
-          case 'area':
-          case 'damage':
-          case 'delivery':
-          case 'duration':
-          case 'durationtype':
-          case 'element':
-          case 'school':
-          case 'target':
-            return (
-              <div
-                key={component + `-${Math.random()}`}
-                className='search-spells-form-component'
-                style={{ marginBottom: '1rem' }}
-              >
-                <label>{component} Options:</label>
-                <SearchInputField
-                  component={component}
-                  options={checkIfComponentIsInMapAndHasValue( component )}
-                  selectedValue={selectedComponentValues[component]}
-                  onChange={handleSelectChange}
-                />
-              </div>
-            )
-          case 'difficultyclass':
-          case 'level':
-          case 'range':
+        {Object.entries(selectedComponents).map(( componentKey, componentValue ) => {
+          // console.log( 'componentkey', componentKey )
+          // console.log( 'componentValue', componentValue )
+          switch ( componentKey ) {
+          // case 'area':
+          // case 'damage':
+          // case 'delivery':
+          // case 'duration':
+          // case 'durationtype':
+          // case 'element':
+          // case 'school':
+          // case 'target':
+          //   return (
+          //     <div
+          //       key={component + `-${Math.random()}`}
+          //       className='search-spells-form-component'
+          //       style={{ marginBottom: '1rem' }}
+          //     >
+          //       <label>{component} Options:</label>
+          //       <SearchInputField
+          //         component={component}
+          //         options={checkIfComponentIsInMapAndHasValue( component )}
+          //         selectedValue={selectedComponentValues[component]}
+          //         onChange={handleSelectChange}
+          //       />
+          //     </div>
+          //   )
+          // case 'difficultyclass':
+          // case 'level':
+          // case 'range':
           default:
-            console.log( 'MADE IT IN ELSE' )
+            // console.log( 'MADE IT IN ELSE' )
             return null
           }
         })}
@@ -132,9 +163,7 @@ const SearchSpellsForm: React.FC<SearchSpellsFormProps> = ({
           onClick={() => {
             setSearchQuery( tempSearchQuery )
             filterSpells(
-              tempSearchQuery,
               selectedComponents,
-              selectedComponentValues,
               filterLogic,
             )
             setSelectedComponentValues({})

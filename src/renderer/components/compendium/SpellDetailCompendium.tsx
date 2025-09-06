@@ -30,7 +30,7 @@ const SpellDetailsCompendium = ({
         const componentElements: React.ReactElement[] = [ <strong>{type}: </strong> ]
 
         for ( const [ key, val ] of Object.entries( value )) {
-          console.log( key, val, value )
+          // console.log( key, val, value )
           componentElements.push(
             <>
               {key}: {val}
