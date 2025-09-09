@@ -12,6 +12,8 @@ interface SelectBoxProps {
   onOptionClick: ( option: string, action: SelectBoxAction ) => void;
 }
 
+
+// component type box
 const SelectBox: FC<SelectBoxProps> = ({ options, onOptionClick }) => {
   const [ available, setAvailable ] = useState<string[]>( options )
   const [ selected, setSelected ] = useState<string[]>( [] )
@@ -22,9 +24,11 @@ const SelectBox: FC<SelectBoxProps> = ({ options, onOptionClick }) => {
         return o !== option 
       }) 
     })
+
     setSelected(( prev ) => {
       return [ ...prev, option ] 
     })
+
     onOptionClick( option, SelectBoxAction.Add )
   }
 
@@ -34,9 +38,11 @@ const SelectBox: FC<SelectBoxProps> = ({ options, onOptionClick }) => {
         return o !== option 
       }) 
     })
+
     setAvailable(( prev ) => {
       return [ ...prev, option ] 
     })
+
     onOptionClick( option, SelectBoxAction.Remove )
   }
 
@@ -66,7 +72,7 @@ const SelectBox: FC<SelectBoxProps> = ({ options, onOptionClick }) => {
               borderRadius: '10px',
             }}
           >
-              ⟲
+            ⟲
           </button>
         )}
         {selected.map(( option ) => {

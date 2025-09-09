@@ -14,9 +14,6 @@ import SearchSpellsForm2 from './search/searchform'
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
-  // const [ searchQuery, setSearchQuery ] = useState( '' )
-  // const [ selectedComponents, setSelectedComponents ] = useState<string[]>( [] )
-
   const [ selectedComponents, setSelectedComponents ] = useState<ComponentEntry[]>( [ ] )
 
   const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
@@ -89,7 +86,7 @@ const CompendiumPage = () => {
         console.log( 'returning false' )
         return false
       }
-      
+
       // and check if they contain any (or all, depending on filter logic) of the components to filter by
       console.log( 'components', components )
 
@@ -97,6 +94,8 @@ const CompendiumPage = () => {
     })
   }
 
+  // loop through the selected Components and remove the one that was just removed
+  // trigger a refilter
   // const removeFilter = () => {
   //   setSearchQuery( '' )
   //   actionsDispatch( true )
@@ -152,13 +151,6 @@ const CompendiumPage = () => {
           selectedComponents={selectedComponents}
           setSelectedComponents={setSelectedComponents}
         />
-        // <SearchSpellsForm
-        //   setSearchQuery={setSearchQuery}
-        //   setIsFilteringSpells={setIsFilteringSpells}
-        //   filterSpells={filterSpells}
-        //   selectedComponents={selectedComponents}
-        //   setSelectedComponents={setSelectedComponents}
-        // />
       )
     }
 
@@ -200,9 +192,6 @@ const CompendiumPage = () => {
         }}
       >
         <div>
-          {/* {searchQuery && !isFilteringSpells && (
-            <SearchChip text={searchQuery} onRemove={removeFilter} />
-          )} */}
           {selectedComponents.map(( selectedComponent ) => {
             return <SearchChip component={selectedComponent} onRemove={() => {
               return console.log( 'remove' ) 
@@ -223,6 +212,8 @@ const CompendiumPage = () => {
           >
             Filter / Search
           </button>
+
+          {/* add spell button */}
           <button
             style={{
               padding: '0.5rem',

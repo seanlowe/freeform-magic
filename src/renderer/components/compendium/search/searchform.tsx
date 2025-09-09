@@ -6,6 +6,9 @@ import SearchLogicSlider from './SearchLogicSlider'
 import SelectBox2 from './selbox2'
 import SelectBox, { SelectBoxAction } from './selectbox'
 import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
+import ComponentTypeFilter from './ComponentTypeFilter'
+import TouchSpinner from './touchSpinner'
+import ComponentTypeFilterInnerWrapper from './ComponentTypeFilterInnerWrapper'
 
 interface SearchSpellsFormProps {
   selectedComponents: ComponentEntry[];
@@ -17,11 +20,12 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   setSelectedComponents,
 }) => {
 
+  const [ query, setQuery ] = useState<string>( '' )
   // need a temp state to store components that we've selected that we want to fitler on
   // these will be string[], accepted values are AvailableComponents
   const [ selectedComponentTypes, setSelectedComponentTypes ] = useState<AvailableComponent[]>( [] )
 
-  const updateQuery = ( query: string ) => {
+  const updateQuery = useMemo(() => {
     const updatedQueryComponent: ComponentEntry = { type: 'query', value: query }
     let currentComponents = selectedComponents
 
@@ -48,7 +52,36 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
       ...currentComponents,
       updatedQueryComponent
     ] )
-  }
+  }, [query])
+
+  // const updateQuery = ( query: string ) => {
+  //   const updatedQueryComponent: ComponentEntry = { type: 'query', value: query }
+  //   let currentComponents = selectedComponents
+  //
+  //   // check if there is a query component in the selected components
+  //   const queryComponent = selectedComponents.find(( component ) => {
+  //     return component.type === 'query'
+  //   })
+  //
+  //   if ( queryComponent ) {
+  //     // remove the query component from the selected components
+  //     currentComponents = currentComponents.filter(( component ) => {
+  //       return component.type !== 'query'
+  //     })
+  //   }
+  //
+  //   // if we just deleted the query field, don't add in the query component
+  //   if ( !query ) {
+  //     setSelectedComponents( currentComponents )
+  //     return
+  //   }
+  //
+  //   // add the updated query component back to the selected components
+  //   setSelectedComponents( [
+  //     ...currentComponents,
+  //     updatedQueryComponent
+  //   ] )
+  // }
 
   const handleTypeSelect = ( option: string, action: SelectBoxAction ) => {
     switch ( action ) {
@@ -96,25 +129,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   return (
     <div style={{ padding: '1rem' }}>
       <h3>Filter Spells</h3>
-      {/* <SearchLogicSlider filterLogic={filterLogic} setFilterLogic={setFilterLogic} /> */}
 
-      {/* search text box */}
-      <input
-        type='text'
-        // value={tempSearchQuery}
-        onChange={( e ) => {
-          updateQuery( e.target.value )
-        }}
-        onKeyDown={( e ) => {
-          if ( e.key === 'Enter' ) {
-            console.log( selectedComponents )
-          }
-        }}
-        placeholder='Enter search query. . .'
-        style={{ padding: '0.5rem', marginBottom: '1rem' }}
-      />
-
-      {/* box that has all the other component types (not query) */}
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.5rem' }}>Filter by Components:</label>
         <SelectBox
@@ -122,40 +137,71 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
           onOptionClick={handleTypeSelect}
         />
 
-        {selectedComponentTypes.map(( componentType ) => {
-          switch ( componentType ) {
-          case 'area':
-          case 'damage':
-          case 'delivery':
-          case 'durationType':
-          case 'element':
-          case 'school':
-          case 'target':
-            return (
-              <div
-                key={componentType + `-${Math.random()}`}
-                className='search-spells-form-component'
-                style={{ marginBottom: '1rem' }}
-              >
-                <label>{componentType} Options:</label>
-                <SelectBox2
-                  options={checkIfComponentIsInMapAndHasValue( componentType.toLowerCase()) ?? []}
-                  onOptionClick={( option, action ) => {
-                    handleOptionSelect( option, action, componentType )
-                  }}
-                />
-              </div>
-            )
-          case 'duration':
-          case 'difficultyClass':
-          case 'level':
-          case 'range':
-          case 'query':
-          default:
-            // console.log( 'MADE IT IN ELSE' )
-            return <p> {componentType} </p>
-          }
-        })}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          {selectedComponentTypes.map(( componentType ) => {
+            switch ( componentType ) {
+            case 'area':
+            case 'damage':
+            case 'delivery':
+            case 'durationType':
+            case 'element':
+            case 'school':
+            case 'target':
+              return (
+                <ComponentTypeFilter componentType={componentType} key={componentType + `-${Math.random()}`}>
+                  <SelectBox2
+                    options={checkIfComponentIsInMapAndHasValue( componentType.toLowerCase()) ?? []}
+                    onOptionClick={( option, action ) => {
+                      handleOptionSelect( option, action, componentType )
+                    }}
+                  />
+                </ComponentTypeFilter>
+              )
+
+            // search text box
+            case 'query':
+              return (
+                <ComponentTypeFilter componentType={componentType} key={componentType + `-${Math.random()}`}>
+                  <ComponentTypeFilterInnerWrapper>
+                    <input
+                      type='text'
+                      onKeyDown={( e ) => {
+                        if ( e.key === 'Enter' ) {
+                          // updateQuery( e.currentTarget.value )
+                          setQuery( e.currentTarget.value )
+                          // updateQuery
+                        }
+                      }}
+                      placeholder='Enter search query. . .'
+                      style={{ padding: '0.5rem', marginBottom: '1rem', marginTop: '1rem', width: '90%' }}
+                    />
+                  </ComponentTypeFilterInnerWrapper>
+                </ComponentTypeFilter>
+              )
+
+            case 'level':
+              return (
+                <ComponentTypeFilter componentType={componentType} key={componentType + `-${Math.random()}`}>
+                  <ComponentTypeFilterInnerWrapper>
+                    <TouchSpinner min={0} max={20}/>
+                  </ComponentTypeFilterInnerWrapper>
+                </ComponentTypeFilter>
+              )
+
+            case 'duration':
+            case 'difficultyClass':
+            case 'range':
+            default:
+              return (
+                <ComponentTypeFilter componentType={componentType} key={componentType + `-${Math.random()}`}>
+                  <ComponentTypeFilterInnerWrapper>
+                    <p> not implemented yet </p>
+                  </ComponentTypeFilterInnerWrapper>
+                </ComponentTypeFilter>
+              )
+            }
+          })}
+        </div>
 
       </div>
 

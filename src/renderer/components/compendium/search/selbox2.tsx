@@ -7,6 +7,8 @@ interface SelectBoxProps {
   onOptionClick: ( option: string, action: SelectBoxAction ) => void;
 }
 
+
+// component options box
 const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
   const [ selected, setSelected ] = useState<string[]>( [] )
   const [ mode, setMode ] = useState<'AND' | 'OR'>( 'AND' )
@@ -27,6 +29,7 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
 
   const handleReset = () => {
     setSelected( [] )
+    setMode( 'AND' )
   }
 
   const toggleMode = () => {
@@ -39,27 +42,56 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
     <div
       style={{
         border: '1px solid #ccc',
-        padding: '8px',
+        padding: '1rem',
         width: '300px',
-        borderRadius: '6px',
+        borderRadius: '8px',
         position: 'relative',
       }}
     >
-      {/* Chips row */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+      {/* row of selected chips */}
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '6px',
+        marginBottom: selected.length > 0 ? '1rem' : '0',
+        // marginTop: selected.length > 0 ? '8px' : '0px',
+        paddingRight: mode === 'AND' ? '47px' : '37px',
+        }}>
         {selected.length > 0 && (
-          <button
-            onClick={handleReset}
-            style={{
-              border: '1px solid gray',
-              borderRadius: '12px',
-              padding: '2px 8px',
-              cursor: 'pointer',
-              background: '#f8f8f8',
-            }}
-          >
-            Reset
-          </button>
+          <>
+            <button
+              onClick={handleReset}
+              style={{
+                background: 'lightgray',
+                border: 'none',
+                padding: '5px',
+                cursor: 'pointer',
+                borderRadius: '10px',
+              }}
+            >
+              ⟲
+            </button>
+
+            {/* AND/OR toggle chip */}
+            <div
+              onClick={toggleMode}
+              style={{
+                padding: '5px',
+                cursor: 'pointer',
+                borderRadius: '10px',
+
+                position: 'absolute',
+                top: '8px',
+                right: '8px',
+                border: '1px solid gray',
+                background: '#d9edf7',
+                fontWeight: 'bold',
+                userSelect: 'none',
+              }}
+            >
+              {mode}
+            </div>
+          </>
         )}
 
         {selected.map(( option ) => {
@@ -69,10 +101,11 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                border: '1px solid gray',
-                borderRadius: '12px',
-                padding: '2px 8px',
-                background: '#e0e0e0',
+                background: '#e0f0ff',
+                color: '#004080',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '10px',
+                fontSize: '0.9rem'
               }}
             >
               {option}
@@ -81,9 +114,12 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
                   return handleRemove( option ) 
                 }}
                 style={{
-                  marginLeft: '6px',
+                  marginLeft: '0.5rem',
+                  border: 'none',
+                  background: 'transparent',
                   cursor: 'pointer',
                   fontWeight: 'bold',
+                  color: '#004080'
                 }}
               >
               ×
@@ -93,34 +129,13 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
         })}
       </div>
 
-      {/* AND/OR toggle chip */}
-      {selected.length > 0 && (
-        <div
-          onClick={toggleMode}
-          style={{
-            position: 'absolute',
-            top: '8px',
-            right: '8px',
-            border: '1px solid gray',
-            borderRadius: '12px',
-            padding: '2px 10px',
-            cursor: 'pointer',
-            background: '#d9edf7',
-            fontWeight: 'bold',
-            userSelect: 'none',
-          }}
-        >
-          {mode}
-        </div>
-      )}
-
-      {/* Options list */}
+      {/* list of available options */}
       <div
         style={{
-          marginTop: '12px',
           display: 'flex',
           flexWrap: 'wrap',
-          gap: '6px',
+          gap: '0.5rem',
+          // marginTop: '12px',
         }}
       >
         {options
@@ -135,10 +150,11 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
                   return handleSelect( option ) 
                 }}
                 style={{
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: '6px',
                   border: '1px solid #ccc',
-                  borderRadius: '12px',
-                  padding: '4px 10px',
                   cursor: 'pointer',
+                  background: '#f5f5f5'
                 }}
               >
                 {option}

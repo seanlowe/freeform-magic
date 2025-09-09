@@ -32,12 +32,12 @@
     - [x] favorites list
       - [x] add spell to favorites
       - [x] remove spell from favorites
-    - [x] spell search form
-      - [x] spell search working
-      - [x] add search query "chips" next to filter button when filtering on search
-        - [x] auto refresh to full list when removing query chip
-      - [x] search on hitting enter
-      - [x] add filtering by component
+    - [ ] spell search form (needs redone - see current work notes)
+      - [ ] spell search working
+      - [ ] add search query "chips" next to filter button when filtering on search
+        - [ ] auto refresh to full list when removing query chip
+      - [ ] search on hitting enter
+      - [ ] add filtering by component
     - [x] recently viewed list
     - [x] get spell import working
       - [x] get spell components working
@@ -68,4 +68,16 @@ current work notes:
 - redoing spell search form
   - figure out and/or logic with selbox.tsx
   - add and/or logic to selectbox.tsx
-  - add different forms for non-list components (query, duration, etc)
+  - [ ] add different forms for non-list components
+    - [ ] duration
+    - [x] level -> touchSpinner.tsx
+    - [ ] range
+    - [ ] difficultyclass
+    - [x] query -> handled in searchform.tsx
+  - touchspinner
+    - [ ] add less than / greater than
+    - [ ] add multi selection (only want levels 1 and 2)
+    - [ ] and and/or logic
+  - hitting enter on the query field resets other selected components
+  - cannot remove the query chip near the banner by clicking the x
+  - add search and back button functionality back
