@@ -56,7 +56,7 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
         marginBottom: selected.length > 0 ? '1rem' : '0',
         // marginTop: selected.length > 0 ? '8px' : '0px',
         paddingRight: mode === 'AND' ? '47px' : '37px',
-        }}>
+      }}>
         {selected.length > 0 && (
           <>
             <button

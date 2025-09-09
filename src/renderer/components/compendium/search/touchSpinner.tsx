@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 interface SpinnerProps {
   value?: number;
-  onChange?: (val: number) => void;
+  onChange?: ( val: number ) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -16,54 +16,62 @@ const Spinner: React.FC<SpinnerProps> = ({
   max = Infinity,
   step = 1,
 }) => {
-  const [internal, setInternal] = useState<number>(value ?? 0)
+  const [ internal, setInternal ] = useState<number>( value ?? 0 )
   const val = value ?? internal
 
-  const update = (next: number) => {
-    const clamped = Math.min(max, Math.max(min, next))
-    if (value === undefined) setInternal(clamped)
-    onChange?.(clamped)
-  };
+  const update = ( next: number ) => {
+    const clamped = Math.min( max, Math.max( min, next ))
+    if ( value === undefined ) {
+      setInternal( clamped ) 
+    }
+    onChange?.( clamped )
+  }
 
   return (
     <div style={{
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "space-evenly",
-      gap: "1rem",
-      width: "100%",
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
+      gap: '1rem',
+      width: '100%',
     }}>
       <button
         style={{
-          border: "1px solid rgb(204, 204, 204)",
-          borderRadius: "25px",
-          height: "35px",
-          width: "35px",
+          border: '1px solid rgb(204, 204, 204)',
+          borderRadius: '25px',
+          height: '35px',
+          width: '35px',
         }}
-        onClick={() => update(val - step)}
+        onClick={() => {
+          return update( val - step ) 
+        }}
       >
         -
       </button>
       <input
-        type="number"
+        type='number'
         value={val}
-        onChange={(e) => update(Number(e.target.value))}
+        onChange={( e ) => {
+          return update( Number( e.target.value )) 
+        }}
         style={{
-          width: "50px",
-          textAlign: "center",
-          height: "30px",
-          border: "1px solid rgb(204, 204, 204)",
-          borderRadius: "6px",
+          width: '50px',
+          textAlign: 'center',
+          height: '30px',
+          border: '1px solid rgb(204, 204, 204)',
+          borderRadius: '6px',
         }}
       />
       <button
         style={{
-          border: "1px solid rgb(204, 204, 204)",
-          borderRadius: "25px",
-          height: "35px",
-          width: "35px",
+          border: '1px solid rgb(204, 204, 204)',
+          borderRadius: '25px',
+          height: '35px',
+          width: '35px',
         }}
-        onClick={() => update(val + step)}
+        onClick={() => {
+          return update( val + step ) 
+        }}
       >
         +
       </button>
@@ -71,4 +79,4 @@ const Spinner: React.FC<SpinnerProps> = ({
   )
 }
 
-export default Spinner;
+export default Spinner

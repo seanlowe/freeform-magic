@@ -2,13 +2,13 @@
 import { FC, useMemo, useState } from 'react'
 
 import { AvailableComponent, AvailableComponents, ComponentEntry } from '../constants'
+import ComponentTypeFilter from './ComponentTypeFilter'
+import ComponentTypeFilterInnerWrapper from './ComponentTypeFilterInnerWrapper'
 import SearchLogicSlider from './SearchLogicSlider'
 import SelectBox2 from './selbox2'
 import SelectBox, { SelectBoxAction } from './selectbox'
-import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
-import ComponentTypeFilter from './ComponentTypeFilter'
 import TouchSpinner from './touchSpinner'
-import ComponentTypeFilterInnerWrapper from './ComponentTypeFilterInnerWrapper'
+import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
 
 interface SearchSpellsFormProps {
   selectedComponents: ComponentEntry[];
@@ -52,7 +52,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
       ...currentComponents,
       updatedQueryComponent
     ] )
-  }, [query])
+  }, [ query ] )
 
   // const updateQuery = ( query: string ) => {
   //   const updatedQueryComponent: ComponentEntry = { type: 'query', value: query }
