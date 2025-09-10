@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useMemo, useState } from 'react'
 
 import { AvailableComponent, AvailableComponents, ComponentEntry } from '../constants'
 import ComponentTypeFilter from './ComponentTypeFilter'
 import ComponentTypeFilterInnerWrapper from './ComponentTypeFilterInnerWrapper'
-import SearchLogicSlider from './SearchLogicSlider'
 import SelectBox2 from './selbox2'
 import SelectBox, { SelectBoxAction } from './selectbox'
-import TouchSpinner from './touchSpinner'
 import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
+import LevelSelector from './LevelSelector'
 
 interface SearchSpellsFormProps {
   selectedComponents: ComponentEntry[];
@@ -183,7 +181,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
               return (
                 <ComponentTypeFilter componentType={componentType} key={componentType + `-${Math.random()}`}>
                   <ComponentTypeFilterInnerWrapper>
-                    <TouchSpinner min={0} max={20}/>
+                    <LevelSelector min={0} max={20}/>
                   </ComponentTypeFilterInnerWrapper>
                 </ComponentTypeFilter>
               )

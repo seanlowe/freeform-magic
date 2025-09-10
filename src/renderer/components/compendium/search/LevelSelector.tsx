@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { FC, useState } from 'react'
 
-interface SpinnerProps {
+interface LevelSelectorProps {
   value?: number;
   onChange?: ( val: number ) => void;
   min?: number;
@@ -8,8 +8,7 @@ interface SpinnerProps {
   step?: number;
 }
 
-// level selection widget
-const Spinner: React.FC<SpinnerProps> = ({
+const LevelSelector: FC<LevelSelectorProps> = ({
   value,
   onChange,
   min = -Infinity,
@@ -79,4 +78,4 @@ const Spinner: React.FC<SpinnerProps> = ({
   )
 }
 
-export default Spinner
+export default LevelSelector
