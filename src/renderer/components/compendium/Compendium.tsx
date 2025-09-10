@@ -150,6 +150,7 @@ const CompendiumPage = () => {
         <SearchSpellsForm2
           selectedComponents={selectedComponents}
           setSelectedComponents={setSelectedComponents}
+          setIsFilteringSpells={setIsFilteringSpells}
         />
       )
     }

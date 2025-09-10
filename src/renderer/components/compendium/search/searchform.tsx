@@ -11,13 +11,14 @@ import LevelSelector from './LevelSelector'
 interface SearchSpellsFormProps {
   selectedComponents: ComponentEntry[];
   setSelectedComponents: ( selectedComponents: ComponentEntry[] ) => void;
+  setIsFilteringSpells: ( isFiltering: boolean ) => void;
 }
 
 const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   selectedComponents,
   setSelectedComponents,
+  setIsFilteringSpells,
 }) => {
-
   const [ query, setQuery ] = useState<string>( '' )
   // need a temp state to store components that we've selected that we want to fitler on
   // these will be string[], accepted values are AvailableComponents
@@ -125,8 +126,31 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   console.log( Object.values( AvailableComponents ))
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h3>Filter Spells</h3>
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <button
+            onClick={() => {
+              return setIsFilteringSpells( false )
+            }}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              marginRight: '1rem',
+              transform: 'scale(2.5)',
+              position: 'relative',
+              top: '-0.4rem',
+            }}
+          >
+            ←
+          </button>
+        <h3>Filter Spells</h3>
+      </div>
 
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.5rem' }}>Filter by Components:</label>
@@ -204,7 +228,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
       </div>
 
       {/* buttons */}
-      <div>
+      <div style={{ marginBottom: '1rem' }}>
 
         {/* search button */}
         <button
@@ -235,8 +259,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
             cursor: 'pointer',
           }}
           onClick={() => {
-            console.log( 'back button clicked' )
-            // setIsFilteringSpells( false )
+            setIsFilteringSpells( false )
           }}
         >
           Back
