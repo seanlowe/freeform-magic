@@ -66,18 +66,20 @@ Currently known bugs:
 
 current work notes:
 - redoing spell search form
-  - figure out and/or logic with selbox.tsx
-  - add and/or logic to selectbox.tsx
+  - figure out and/or logic with selbox2.tsx (component options)
+  - add and/or logic to selectbox.tsx (component types)
   - [ ] add different forms for non-list components
     - [ ] duration
-    - [x] level -> touchSpinner.tsx
+    - [x] level -> LevelSelector.tsx
     - [ ] range
     - [ ] difficultyclass
     - [x] query -> handled in searchform.tsx
   - touchspinner
     - [ ] add less than / greater than
     - [ ] add multi selection (only want levels 1 and 2)
-    - [ ] and and/or logic
+    - [ ] add and/or logic
   - hitting enter on the query field resets other selected components
   - cannot remove the query chip near the banner by clicking the x
   - add search and back button functionality back
+    - [x] back button
+    - [ ] search button
