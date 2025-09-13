@@ -14,8 +14,6 @@ import SearchSpellsForm2 from './search/searchform'
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
 
-  const [ selectedComponents, setSelectedComponents ] = useState<ComponentEntry[]>( [ ] )
-
   const [ favorites, setFavorites ] = useState<SpellForApp[]>( [] )
   const [ recentlyViewed, setRecentlyViewed ] = useState<SpellForApp[]>( [] )
   const [ allSpells, setAllSpells ] = useState<SpellForApp[]>( [] )
@@ -94,13 +92,6 @@ const CompendiumPage = () => {
     })
   }
 
-  // loop through the selected Components and remove the one that was just removed
-  // trigger a refilter
-  // const removeFilter = () => {
-  //   setSearchQuery( '' )
-  //   actionsDispatch( true )
-  // }
-
   const updateRecentlyViewed = ( newSpell: SpellForApp ): SpellForApp[] => {
     const newRecentlyViewed = [
       newSpell,
@@ -147,11 +138,7 @@ const CompendiumPage = () => {
 
     if ( isFilteringSpells ) {
       return (
-        <SearchSpellsForm2
-          selectedComponents={selectedComponents}
-          setSelectedComponents={setSelectedComponents}
-          setIsFilteringSpells={setIsFilteringSpells}
-        />
+        <SearchSpellsForm2 setIsFilteringSpells={setIsFilteringSpells} />
       )
     }
 
@@ -193,11 +180,7 @@ const CompendiumPage = () => {
         }}
       >
         <div>
-          {selectedComponents.map(( selectedComponent ) => {
-            return <SearchChip component={selectedComponent} onRemove={() => {
-              return console.log( 'remove' ) 
-            }} />
-          })}
+          {/* render a SearchChip for each selected component */}
           <button
             style={{
               marginRight: '0.5rem',

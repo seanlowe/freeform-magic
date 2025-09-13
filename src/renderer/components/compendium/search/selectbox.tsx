@@ -2,9 +2,9 @@
 import React, { FC, useState } from 'react'
 
 export enum SelectBoxAction {
-  Add,
-  Remove,
-  Reset,
+  Add = "Add",
+  Remove = "Remove",
+  Reset = "Reset",
 }
 
 interface SelectBoxProps {

@@ -3,9 +3,14 @@ import { FC } from 'react'
 interface ComponentTypeFilterProps {
   componentType: string
   children: React.ReactNode
+  visible: boolean
 }
 
-const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({ componentType, children }) => {
+const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({ componentType, children, visible }) => {
+  if ( !visible ) {
+    return null
+  }
+
   return (
     <div
       className='search-spells-form-component'

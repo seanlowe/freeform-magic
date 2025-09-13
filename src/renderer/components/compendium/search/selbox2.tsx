@@ -3,33 +3,36 @@ import React, { useState } from 'react'
 import { SelectBoxAction } from './selectbox'
 
 interface SelectBoxProps {
+  prepopulatedOptions?: string[]; // make always defined, and jsut an empty array if nothing selecteD?
   options: string[];
   onOptionClick: ( option: string, action: SelectBoxAction ) => void;
 }
 
-
 // component options box
-const SelectBox2: React.FC<SelectBoxProps> = ({ options }) => {
-  const [ selected, setSelected ] = useState<string[]>( [] )
+const SelectBox2: React.FC<SelectBoxProps> = ({ prepopulatedOptions, options, onOptionClick }) => {
+  const [ selected, setSelected ] = useState<string[]>( [...(prepopulatedOptions ?? [])] )
   const [ mode, setMode ] = useState<'AND' | 'OR'>( 'AND' )
 
   const handleSelect = ( option: string ) => {
     setSelected(( prev ) => {
       return [ ...prev, option ] 
     })
+    onOptionClick( option, SelectBoxAction.Add )
   }
 
   const handleRemove = ( option: string ) => {
     setSelected(( prev ) => {
       return prev.filter(( o ) => {
         return o !== option 
-      }) 
+      })
     })
+    onOptionClick( option, SelectBoxAction.Remove )
   }
 
   const handleReset = () => {
     setSelected( [] )
     setMode( 'AND' )
+    onOptionClick( "", SelectBoxAction.Reset )
   }
 
   const toggleMode = () => {
