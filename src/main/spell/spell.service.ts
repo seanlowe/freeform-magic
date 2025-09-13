@@ -17,7 +17,8 @@ import {
   TargetOption
 } from '../../types/spells.types'
 
-const BASE_URL = 'https://www.dnd5eapi.co'
+// const BASE_URL = 'https://www.dnd5eapi.co'
+const BASE_URL = 'http://127.0.0.1:3000'
 
 type ImportAll5eSpellsResponse = {
   count: number,
@@ -48,7 +49,7 @@ function convert5eSpellsToAppSpells( importedSpells: SpellDetailResponse[] ): Sp
   const spells: SpellForApp[] = importedSpells.map(( spell ) => {
     return {
       name: spell.name,
-      description: spell.desc.join( ' ' ),
+      description: spell.desc.join( "|" ),
       components: buildSpellComponents( spell ),
     }
   })
@@ -305,7 +306,7 @@ function buildSpellComponents( spell: SpellDetailResponse ): SpellComponent[] {
 
 async function import5eSpells(): Promise<SpellDetailResponse[]> {
   const spellIndexes: ImportAll5eSpellsResponse =
-    await fetch( BASE_URL + '/api/spells' ).then(( response ) => {
+    await fetch( BASE_URL + '/api/2014/spells' ).then(( response ) => {
       return response.json()
     })
 

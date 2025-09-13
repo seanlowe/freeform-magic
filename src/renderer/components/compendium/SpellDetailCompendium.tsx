@@ -11,6 +11,7 @@ const SpellDetailsCompendium = ({
   setSelectedSpell: ( spell: SpellForApp | null ) => void,
   toggleFavorite: ( spell: SpellForApp ) => void
 }) => {
+  const spellDescriptions = selectedSpell?.description.split("|")
   const renderComponents = ( components: SpellComponent[] ) => {
     if ( !components.length ) {
       return null
@@ -92,7 +93,9 @@ const SpellDetailsCompendium = ({
         </button>
         <h3 style={{ margin: 0 }}>{selectedSpell.name}</h3>
       </div>
-      <p>{selectedSpell.description}</p>
+      {spellDescriptions?.map((entry) => {
+        return <p> {entry} </p>
+      })}
       { renderComponents( selectedSpell.components )}
       <button
         style={{

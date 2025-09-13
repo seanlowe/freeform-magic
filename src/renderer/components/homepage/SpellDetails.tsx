@@ -1,6 +1,8 @@
 import { SpellForApp } from '../../../types/spells.types'
 
 const SpellDetails = ({ selectedSpell }: { selectedSpell: SpellForApp | null }) => {
+  const spellDescriptions = selectedSpell?.description.split("|")
+
   return (
     <div style={{
       padding: '16px',
@@ -12,7 +14,9 @@ const SpellDetails = ({ selectedSpell }: { selectedSpell: SpellForApp | null }) 
       {selectedSpell ? (
         <>
           <h3>{selectedSpell.name}</h3>
-          <p>{selectedSpell.description}</p>
+          {spellDescriptions?.map((entry) => {
+            return <p> {entry} </p>
+          })}
         </>
       ) : (
         <p>Select a spell to view its details.</p>

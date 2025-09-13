@@ -19,7 +19,7 @@ interface DifficultyClassOption {
  */
 export interface Spell {
   name: string
-  description: string
+  description: string // is a single string with "|" separating paragraphs
 }
 
 /** 
