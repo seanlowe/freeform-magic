@@ -39,8 +39,7 @@ const LevelSelector: FC<LevelSelectorProps> = ({
   const [ equalityOption, setEqualityOption ] = useState<EqualityOptions>( EqualityOptions.EQUAL_TO )
   const [ logicOption, setLogicOption ] = useState<LogicOptions>( LogicOptions.AND )
 
-  // refactor to use LevelSelectionObject
-  const [ selected, setSelected ] = useState<string[]>( [] )
+  const [ selected, setSelected ] = useState<LevelSelectionObject[]>( [] )
 
   const [ internal, setInternal ] = useState<number>( value ?? 0 )
   const val = value ?? internal
@@ -70,45 +69,77 @@ const LevelSelector: FC<LevelSelectorProps> = ({
     })
   }
 
-  const handleSelect = ( option: string, modeAtSelection: EqualityOptions = equalityOption ) => {
-    let opt = `${modeAtSelection} ${option}`
+  const handleSelect = (
+    option: string,
+    equalityOptionAtSelection: EqualityOptions = equalityOption,
+    logicOptionAtSelection: LogicOptions = logicOption
+  ) => {
+    let label = `${equalityOptionAtSelection} ${option} ${logicOptionAtSelection}`
 
-    if (selected.includes( opt )) {
+    let duplicateObjectExists = selected.find((selectedObject) => {
+      return selectedObject.label === label
+    })
+
+    if (duplicateObjectExists) {
       console.log( 'already selected' )
       return
     }
 
+    const newSelectionObject: LevelSelectionObject = {
+      equalityOption: equalityOptionAtSelection,
+      logicOption: logicOptionAtSelection,
+      value: Number( option ),
+      label: label,
+    }
+
     setSelected(( prev ) => {
-      return [ ...prev, opt ]
+      return [ ...prev, newSelectionObject ]
     })
 
     setEqualityOption( EqualityOptions.EQUAL_TO )
+    setLogicOption( LogicOptions.AND )
   }
 
-  const handleRemove = ( option: string ) => {
+  const handleRemove = ( optionLabel: string ) => {
     setSelected(( prev ) => {
       return prev.filter(( o ) => {
-        return o !== option 
-      }) 
+        return o.label !== optionLabel
+      })
     })
   }
 
   const handleReset = () => {
     setSelected( [] )
     setEqualityOption( EqualityOptions.EQUAL_TO )
+    setLogicOption( LogicOptions.AND )
   }
+
+
+  // const buildQueryString = () -=> {}
+  // const convertQueryStringToObject = () => {}
+  
+  
+  // make "selected" an array of strings? like
+  //     [ EqualityOptions.EQUAL_TO, 1, LogicOptions.AND, EqualityOptions.LESS_THAN, 2, LogicOptions.OR ]
+  // then display all those strings as chips
+  // and can remove them each individually and
+  // click on the equality or logic options to
+  // toggle them
+
+  // need some way to make the in-progress work
+  // in one component type not be reset when
+  // selecting a new component to filter by.
+
+  console.log( 'selected', selected )
 
   return (
     <>
-
-    {/* row of selected chips */}
-    <div style={{
+      {/* row of selected chips */}
+      <div style={{
         display: 'flex',
         flexWrap: 'wrap',
         gap: '6px',
         marginBottom: selected.length > 0 ? '1rem' : '0',
-        // marginTop: selected.length > 0 ? '8px' : '0px',
-        // paddingRight: mode === 'AND' ? '47px' : '37px',
       }}>
         {selected.length > 0 && (
           <button
@@ -125,10 +156,19 @@ const LevelSelector: FC<LevelSelectorProps> = ({
           </button>
         )}
 
-        {selected.map(( option ) => {
+        {selected.map(( option, index ) => {
+          const { label: rawLabel } = option
+          let finalLabel = rawLabel
+
+          if ( index === selected.length - 1 ) {
+            console.log( 'last index', index )
+            // strip off the last word
+            finalLabel = rawLabel.split(' ').slice(0, -1).join(' ')
+          }
+
           return (
             <div
-              key={option}
+              key={rawLabel}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -139,10 +179,10 @@ const LevelSelector: FC<LevelSelectorProps> = ({
                 fontSize: '0.9rem'
               }}
             >
-              {option}
+              {finalLabel}
               <span
                 onClick={() => {
-                  return handleRemove( option ) 
+                  return handleRemove( rawLabel )
                 }}
                 style={{
                   marginLeft: '0.5rem',
@@ -197,7 +237,6 @@ const LevelSelector: FC<LevelSelectorProps> = ({
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                // console.log( `adding ${Number(e.currentTarget.value)} to selected` )
                 handleSelect( Number(e.currentTarget.value).toString() )
               }
             }}
@@ -239,7 +278,9 @@ const LevelSelector: FC<LevelSelectorProps> = ({
           +
         </button>
       </div>
+
       <hr />
+
       <label> Level Selection Options: </label>
       <div
         style={{
