@@ -196,7 +196,7 @@ const LevelSelector: FC<LevelSelectorProps> = ({
     <>
       {/* row of selected chips */}
       <div
-        className='level-selector-chips-wrapper'
+        className='chips-wrapper'
         style={{ marginBottom: selected.length > 0 ? '1rem' : '0' }}
       >
         {selected.length > 0 && (

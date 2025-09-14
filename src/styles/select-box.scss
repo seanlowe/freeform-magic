@@ -1,0 +1,22 @@
+.component-type-select,
+.select-box-wrapper {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+  position: relative;
+}
+
+// how large it should be when it's hosting the per-component options
+.select-box-wrapper {
+  width: 300px;
+}
+
+
+.chips-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  // handled in the TSX
+  // marginBottom: selected.length > 0 ? '1rem' : '0',
+}

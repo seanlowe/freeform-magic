@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
-
-import { SelectBoxAction } from './selectbox'
+import { FC, useState } from 'react'
 
 interface SelectBoxProps {
   prepopulatedOptions?: string[]; // make always defined, and jsut an empty array if nothing selecteD?
   options: string[];
   onOptionClick: ( option: string, action: SelectBoxAction ) => void;
+  className?: string;
+}
+
+export enum SelectBoxAction {
+  Add = 'Add',
+  Remove = 'Remove',
+  Reset = 'Reset',
 }
 
 // component options box
-const SelectBox2: React.FC<SelectBoxProps> = ({ prepopulatedOptions, options, onOptionClick }) => {
+const SelectBox: FC<SelectBoxProps> = ({ prepopulatedOptions, options, onOptionClick, className }) => {
   const [ selected, setSelected ] = useState<string[]>( [ ...( prepopulatedOptions ?? [] ) ] )
   const [ mode, setMode ] = useState<'AND' | 'OR'>( 'AND' )
 
@@ -41,25 +46,20 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ prepopulatedOptions, options, on
     })
   }
 
+  const wrapperClassName = className ? className : 'select-box-wrapper'
+
   return (
     <div
-      style={{
-        border: '1px solid #ccc',
-        padding: '1rem',
-        width: '300px',
-        borderRadius: '8px',
-        position: 'relative',
-      }}
+      className={wrapperClassName}
     >
       {/* row of selected chips */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '6px',
-        marginBottom: selected.length > 0 ? '1rem' : '0',
-        // marginTop: selected.length > 0 ? '8px' : '0px',
-        paddingRight: mode === 'AND' ? '47px' : '37px',
-      }}>
+      <div
+        className='chips-wrapper'
+        style={{
+          marginBottom: selected.length > 0 ? '1rem' : '0',
+          paddingRight: mode === 'AND' ? '47px' : '37px',
+        }}
+      >
         {selected.length > 0 && (
           <>
             <button
@@ -169,4 +169,4 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ prepopulatedOptions, options, on
   )
 }
 
-export default SelectBox2
+export default SelectBox

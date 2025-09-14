@@ -4,8 +4,7 @@ import { AvailableComponent, AvailableComponents } from '../constants'
 import ComponentTypeFilter from './ComponentTypeFilter'
 import ComponentTypeFilterInnerWrapper from './ComponentTypeFilterInnerWrapper'
 import LevelSelector from './LevelSelector'
-import SelectBox2 from './selbox2'
-import SelectBox, { SelectBoxAction } from './selectbox'
+import SelectBox, { SelectBoxAction } from './SelectBox'
 import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
 
 interface SearchSpellsFormProps {
@@ -178,6 +177,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
       <div style={{ marginBottom: '1rem' }}>
         <label style={{ display: 'block', marginBottom: '0.5rem' }}>Filter by Components:</label>
         <SelectBox
+          className='component-type-select'
           options={Object.values( [ ...AvailableComponents, 'query' ] )}
           onOptionClick={handleTypeSelect}
         />
@@ -198,7 +198,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
                   key={componentType + `-${Math.random()}`}
                   componentType={componentType}
                 >
-                  <SelectBox2
+                  <SelectBox
                     prepopulatedOptions={tempSavedOptions[componentType]}
                     options={checkIfComponentIsInMapAndHasValue( componentType.toLowerCase()) ?? []}
                     onOptionClick={( option, action ) => {
