@@ -3,10 +3,10 @@ import { FC, useState } from 'react'
 import { AvailableComponent, AvailableComponents } from '../constants'
 import ComponentTypeFilter from './ComponentTypeFilter'
 import ComponentTypeFilterInnerWrapper from './ComponentTypeFilterInnerWrapper'
+import LevelSelector from './LevelSelector'
 import SelectBox2 from './selbox2'
 import SelectBox, { SelectBoxAction } from './selectbox'
 import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
-import LevelSelector from './LevelSelector'
 
 interface SearchSpellsFormProps {
   setIsFilteringSpells: ( isFiltering: boolean ) => void;
@@ -21,7 +21,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
 }) => {
   const [ query, setQuery ] = useState<string>( '' )
 
-  const [ tempSavedOptions, setTempSavedOptions ] = useState<TempSavedOptions>( {} )
+  const [ tempSavedOptions, setTempSavedOptions ] = useState<TempSavedOptions>({})
   const [ selectedComponentTypes, setSelectedComponentTypes ] = useState<AvailableComponent[]>( [] )
 
   // const updateQuery = useMemo(() => {
@@ -106,7 +106,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   }
 
   const addOptionToArray = ( array: string[], option: string ) => {
-    if ( array.includes( option ) ) {
+    if ( array.includes( option )) {
       return array
     }
 
@@ -116,33 +116,36 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   const handleOptionSelect = ( option: string, action: SelectBoxAction, componentType: AvailableComponent ) => {
     switch ( action ) {
     case SelectBoxAction.Add: {
-      let newArray = tempSavedOptions
+      const newArray = tempSavedOptions
       newArray[componentType] = !newArray[componentType]
         ? [ option ]
         : addOptionToArray( newArray[componentType], option )
 
-      setTempSavedOptions(newArray)
+      setTempSavedOptions( newArray )
       break
     }
 
     case SelectBoxAction.Remove: {
-      let newArray = tempSavedOptions
+      const newArray = tempSavedOptions
       newArray[componentType] = newArray[componentType]
-        ? newArray[componentType].filter((opt) => opt !== option)
+        ? newArray[componentType].filter(( opt ) => {
+          return opt !== option 
+        })
         : []
 
-      setTempSavedOptions(newArray)
+      setTempSavedOptions( newArray )
 
       break
     }
 
     case SelectBoxAction.Reset: {
-      let newArray = tempSavedOptions
+      const newArray = tempSavedOptions
       newArray[componentType] = []
 
-      setTempSavedOptions(newArray)
+      setTempSavedOptions( newArray )
       break
-    }}
+    } 
+    }
   }
 
   return (
@@ -199,7 +202,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
                     prepopulatedOptions={tempSavedOptions[componentType]}
                     options={checkIfComponentIsInMapAndHasValue( componentType.toLowerCase()) ?? []}
                     onOptionClick={( option, action ) => {
-                      console.log("in here", { option, action })
+                      console.log( 'in here', { option, action })
                       handleOptionSelect( option, action, componentType )
                     }}
                   />
@@ -249,9 +252,9 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
             case 'range':
               return (
                 <ComponentTypeFilter
-                visible={selectedComponentTypes.includes( componentType )}
-                componentType={componentType}
-                key={componentType + `-${Math.random()}`}
+                  visible={selectedComponentTypes.includes( componentType )}
+                  componentType={componentType}
+                  key={componentType + `-${Math.random()}`}
                 >
                   <ComponentTypeFilterInnerWrapper>
                     <p> not implemented yet </p>

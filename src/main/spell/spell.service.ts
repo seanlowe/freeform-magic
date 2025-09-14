@@ -49,7 +49,7 @@ function convert5eSpellsToAppSpells( importedSpells: SpellDetailResponse[] ): Sp
   const spells: SpellForApp[] = importedSpells.map(( spell ) => {
     return {
       name: spell.name,
-      description: spell.desc.join( "|" ),
+      description: spell.desc.join( '|' ),
       components: buildSpellComponents( spell ),
     }
   })

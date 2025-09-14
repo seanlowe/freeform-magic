@@ -1,7 +1,7 @@
 import { SpellForApp } from '../../../types/spells.types'
 
 const SpellDetails = ({ selectedSpell }: { selectedSpell: SpellForApp | null }) => {
-  const spellDescriptions = selectedSpell?.description.split("|")
+  const spellDescriptions = selectedSpell?.description.split( '|' )
 
   return (
     <div style={{
@@ -14,7 +14,7 @@ const SpellDetails = ({ selectedSpell }: { selectedSpell: SpellForApp | null }) 
       {selectedSpell ? (
         <>
           <h3>{selectedSpell.name}</h3>
-          {spellDescriptions?.map((entry) => {
+          {spellDescriptions?.map(( entry ) => {
             return <p> {entry} </p>
           })}
         </>

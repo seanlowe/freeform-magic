@@ -10,7 +10,7 @@ interface SelectBoxProps {
 
 // component options box
 const SelectBox2: React.FC<SelectBoxProps> = ({ prepopulatedOptions, options, onOptionClick }) => {
-  const [ selected, setSelected ] = useState<string[]>( [...(prepopulatedOptions ?? [])] )
+  const [ selected, setSelected ] = useState<string[]>( [ ...( prepopulatedOptions ?? [] ) ] )
   const [ mode, setMode ] = useState<'AND' | 'OR'>( 'AND' )
 
   const handleSelect = ( option: string ) => {
@@ -32,7 +32,7 @@ const SelectBox2: React.FC<SelectBoxProps> = ({ prepopulatedOptions, options, on
   const handleReset = () => {
     setSelected( [] )
     setMode( 'AND' )
-    onOptionClick( "", SelectBoxAction.Reset )
+    onOptionClick( '', SelectBoxAction.Reset )
   }
 
   const toggleMode = () => {
