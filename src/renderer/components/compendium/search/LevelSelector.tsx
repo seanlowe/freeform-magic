@@ -21,12 +21,49 @@ enum LogicOptions {
   OR = 'OR',
 }
 
-// make this extend / inherit from an object that include value, label, and logicoption
-interface LevelSelectionObject {
-  equalityOption: EqualityOptions,
-  logicOption: LogicOptions,
-  value: number,
-  label: string,
+/**
+ * Iterates to the next value in the possibleValues array,
+ * wrapping around if necessary.
+ *
+ * @param {any} currentValue the current value
+ * @param {any[]} possibleValues the array of possible values
+ *
+ * @returns
+ */
+const iterateToNextValue = ( currentValue: any, possibleValues: any[] ) => {
+  let currentIndex = possibleValues.indexOf( currentValue )
+  if ( currentIndex === possibleValues.length - 1 ) {
+    currentIndex = 0
+  } else {
+    currentIndex++
+  }
+
+  return currentIndex
+}
+
+interface ChipLabelProps {
+  currentValue: any,
+  possibleValues: any[]
+}
+
+// reusable chip component with the ability to cycle the label
+// this doesn't update state
+const ChipLabel: FC<ChipLabelProps> = ({ currentValue, possibleValues }) => {
+  const [ entry, setEntry ] = useState<string>( currentValue )
+
+  const cycleToNextLabel = () => {
+    const newIndex = iterateToNextValue( entry, possibleValues )
+    setEntry( possibleValues[newIndex] )
+  }
+
+  return (
+    <span
+      onClick={cycleToNextLabel}
+      style={{ cursor: 'pointer' }}
+    >
+      {entry}
+    </span>
+  )
 }
 
 const LevelSelector: FC<LevelSelectorProps> = ({
@@ -36,10 +73,10 @@ const LevelSelector: FC<LevelSelectorProps> = ({
   max = Infinity,
   step = 1,
 }) => {
+  const [ selected, setSelected ] = useState<string[]>( [] )
+
   const [ equalityOption, setEqualityOption ] = useState<EqualityOptions>( EqualityOptions.EQUAL_TO )
   const [ logicOption, setLogicOption ] = useState<LogicOptions>( LogicOptions.AND )
-
-  const [ selected, setSelected ] = useState<LevelSelectionObject[]>( [] )
 
   const [ internal, setInternal ] = useState<number>( value ?? 0 )
   const val = value ?? internal
@@ -47,65 +84,53 @@ const LevelSelector: FC<LevelSelectorProps> = ({
   const update = ( next: number ) => {
     const clamped = Math.min( max, Math.max( min, next ))
     if ( value === undefined ) {
-      setInternal( clamped ) 
+      setInternal( clamped )
     }
     onChange?.( clamped )
   }
 
   const toggleEqualityOption = () => {
-    let values = Object.values( EqualityOptions )
-    let currentIndex = values.indexOf( equalityOption )
-    if (currentIndex == values.length - 1) {
-      currentIndex = 0
-    } else {
-      currentIndex++
-    }
+    const values = Object.values( EqualityOptions )
+    const currentIndex = iterateToNextValue( equalityOption, values )
     setEqualityOption( values[currentIndex] )
   }
 
   const toggleLogicOption = () => {
-    setLogicOption(( prev ) => {
-      return ( prev === LogicOptions.AND ? LogicOptions.OR : LogicOptions.AND ) 
-    })
+    const values = Object.values( LogicOptions )
+    const currentIndex = iterateToNextValue( logicOption, values )
+    setLogicOption( values[currentIndex] )
   }
 
   const handleSelect = (
-    option: string,
+    value: string,
     equalityOptionAtSelection: EqualityOptions = equalityOption,
     logicOptionAtSelection: LogicOptions = logicOption
   ) => {
-    let label = `${equalityOptionAtSelection} ${option} ${logicOptionAtSelection}`
+    const newSelection = [ `${equalityOptionAtSelection}`, `${value}`, `${logicOptionAtSelection}` ]
+    const newSelectionAsString = newSelection.join( ' ' )
 
-    let duplicateObjectExists = selected.find((selectedObject) => {
-      return selectedObject.label === label
-    })
-
-    if (duplicateObjectExists) {
+    const indexOfDuplicateSequence = selected.join( ' ' ).indexOf( newSelectionAsString )
+    if ( indexOfDuplicateSequence !== -1 ) {
+      // we found it somewhere
       console.log( 'already selected' )
       return
+    } else {
+      // we didn't find it
+      console.log( "didn't find it, adding" )
+      setSelected(( prev ) => {
+        return [ ...prev, ...newSelection ]
+      })
+
+      setEqualityOption( EqualityOptions.EQUAL_TO )
+      setLogicOption( LogicOptions.AND )
     }
-
-    const newSelectionObject: LevelSelectionObject = {
-      equalityOption: equalityOptionAtSelection,
-      logicOption: logicOptionAtSelection,
-      value: Number( option ),
-      label: label,
-    }
-
-    setSelected(( prev ) => {
-      return [ ...prev, newSelectionObject ]
-    })
-
-    setEqualityOption( EqualityOptions.EQUAL_TO )
-    setLogicOption( LogicOptions.AND )
   }
 
-  const handleRemove = ( optionLabel: string ) => {
-    setSelected(( prev ) => {
-      return prev.filter(( o ) => {
-        return o.label !== optionLabel
-      })
-    })
+  const handleRemove = ( startingIndex: number ) => {
+    const tempSelected = [ ...selected ]
+    tempSelected.splice( startingIndex, 3 )
+
+    setSelected( tempSelected )
   }
 
   const handleReset = () => {
@@ -114,150 +139,105 @@ const LevelSelector: FC<LevelSelectorProps> = ({
     setLogicOption( LogicOptions.AND )
   }
 
+  const renderChipLabel = ( entry: string, isEqualityOption: boolean, isLogicOption: boolean ) => {
+    if ( isEqualityOption ) {
+      return (
+        <ChipLabel
+          currentValue={entry}
+          possibleValues={Object.values( EqualityOptions )}
+        />
+      )
+    } else if ( isLogicOption ) {
+      return (
+        <ChipLabel
+          currentValue={entry}
+          possibleValues={Object.values( LogicOptions )}
+        />
+      )
+    } else {
+      return entry
+    }
+  }
 
-  // const buildQueryString = () -=> {}
-  // const convertQueryStringToObject = () => {}
-  
-  
-  // make "selected" an array of strings? like
-  //     [ EqualityOptions.EQUAL_TO, 1, LogicOptions.AND, EqualityOptions.LESS_THAN, 2, LogicOptions.OR ]
-  // then display all those strings as chips
-  // and can remove them each individually and
-  // click on the equality or logic options to
-  // toggle them
+  const renderSelectedChipsWithBorder = () => {
+    const toRender = []
+    for ( let i = 0; i < selected.length; i += 3 ) {
+      const equalityOption = selected[i]
+      const value          = selected[i + 1]
+      const logicOption    = selected[i + 2]
 
-  // need some way to make the in-progress work
-  // in one component type not be reset when
-  // selecting a new component to filter by.
+      toRender.push(
+        <div key={i} className='chip-sequence-wrapper'>
+          <div className='chip-body'>
+            {renderChipLabel( equalityOption, true, false )}
+          </div>
+          <div  className='chip-body'>
+            {renderChipLabel( value, false, false )}
+          </div>
+          <div className='chip-body'>
+            {renderChipLabel( logicOption, false, true )}
+          </div>
+          <span
+            className='chip-x'
+            onClick={() => {
+              return handleRemove( i )
+            }}
+          >
+            ×
+          </span>
+        </div>
+      )
+    }
 
-  console.log( 'selected', selected )
+    return toRender
+  }
 
   return (
     <>
       {/* row of selected chips */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '6px',
-        marginBottom: selected.length > 0 ? '1rem' : '0',
-      }}>
+      <div
+        className='level-selector-chips-wrapper'
+        style={{ marginBottom: selected.length > 0 ? '1rem' : '0' }}
+      >
         {selected.length > 0 && (
           <button
+            className='chip-reset-button'
             onClick={handleReset}
-            style={{
-              background: 'lightgray',
-              border: 'none',
-              padding: '5px',
-              cursor: 'pointer',
-              borderRadius: '10px',
-            }}
           >
             ⟲
           </button>
         )}
-
-        {selected.map(( option, index ) => {
-          const { label: rawLabel } = option
-          let finalLabel = rawLabel
-
-          if ( index === selected.length - 1 ) {
-            console.log( 'last index', index )
-            // strip off the last word
-            finalLabel = rawLabel.split(' ').slice(0, -1).join(' ')
-          }
-
-          return (
-            <div
-              key={rawLabel}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: '#e0f0ff',
-                color: '#004080',
-                padding: '0.25rem 0.5rem',
-                borderRadius: '10px',
-                fontSize: '0.9rem'
-              }}
-            >
-              {finalLabel}
-              <span
-                onClick={() => {
-                  return handleRemove( rawLabel )
-                }}
-                style={{
-                  marginLeft: '0.5rem',
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  color: '#004080'
-                }}
-              >
-              ×
-              </span>
-            </div>
-          ) 
-        })}
+        {renderSelectedChipsWithBorder()}
       </div>
 
-      <div style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        gap: '1rem',
-        width: '100%',
-        marginBottom: '1rem',
-      }}>
+      <div className='level-selector-row-wrapper'>
         <button
-          style={{
-            border: '1px solid rgb(204, 204, 204)',
-            borderRadius: '25px',
-            height: '40px',
-            width: '40px',
-          }}
+          className='level-selector-button'
           onClick={() => {
-            return update( val - step ) 
+            return update( val - step )
           }}
-          >
+        >
           -
         </button>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.25rem',
-          }}
-        >
+        <div className='level-selector-input-wrapper'>
           <input
+            className='level-selector-input-field'
             type='number'
             value={val}
             onChange={( e ) => {
-              return update( Number( e.target.value )) 
+              return update( Number( e.target.value ))
             }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSelect( Number(e.currentTarget.value).toString() )
+            onKeyDown={( e ) => {
+              if ( e.key === 'Enter' ) {
+                handleSelect( e.currentTarget.value )
               }
-            }}
-            style={{
-              width: '30px',
-              textAlign: 'center',
-              height: '30px',
-              border: '1px solid rgb(204, 204, 204)',
-              borderRadius: '6px',
             }}
           />
           <button
+            className='level-selector-input-button'
             onClick={() => {
-              handleSelect( val.toString() )
-            }}
-            style={{
-              border: '1px solid rgb(165 165 165)',
-              backgroundColor: 'rgb(225, 225, 225)',
-              borderRadius: '25px',
-              height: '35px',
-              width: '35px',
+              handleSelect( val.toString())
             }}
           >
             ✔
@@ -265,16 +245,11 @@ const LevelSelector: FC<LevelSelectorProps> = ({
         </div>
 
         <button
-          style={{
-            border: '1px solid rgb(204, 204, 204)',
-            borderRadius: '25px',
-            height: '40px',
-            width: '40px',
-          }}
+          className='level-selector-button'
           onClick={() => {
-            return update( val + step ) 
+            return update( val + step )
           }}
-          >
+        >
           +
         </button>
       </div>
@@ -282,47 +257,17 @@ const LevelSelector: FC<LevelSelectorProps> = ({
       <hr />
 
       <label> Level Selection Options: </label>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          marginTop: '1rem',
-        }}
-      >
+      <div className='options-wrapper'>
         <div
+          className='options-button'
           onClick={toggleEqualityOption}
-          style={{
-            padding: '5px',
-            cursor: 'pointer',
-            borderRadius: '10px',
-
-            // position: 'absolute',
-            // top: '8px',
-            // right: '8px',
-            border: '1px solid gray',
-            background: '#d9edf7',
-            fontWeight: 'bold',
-            userSelect: 'none',
-          }}
         >
           {equalityOption}
         </div>
 
         <div
           onClick={toggleLogicOption}
-          style={{
-            padding: '5px',
-            cursor: 'pointer',
-            borderRadius: '10px',
-
-            // position: 'absolute',
-            // top: '8px',
-            // right: '8px',
-            border: '1px solid gray',
-            background: '#d9edf7',
-            fontWeight: 'bold',
-            userSelect: 'none',
-          }}
+          className='options-button'
         >
           {logicOption}
         </div>

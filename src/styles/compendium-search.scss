@@ -1,0 +1,101 @@
+.level-selector-chips-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  // handled in the TSX
+  // marginBottom: selected.length > 0 ? '1rem' : '0',
+}
+
+.chip-sequence-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(204 204 204);
+  border-radius: 10px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.chip-reset-button {
+  border: none;
+  background: lightgrey;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.chip-x {
+  margin-left: 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: bold;
+  color: rgb(0, 64, 128);
+}
+
+.chip-body {
+  display: flex;
+  align-items: center;
+  background: rgb(224, 240, 255);
+  color: rgb(0, 64, 128);
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.level-selector-row-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.level-selector-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+// text input
+.level-selector-input-field {
+  width: 30px;
+  text-align: center;
+  height: 30px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 6px;
+}
+
+// enter button
+.level-selector-input-button {
+  border: 1px solid rgb(165 165 165);
+  background-color: rgb(225, 225, 225);
+  border-radius: 25px;
+  height: 35px;
+  width: 35px;
+}
+
+// plus and minus buttons
+.level-selector-button {
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 25px;
+  height: 40px;
+  width: 40px;
+}
+
+.options-wrapper {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
+.options-button {
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid gray;
+  background: #d9edf7;
+  font-weight: bold;
+  user-select: none;
+}
