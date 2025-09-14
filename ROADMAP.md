@@ -75,11 +75,17 @@ current work notes:
     - [ ] difficultyclass
     - [x] query -> handled in searchform.tsx
   - touchspinner
-    - [ ] add less than / greater than
-    - [ ] add multi selection (only want levels 1 and 2)
-    - [ ] add and/or logic
-  - hitting enter on the query field resets other selected components
+    - [x] add less than / greater than
+    - [x] add multi selection (only want levels 1 and 2)
+    - [x] add and/or logic
+  - [x] hitting enter on the query field resets other selected components
   - cannot remove the query chip near the banner by clicking the x
   - add search and back button functionality back
     - [x] back button
     - [ ] search button
+
+ideas:
+break out spells into "user spells" and "api spells"
+- import updated spells from api
+- spells have an "updated at" field
+- add field "source" -> user or API
