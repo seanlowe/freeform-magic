@@ -1,4 +1,7 @@
 import { FC, useState } from 'react'
+import { iterateToNextValue } from '../utilities';
+import SelectionChipLabel from './SelectionChipLabel';
+import { EqualityOptions, LogicOptions } from '../constants';
 
 interface LevelSelectorProps {
   value?: number;
@@ -6,64 +9,6 @@ interface LevelSelectorProps {
   min?: number;
   max?: number;
   step?: number;
-}
-
-enum EqualityOptions {
-  EQUAL_TO = 'EQUAL TO',
-  LESS_THAN = 'LESS THAN',
-  GREATER_THAN = 'GREATER THAN',
-  LESS_THAN_OR_EQUAL_TO = 'LESS THAN OR EQUAL TO',
-  GREATER_THAN_OR_EQUAL_TO = 'GREATER THAN OR EQUAL TO',
-}
-
-enum LogicOptions {
-  AND = 'AND',
-  OR = 'OR',
-}
-
-/**
- * Iterates to the next value in the possibleValues array,
- * wrapping around if necessary.
- *
- * @param {any} currentValue the current value
- * @param {any[]} possibleValues the array of possible values
- *
- * @returns
- */
-const iterateToNextValue = ( currentValue: any, possibleValues: any[] ) => {
-  let currentIndex = possibleValues.indexOf( currentValue )
-  if ( currentIndex === possibleValues.length - 1 ) {
-    currentIndex = 0
-  } else {
-    currentIndex++
-  }
-
-  return currentIndex
-}
-
-interface ChipLabelProps {
-  currentValue: any,
-  possibleValues: any[]
-}
-
-// reusable chip component with the ability to cycle the label
-// this doesn't update state
-const ChipLabel: FC<ChipLabelProps> = ({ currentValue, possibleValues }) => {
-  const [ entry, setEntry ] = useState<string>( currentValue )
-
-  const cycleToNextLabel = () => {
-    const newIndex = iterateToNextValue( entry, possibleValues )
-    setEntry( possibleValues[newIndex] )
-  }
-
-  return (
-    <span
-      onClick={cycleToNextLabel}
-      style={{ cursor: 'pointer' }}
-    >
-      {entry}
-    </span>
-  )
 }
 
 const LevelSelector: FC<LevelSelectorProps> = ({
@@ -142,14 +87,14 @@ const LevelSelector: FC<LevelSelectorProps> = ({
   const renderChipLabel = ( entry: string, isEqualityOption: boolean, isLogicOption: boolean ) => {
     if ( isEqualityOption ) {
       return (
-        <ChipLabel
+        <SelectionChipLabel
           currentValue={entry}
           possibleValues={Object.values( EqualityOptions )}
         />
       )
     } else if ( isLogicOption ) {
       return (
-        <ChipLabel
+        <SelectionChipLabel
           currentValue={entry}
           possibleValues={Object.values( LogicOptions )}
         />

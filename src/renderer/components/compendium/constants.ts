@@ -9,6 +9,19 @@ import {
   TargetOption
 } from '../../../types/spells.types'
 
+export enum EqualityOptions {
+  EQUAL_TO = 'EQUAL TO',
+  LESS_THAN = 'LESS THAN',
+  GREATER_THAN = 'GREATER THAN',
+  LESS_THAN_OR_EQUAL_TO = 'LESS THAN OR EQUAL TO',
+  GREATER_THAN_OR_EQUAL_TO = 'GREATER THAN OR EQUAL TO',
+}
+
+export enum LogicOptions {
+  AND = 'AND',
+  OR = 'OR',
+}
+
 export const AvailableComponents = [
   'area',
   'damage',
