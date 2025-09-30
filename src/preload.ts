@@ -13,11 +13,11 @@ import { CreateUserDto } from './main/user/create-user.dto'
  * preload.ts runs in an isolated context.
  */
 
-const env: Record<string, string> = {};
-for (const arg of process.argv) {
-  if (arg.startsWith("--")) {
-    const [key, value] = arg.substring(2).split("=");
-    env[key] = value;
+const env: Record<string, string> = {}
+for ( const arg of process.argv ) {
+  if ( arg.startsWith( '--' )) {
+    const [ key, value ] = arg.substring( 2 ).split( '=' )
+    env[key] = value
   }
 }
 
@@ -75,4 +75,4 @@ contextBridge.exposeInMainWorld( 'api', {
   }
 })
 
-contextBridge.exposeInMainWorld("env", env);
+contextBridge.exposeInMainWorld( 'env', env )

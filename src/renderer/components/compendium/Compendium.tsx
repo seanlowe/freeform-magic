@@ -2,15 +2,17 @@ import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './add/AddSpellForm'
 import AllSpells from './AllSpells'
-import { ComponentEntry } from './constants'
-import SearchChip from './search/SearchChip'
-import SearchSpellsForm from './search/SearchSpellsForm'
+// import { ComponentEntry } from './constants'
 import SpellDetailsCompendium from './SpellDetailCompendium'
-import { SpellComponent, SpellForApp } from '../../../types/spells.types'
+import { SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
 import { convertSpellFromPrismaToApp } from '../spells/utilities'
 import SearchSpellsForm2 from './search/searchform'
 import { useShortcut } from '../../utilities/hooks/useShortcut'
+
+// import SearchChip from './search/SearchChip'
+// import SearchSpellsForm from './search/SearchSpellsForm'
+// import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
@@ -35,11 +37,11 @@ const CompendiumPage = () => {
   //   return () => window.removeEventListener("keydown", listener);
   // }, [])
 
-  useShortcut("f", () => {
+  useShortcut( 'f', () => {
     setIsFilteringSpells( true )
   }, { ctrl: true, shift: true })
 
-  useShortcut("Escape", () => {
+  useShortcut( 'Escape', () => {
     if ( isFilteringSpells ) {
       setIsFilteringSpells( false )
     }
@@ -97,22 +99,27 @@ const CompendiumPage = () => {
   //   // await setIsFilteringSpells( false )
   // }
 
-  const filterByComponents = ( listOfSpells: SpellForApp[], componentsToFilterBy: ComponentEntry[], filterLogic: 'AND' | 'OR' ) => {
-    // loop over the spells in the list 
-    return listOfSpells.filter(( spell ) => {
-      const { components } = spell
-      // if no components, don't keep spell in list
-      if ( !components ) {
-        console.log( 'returning false' )
-        return false
-      }
+  // const filterByComponents = (
+  //   listOfSpells: SpellForApp[],
+  //   componentsToFilterBy: ComponentEntry[],
+  //   filterLogic: 'AND' | 'OR'
+  // ) => {
+  //   // loop over the spells in the list 
+  //   return listOfSpells.filter(( spell ) => {
+  //     const { components } = spell
+  //     // if no components, don't keep spell in list
+  //     if ( !components ) {
+  //       console.log( 'returning false' )
+  //       return false
+  //     }
 
-      // and check if they contain any (or all, depending on filter logic) of the components to filter by
-      console.log( 'components', components )
+  //     // and check if they contain any (or all, depending on
+  //     // filter logic) of the components to filter by
+  //     console.log( 'components', components )
 
-      return false
-    })
-  }
+  //     return false
+  //   })
+  // }
 
   const updateRecentlyViewed = ( newSpell: SpellForApp ): SpellForApp[] => {
     const newRecentlyViewed = [

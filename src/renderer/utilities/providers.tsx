@@ -9,9 +9,12 @@ import useLocation from './hooks/useLocation'
 import authReducer from './reducers/auth.reducer'
 
 const Providers: FC<{ children: ReactNode }> = ({ children }) => {
-  const { state: authState, dispatch: authDispatch } = useAuth( authReducer, createInitialAuthState() )
   const { state: locationState, dispatch: locationDispatch } = useLocation( 'Home' )
   const { state: actionsState, dispatch: actionsDispatch } = useActions( false )
+  const {
+    state: authState,
+    dispatch: authDispatch
+  } = useAuth( authReducer, createInitialAuthState())
 
   return (
     <AuthContext.Provider value={{ state: authState, dispatch: authDispatch }}>

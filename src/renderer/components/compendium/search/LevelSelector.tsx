@@ -1,7 +1,8 @@
 import { FC, useState } from 'react'
-import { iterateToNextValue } from '../utilities';
-import SelectionChipLabel from './SelectionChipLabel';
-import { EqualityOptions, LogicOptions } from '../constants';
+
+import { iterateToNextValue } from '../utilities'
+import SelectionChipLabel from './SelectionChipLabel'
+import { EqualityOptions, LogicOptions } from '../constants'
 
 interface LevelSelectorProps {
   value?: number;
@@ -19,11 +20,13 @@ const LevelSelector: FC<LevelSelectorProps> = ({
   step = 1,
 }) => {
   const [ selected, setSelected ] = useState<string[]>( [] )
-
-  const [ equalityOption, setEqualityOption ] = useState<EqualityOptions>( EqualityOptions.EQUAL_TO )
-  const [ logicOption, setLogicOption ] = useState<LogicOptions>( LogicOptions.AND )
-
   const [ internal, setInternal ] = useState<number>( value ?? 0 )
+  const [ logicOption, setLogicOption ] = useState<LogicOptions>( LogicOptions.AND )
+  const [
+    equalityOption,
+    setEqualityOption
+  ] = useState<EqualityOptions>( EqualityOptions.EQUAL_TO )
+
   const val = value ?? internal
 
   const update = ( next: number ) => {

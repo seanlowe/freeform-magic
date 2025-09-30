@@ -1,9 +1,10 @@
-import { FC, useState } from "react"
-import { iterateToNextValue } from "../utilities"
+import { FC, useState } from 'react'
+
+import { iterateToNextValue } from '../utilities'
 
 interface ChipLabelProps {
-  currentValue: any,
-  possibleValues: any[]
+  currentValue: string,
+  possibleValues: string[]
 }
 
 // reusable chip component with the ability to cycle the label

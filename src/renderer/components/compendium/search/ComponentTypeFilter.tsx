@@ -7,7 +7,12 @@ interface ComponentTypeFilterProps {
   useInnerWrapper?: boolean
 }
 
-const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({ componentType, children, visible, useInnerWrapper = true }) => {
+const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({
+  componentType,
+  children,
+  visible,
+  useInnerWrapper = true
+}) => {
   if ( !visible ) {
     return null
   }

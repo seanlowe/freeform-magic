@@ -33,7 +33,7 @@ const Auth: React.FC = () => {
     if ( window.env.SKIP_LOGIN ) {
       doLogin( window.env.SKIP_LOGIN_USERNAME ?? '', window.env.SKIP_LOGIN_PASSWORD ?? '' )
     }
-  }, [ window.env.SKIP_LOGIN ])
+  }, [ window.env.SKIP_LOGIN ] )
 
   const handleChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
     e.preventDefault()

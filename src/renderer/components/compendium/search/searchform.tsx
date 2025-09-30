@@ -19,6 +19,8 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
 }) => {
   const [ query, setQuery ] = useState<string>( '' )
 
+  console.log( 'query', query )
+
   const [ tempSavedOptions, setTempSavedOptions ] = useState<TempSavedOptions>({})
   const [ selectedComponentTypes, setSelectedComponentTypes ] = useState<AvailableComponent[]>( [] )
 
@@ -111,7 +113,11 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
     return [ ...array, option ]
   }
 
-  const handleOptionSelect = ( option: string, action: SelectBoxAction, componentType: AvailableComponent ) => {
+  const handleOptionSelect = (
+    option: string,
+    action: SelectBoxAction,
+    componentType: AvailableComponent,
+  ) => {
     switch ( action ) {
     case SelectBoxAction.Add: {
       const newArray = tempSavedOptions
@@ -148,7 +154,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
 
   return (
     <>
-      <div className="search-title">
+      <div className='search-title'>
         <button
           className='search-title-back-button'
           onClick={() => {
@@ -216,7 +222,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
                       }
                     }}
                     placeholder='Enter search query. . .'
-                    style={{ padding: '0.5rem', marginBottom: '1rem', marginTop: '1rem', width: '90%' }}
+                    className='search-query-input'
                   />
                 </ComponentTypeFilter>
               )
@@ -254,11 +260,11 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
       </div>
 
       {/* buttons */}
-      <div className="search-form-buttons">
+      <div className='search-form-buttons'>
 
         {/* search button */}
         <button
-          className="search-form-button search-form-button-search"
+          className='search-form-button search-form-button-search'
           onClick={() => {
             console.log( 'search button clicked' )
             // setSearchQuery( tempSearchQuery )
@@ -274,7 +280,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
 
         {/* back button */}
         <button
-          className="search-form-button"
+          className='search-form-button'
           onClick={() => {
             setIsFilteringSpells( false )
           }}

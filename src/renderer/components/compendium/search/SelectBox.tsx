@@ -1,7 +1,8 @@
 import { FC, useState } from 'react'
 
 interface SelectBoxProps {
-  prepopulatedOptions?: string[]; // make always defined, and jsut an empty array if nothing selecteD?
+  // make always defined, and just an empty array if nothing selecteD?
+  prepopulatedOptions?: string[];
   options: string[];
   onOptionClick: ( option: string, action: SelectBoxAction ) => void;
   className?: string;
@@ -14,7 +15,12 @@ export enum SelectBoxAction {
 }
 
 // component options box
-const SelectBox: FC<SelectBoxProps> = ({ prepopulatedOptions, options, onOptionClick, className }) => {
+const SelectBox: FC<SelectBoxProps> = ({
+  prepopulatedOptions,
+  options,
+  onOptionClick,
+  className,
+}) => {
   const [ selected, setSelected ] = useState<string[]>( [ ...( prepopulatedOptions ?? [] ) ] )
   const [ mode, setMode ] = useState<'AND' | 'OR'>( 'AND' )
 

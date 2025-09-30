@@ -7,10 +7,10 @@ import SpellList from './SpellList'
 import { Character } from '../../../types'
 import { SpellForApp } from '../../../types/spells.types'
 import { AuthContext } from '../../utilities/contexts/auth.context'
+import { useShortcut } from '../../utilities/hooks/useShortcut'
 import CharactersPage from '../character/CharactersPage'
 import CompendiumPage from '../compendium/Compendium'
 import { convertSpellFromPrismaToApp } from '../spells/utilities'
-import { useShortcut } from '../../utilities/hooks/useShortcut'
 
 const HomePage = ({
   location,
@@ -25,15 +25,15 @@ const HomePage = ({
   const [ selectedCharacter, setSelectedCharacter ] = useState<Character | null>( null )
   const [ selectedSpell, setSelectedSpell ] = useState<SpellForApp | null>( null )
 
-  useShortcut("s", () => {
+  useShortcut( 's', () => {
     onPageSelect( 'Compendium' )
   }, { ctrl: true, shift: true })
 
-  useShortcut("c", () => {
+  useShortcut( 'c', () => {
     onPageSelect( 'Characters' )
   }, { ctrl: true, shift: true })
 
-  useShortcut("h", () => {
+  useShortcut( 'h', () => {
     onPageSelect( 'Home' )
   }, { ctrl: true, shift: true })
 
