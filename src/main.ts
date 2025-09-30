@@ -3,7 +3,7 @@ import path from 'path'
 
 import started from 'electron-squirrel-startup'
 
-import { registerStore } from './db'
+import { registerDb, registerStore } from './db'
 import AuthRepository from './main/auth/auth.repository'
 import { registerHandlers } from './main/handlers'
 import { config } from 'dotenv'
@@ -23,8 +23,8 @@ const envVars = result.parsed || {};
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 2100,
+    height: 1000,
     webPreferences: {
       preload: path.join( __dirname, 'preload.js' ),
       nodeIntegration: true,
@@ -32,13 +32,17 @@ const createWindow = () => {
     },
   })
 
-  // and load the index.html of the app.
+  // and load the index.html of the app. (with env variables)
   // if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+  //   mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  // } else {
+  //   mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+  // }
+
+  // and load the index.html of the app. (no env variables)
   if ( process.env.NODE_ENV === 'development' ) {
-    // mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
     mainWindow.loadURL( 'http://localhost:5173' )
   } else {
-    // mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
     mainWindow.loadFile( path.join( __dirname, '../renderer/index.html' ))
   }
 
@@ -51,6 +55,7 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then( async () => {
   await registerStore()
+  await registerDb()
   registerHandlers()
 
   createWindow()
