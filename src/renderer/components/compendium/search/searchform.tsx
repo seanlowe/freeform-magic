@@ -2,7 +2,6 @@ import { FC, useState } from 'react'
 
 import { AvailableComponent, AvailableComponents } from '../constants'
 import ComponentTypeFilter from './ComponentTypeFilter'
-import ComponentTypeFilterInnerWrapper from './ComponentTypeFilterInnerWrapper'
 import LevelSelector from './LevelSelector'
 import SelectBox, { SelectBoxAction } from './SelectBox'
 import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
@@ -148,25 +147,12 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   }
 
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+    <>
+      <div className="search-title">
         <button
+          className='search-title-back-button'
           onClick={() => {
             return setIsFilteringSpells( false )
-          }}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            marginRight: '1rem',
-            transform: 'scale(2.5)',
-            position: 'relative',
-            top: '-0.4rem',
           }}
         >
           ←
@@ -174,15 +160,17 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
         <h3>Filter Spells</h3>
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Filter by Components:</label>
+      <div className='search-component-type-select-wrapper'>
+        <label className='search-component-type-select-label'>
+          Filter by Components:
+        </label>
         <SelectBox
           className='component-type-select'
           options={Object.values( [ ...AvailableComponents, 'query' ] )}
           onOptionClick={handleTypeSelect}
         />
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+        <div className='search-selected-components-wrapper'>
           {Object.values( [ ...AvailableComponents, 'query' ] ).map(( componentType ) => {
             switch ( componentType ) {
             case 'area':
@@ -197,6 +185,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
                   visible={selectedComponentTypes.includes( componentType )}
                   key={componentType + `-${Math.random()}`}
                   componentType={componentType}
+                  useInnerWrapper={false}
                 >
                   <SelectBox
                     prepopulatedOptions={tempSavedOptions[componentType]}
@@ -217,20 +206,18 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
                   componentType={componentType}
                   key={componentType + `-${Math.random()}`}
                 >
-                  <ComponentTypeFilterInnerWrapper>
-                    <input
-                      type='text'
-                      onKeyDown={( e ) => {
-                        if ( e.key === 'Enter' ) {
-                          // updateQuery( e.currentTarget.value )
-                          setQuery( e.currentTarget.value )
-                          // updateQuery
-                        }
-                      }}
-                      placeholder='Enter search query. . .'
-                      style={{ padding: '0.5rem', marginBottom: '1rem', marginTop: '1rem', width: '90%' }}
-                    />
-                  </ComponentTypeFilterInnerWrapper>
+                  <input
+                    type='text'
+                    onKeyDown={( e ) => {
+                      if ( e.key === 'Enter' ) {
+                        // updateQuery( e.currentTarget.value )
+                        setQuery( e.currentTarget.value )
+                        // updateQuery
+                      }
+                    }}
+                    placeholder='Enter search query. . .'
+                    style={{ padding: '0.5rem', marginBottom: '1rem', marginTop: '1rem', width: '90%' }}
+                  />
                 </ComponentTypeFilter>
               )
 
@@ -241,9 +228,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
                   componentType={componentType}
                   key={componentType + `-${Math.random()}`}
                 >
-                  <ComponentTypeFilterInnerWrapper>
-                    <LevelSelector min={0} max={20}/>
-                  </ComponentTypeFilterInnerWrapper>
+                  <LevelSelector min={0} max={20}/>
                 </ComponentTypeFilter>
               )
 
@@ -256,9 +241,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
                   componentType={componentType}
                   key={componentType + `-${Math.random()}`}
                 >
-                  <ComponentTypeFilterInnerWrapper>
-                    <p> not implemented yet </p>
-                  </ComponentTypeFilterInnerWrapper>
+                  <p> not implemented yet </p>
                 </ComponentTypeFilter>
               )
 
@@ -271,16 +254,11 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
       </div>
 
       {/* buttons */}
-      <div style={{ marginBottom: '1rem' }}>
+      <div className="search-form-buttons">
 
         {/* search button */}
         <button
-          style={{
-            padding: '0.5rem 1rem',
-            marginRight: '1rem',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+          className="search-form-button search-form-button-search"
           onClick={() => {
             console.log( 'search button clicked' )
             // setSearchQuery( tempSearchQuery )
@@ -296,11 +274,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
 
         {/* back button */}
         <button
-          style={{
-            padding: '0.5rem 1rem',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+          className="search-form-button"
           onClick={() => {
             setIsFilteringSpells( false )
           }}
@@ -308,7 +282,7 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
           Back
         </button>
       </div>
-    </div>
+    </>
   )
 }
 

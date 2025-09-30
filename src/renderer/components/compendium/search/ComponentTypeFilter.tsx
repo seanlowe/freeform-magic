@@ -4,9 +4,10 @@ interface ComponentTypeFilterProps {
   componentType: string
   children: React.ReactNode
   visible: boolean
+  useInnerWrapper?: boolean
 }
 
-const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({ componentType, children, visible }) => {
+const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({ componentType, children, visible, useInnerWrapper = true }) => {
   if ( !visible ) {
     return null
   }
@@ -26,7 +27,22 @@ const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({ componentType, chil
       >
         {componentType} Options:
       </label>
-      { children }
+      { useInnerWrapper
+        ? (
+          <div
+            style={{
+              border: '1px solid #ccc',
+              padding: '1rem',
+              width: '300px',
+              borderRadius: '8px',
+              position: 'relative',
+            }}
+          >
+            { children }
+          </div>
+        )
+        : children
+      }
     </div>
   )
 }

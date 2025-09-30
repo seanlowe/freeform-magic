@@ -90,3 +90,47 @@
   font-weight: bold;
   user-select: none;
 }
+
+.search-title {
+  display: flex;
+  align-items: center;
+}
+
+.search-title-back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 1rem;
+  transform: scale(2.5);
+  position: relative;
+  top: -0.4rem;
+}
+
+.search-component-type-select-wrapper {
+  margin-bottom: 1rem;
+}
+
+.search-component-type-select-label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.search-selected-components-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.search-form-buttons {
+  margin-bottom: 1rem;
+}
+
+.search-form-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-form-button-search {
+  margin-right: 1rem;
+}
