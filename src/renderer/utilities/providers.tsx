@@ -1,15 +1,15 @@
-import React, { ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 
 import { ActionsContext } from './contexts/actions.context'
-import { AuthContext, initialAuthState } from './contexts/auth.context'
+import { AuthContext, createInitialAuthState } from './contexts/auth.context'
 import { LocationContext } from './contexts/location.context'
 import useActions from './hooks/useActions'
 import useAuth from './hooks/useAuth'
 import useLocation from './hooks/useLocation'
 import authReducer from './reducers/auth.reducer'
 
-const Providers: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { state: authState, dispatch: authDispatch } = useAuth( authReducer, initialAuthState )
+const Providers: FC<{ children: ReactNode }> = ({ children }) => {
+  const { state: authState, dispatch: authDispatch } = useAuth( authReducer, createInitialAuthState() )
   const { state: locationState, dispatch: locationDispatch } = useLocation( 'Home' )
   const { state: actionsState, dispatch: actionsDispatch } = useActions( false )
 

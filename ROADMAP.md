@@ -24,8 +24,11 @@
     - [x] add key to .env file
     - [x] import .env file into process.env in `main.ts`
       - [x] pass env keys to preload.ts as additional arguments (preload cannot access process.env on its own)
-    - [ ] update `initialAuthState` in `auth.context.tsx` to check if SKIP_LOGIN is true
-    - [ ] update `Auth.tsx` to auto log in if SKIP_LOGIN is true
+    - [x] update `initialAuthState` in `auth.context.tsx` to check if SKIP_LOGIN is true
+    - [x] update `Auth.tsx` to auto log in if SKIP_LOGIN is true
+      - [x] fix infinite calls to doLogin in `Auth.tsx`
+      - [x] put username/password in the env file
+  - [ ] add password obfuscation on the client side
 
 - [ ] Home page
   - [ ] Get user role-specific homepages working

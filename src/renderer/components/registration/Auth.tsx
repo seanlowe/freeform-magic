@@ -29,6 +29,12 @@ const Auth: React.FC = () => {
     }
   }, [ formData.password, confirmPassword ] )
 
+  useEffect(() => {
+    if ( window.env.SKIP_LOGIN ) {
+      doLogin( window.env.SKIP_LOGIN_USERNAME ?? '', window.env.SKIP_LOGIN_PASSWORD ?? '' )
+    }
+  }, [ window.env.SKIP_LOGIN ])
+
   const handleChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
     e.preventDefault()
 
@@ -50,6 +56,7 @@ const Auth: React.FC = () => {
   }
 
   const doLogin = async ( username: string, password: string ) => {
+    // add password obfuscation here
     const didLogin = await dispatch({ type: 'LOGIN', payload: {
       username: username,
       password: password
