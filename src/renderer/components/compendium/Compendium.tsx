@@ -10,6 +10,7 @@ import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
 import { convertSpellFromPrismaToApp } from '../spells/utilities'
 import SearchSpellsForm2 from './search/searchform'
+import { useShortcut } from '../../utilities/hooks/useShortcut'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
@@ -22,6 +23,27 @@ const CompendiumPage = () => {
 
   const [ isAddingSpell, setIsAddingSpell ] = useState( false )
   const [ isFilteringSpells, setIsFilteringSpells ] = useState( false )
+
+  // helpful for debugging keys
+  // useEffect(() => {
+  //   const listener = (event: KeyboardEvent) => {
+  //     console.log("Key Pressed: ", event.key);
+  //   };
+  //
+  //   window.addEventListener("keydown", listener);
+  //
+  //   return () => window.removeEventListener("keydown", listener);
+  // }, [])
+
+  useShortcut("f", () => {
+    setIsFilteringSpells( true )
+  }, { ctrl: true, shift: true })
+
+  useShortcut("Escape", () => {
+    if ( isFilteringSpells ) {
+      setIsFilteringSpells( false )
+    }
+  }, { ctrl: true })
 
   const getAllSpells = async () => {
     const spells = await window.api.database.spells.getSpells()

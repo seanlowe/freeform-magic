@@ -10,6 +10,7 @@ import { AuthContext } from '../../utilities/contexts/auth.context'
 import CharactersPage from '../character/CharactersPage'
 import CompendiumPage from '../compendium/Compendium'
 import { convertSpellFromPrismaToApp } from '../spells/utilities'
+import { useShortcut } from '../../utilities/hooks/useShortcut'
 
 const HomePage = ({
   location,
@@ -23,6 +24,18 @@ const HomePage = ({
   const [ spellsForCharacter, setSpellsForCharacter ] = useState<SpellForApp[]>( [] )
   const [ selectedCharacter, setSelectedCharacter ] = useState<Character | null>( null )
   const [ selectedSpell, setSelectedSpell ] = useState<SpellForApp | null>( null )
+
+  useShortcut("s", () => {
+    onPageSelect( 'Compendium' )
+  }, { ctrl: true, shift: true })
+
+  useShortcut("c", () => {
+    onPageSelect( 'Characters' )
+  }, { ctrl: true, shift: true })
+
+  useShortcut("h", () => {
+    onPageSelect( 'Home' )
+  }, { ctrl: true, shift: true })
 
   const getCharacters = async ( username: string ) => {
     const characters =

@@ -66,11 +66,13 @@
 - [ ] Spell casting
   - [ ] get dice rolling working
 
----
-
-Currently known bugs:
-- [ ] and / or logic not correct when searching on compendium
-- [ ] can't filter by nested component values (e.g. damage -> element -> fire)
+- [ ] Random Work:
+  - [x] add keyboard shortcuts
+    - [x] ctrl+shift+s   -> spell compendium
+      - [x] ctrl+shift+f -> open spell search form
+      - [x] ctrl+escape  -> close spell search form
+    - [x] ctrl+shift+c   -> character compendium
+    - [x] ctrl+shift+h   -> home page
 
 ---
 
