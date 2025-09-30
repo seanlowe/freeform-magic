@@ -6,11 +6,19 @@ import started from 'electron-squirrel-startup'
 import { registerStore } from './db'
 import AuthRepository from './main/auth/auth.repository'
 import { registerHandlers } from './main/handlers'
+import { config } from 'dotenv'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if ( started ) {
   app.quit()
 }
+
+const result = config();
+if (result.error) {
+  throw result.error;
+}
+
+const envVars = result.parsed || {};
 
 const createWindow = () => {
   // Create the browser window.
@@ -20,6 +28,7 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join( __dirname, 'preload.js' ),
       nodeIntegration: true,
+      additionalArguments: Object.entries(envVars).map(([key, value]) => `--${key}=${value}`),
     },
   })
 

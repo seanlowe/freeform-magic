@@ -35,5 +35,6 @@ declare global {
   var db: PrismaClient
   interface Window {
     api: IElectronAPI
+    env: Record<string, string | undefined>
   }
 }

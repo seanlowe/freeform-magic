@@ -6,6 +6,21 @@ import ErrorObject from './main/error/error.object'
 import { emitSignal } from './main/handlers/utilities'
 import { CreateUserDto } from './main/user/create-user.dto'
 
+/*
+ * Note for future debugging:
+ * 
+ * console.logs don't show in the console because
+ * preload.ts runs in an isolated context.
+ */
+
+const env: Record<string, string> = {};
+for (const arg of process.argv) {
+  if (arg.startsWith("--")) {
+    const [key, value] = arg.substring(2).split("=");
+    env[key] = value;
+  }
+}
+
 // NOTE - did you edit interface.d.ts as well?
 contextBridge.exposeInMainWorld( 'api', {
   // auth.handler.ts
@@ -59,3 +74,5 @@ contextBridge.exposeInMainWorld( 'api', {
     },
   }
 })
+
+contextBridge.exposeInMainWorld("env", env);

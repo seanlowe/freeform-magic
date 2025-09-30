@@ -20,6 +20,12 @@
   - [x] Get user login / logout working
   - [x] add password check / hashing to login and user creation
   - [ ] add ability to select a role at user creation
+  - [ ] add a skip login feature for development
+    - [x] add key to .env file
+    - [x] import .env file into process.env in `main.ts`
+      - [x] pass env keys to preload.ts as additional arguments (preload cannot access process.env on its own)
+    - [ ] update `initialAuthState` in `auth.context.tsx` to check if SKIP_LOGIN is true
+    - [ ] update `Auth.tsx` to auto log in if SKIP_LOGIN is true
 
 - [ ] Home page
   - [ ] Get user role-specific homepages working
@@ -85,7 +91,7 @@ current work notes:
     - [ ] search button
 
 ideas:
-break out spells into "user spells" and "api spells"
-- import updated spells from api
-- spells have an "updated at" field
-- add field "source" -> user or API
+- break out spells into "user spells" and "api spells"
+  - import updated spells from api
+  - spells have an "updated at" field
+  - add field "source" -> user or API
