@@ -72,26 +72,30 @@ Currently known bugs:
 - [ ] and / or logic not correct when searching on compendium
 - [ ] can't filter by nested component values (e.g. damage -> element -> fire)
 
+---
 
 current work notes:
-- redoing spell search form
-  - figure out and/or logic with selbox2.tsx (component options)
-  - add and/or logic to selectbox.tsx (component types)
+- [ ] redo the spell search form
+  - [ ] figure out and/or logic with selbox2.tsx (component options)
+  - [ ] add and/or logic to selectbox.tsx (component types)
   - [ ] add different forms for non-list components
     - [ ] duration
     - [x] level -> LevelSelector.tsx
     - [ ] range
     - [ ] difficultyclass
     - [x] query -> handled in searchform.tsx
-  - touchspinner
+  - [ ] finish the "touchspinner" (level selector)
     - [x] add less than / greater than
     - [x] add multi selection (only want levels 1 and 2)
     - [x] add and/or logic
-  - [x] hitting enter on the query field resets other selected components
-  - cannot remove the query chip near the banner by clicking the x
-  - add search and back button functionality back
+  - [/] hitting enter on the query field resets other selected components (fixed for most)
+    - [ ] hitting enter on query field only resets the level selector for some reason
+  - [ ] cannot remove the query chip near the banner by clicking the x
+  - [ ] add search and back button functionality back
     - [x] back button
     - [ ] search button
+  - [ ] hide "filter/search" button in banner when searching
+
 
 ideas:
 - break out spells into "user spells" and "api spells"
