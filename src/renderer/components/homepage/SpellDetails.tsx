@@ -14,8 +14,8 @@ const SpellDetails = ({ selectedSpell }: { selectedSpell: SpellForApp | null }) 
       {selectedSpell ? (
         <>
           <h3>{selectedSpell.name}</h3>
-          {spellDescriptions?.map(( entry ) => {
-            return <p> {entry} </p>
+          {spellDescriptions?.map(( entry, index ) => {
+            return <p key={selectedSpell.name + "-" + index}> {entry} </p>
           })}
         </>
       ) : (
