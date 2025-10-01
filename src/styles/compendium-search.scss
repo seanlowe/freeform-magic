@@ -7,33 +7,6 @@
   gap: 2px;
 }
 
-.chip-reset-button {
-  border: none;
-  background: lightgrey;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 10px;
-}
-
-.chip-x {
-  margin-left: 0.5rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-weight: bold;
-  color: rgb(0, 64, 128);
-}
-
-.chip-body {
-  display: flex;
-  align-items: center;
-  background: rgb(224, 240, 255);
-  color: rgb(0, 64, 128);
-  padding: 0.25rem 0.5rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-}
-
 .level-selector-row-wrapper {
   display: inline-flex;
   align-items: center;

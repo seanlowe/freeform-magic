@@ -116,17 +116,17 @@ const LevelSelector: FC<LevelSelectorProps> = ({
 
       toRender.push(
         <div key={i} className='chip-sequence-wrapper'>
-          <div className='chip-body'>
+          <div className='selection-box-selected-chip-body'>
             {renderChipLabel( equalityOption, true, false )}
           </div>
-          <div  className='chip-body'>
+          <div  className='selection-box-selected-chip-body'>
             {renderChipLabel( value, false, false )}
           </div>
-          <div className='chip-body'>
+          <div className='selection-box-selected-chip-body'>
             {renderChipLabel( logicOption, false, true )}
           </div>
           <span
-            className='chip-x'
+            className='selection-box-selected-chip-x'
             onClick={() => {
               return handleRemove( i )
             }}
@@ -144,18 +144,18 @@ const LevelSelector: FC<LevelSelectorProps> = ({
     <>
       {/* row of selected chips */}
       <div
-        className='chips-wrapper'
+        className='selection-box-selected-chips-wrapper'
         style={{ marginBottom: selected.length > 0 ? '1rem' : '0' }}
       >
         {selected.length > 0 && (
           <button
-            className='chip-reset-button'
+            className='selection-box-reset-chips-button'
             onClick={handleReset}
           >
             ⟲
           </button>
         )}
-        {renderSelectedChipsWithBorder()}
+        { renderSelectedChipsWithBorder() }
       </div>
 
       <div className='level-selector-row-wrapper'>
