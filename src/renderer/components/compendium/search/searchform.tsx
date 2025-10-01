@@ -3,7 +3,7 @@ import { FC, useState } from 'react'
 import { AvailableComponent, AvailableComponents } from '../constants'
 import ComponentTypeFilter from './ComponentTypeFilter'
 import LevelSelector from './LevelSelector'
-import SelectionBox, { SelectionBoxAction } from './SelectBox'
+import SelectionBox, { SelectionBoxAction } from './SelectionBox'
 import { checkIfComponentIsInMapAndHasValue } from '../../spells/utilities'
 
 interface SearchSpellsFormProps {
