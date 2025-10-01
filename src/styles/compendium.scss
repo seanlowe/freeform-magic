@@ -1,0 +1,63 @@
+.compendium-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-direction: row-reverse;
+  position: absolute;
+  right: 0;
+  top: 5rem;
+  padding: 0 1rem;
+}
+
+.compendium-search-button {
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.compendium-add-spell-button {
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  height: 30px;
+  width: 30px;
+}
+
+.compendium-main-content {
+  border: 1px solid grey;
+  border-radius: 8px;
+  display: flex;
+
+  section {
+    padding: 0 1rem;
+    width: 70%;
+  }
+}
+
+.compendium-left-sidebar {
+  border-right: 1px solid grey;
+  padding: 0 1rem;
+  width: 30%;
+
+  section {
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .sidebar-list-item {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}

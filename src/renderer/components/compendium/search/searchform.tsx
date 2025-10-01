@@ -14,7 +14,7 @@ interface TempSavedOptions {
   [key: string]: string[]
 }
 
-const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
+const SearchSpellsForm: FC<SearchSpellsFormProps> = ({
   setIsFilteringSpells,
 }) => {
   const [ query, setQuery ] = useState<string>( '' )
@@ -292,4 +292,4 @@ const SearchSpellsForm2: FC<SearchSpellsFormProps> = ({
   )
 }
 
-export default SearchSpellsForm2
+export default SearchSpellsForm

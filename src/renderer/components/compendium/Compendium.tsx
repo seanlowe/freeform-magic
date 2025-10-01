@@ -2,17 +2,12 @@ import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './add/AddSpellForm'
 import AllSpells from './AllSpells'
-// import { ComponentEntry } from './constants'
+import SearchSpellsForm from './search/searchform'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 import { SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
-import { convertSpellFromPrismaToApp } from '../spells/utilities'
-import SearchSpellsForm2 from './search/searchform'
 import { useShortcut } from '../../utilities/hooks/useShortcut'
-
-// import SearchChip from './search/SearchChip'
-// import SearchSpellsForm from './search/SearchSpellsForm'
-// import { SpellComponent, SpellForApp } from '../../../types/spells.types'
+import { convertSpellFromPrismaToApp } from '../spells/utilities'
 
 const CompendiumPage = () => {
   const { state: needsRefresh, dispatch: actionsDispatch } = useContext( ActionsContext )
@@ -71,55 +66,15 @@ const CompendiumPage = () => {
   }, [ needsRefresh ] )
 
   const onAddSpell = ( newSpell: SpellForApp ) => {
+    // don't persist the new spell to db yet
     // await window.api.database.spells.createSpell( newSpell )
     setAllSpells( [ ...allSpells, newSpell ] )
-    // allSpells.push( newSpell )
   }
 
   const handleAddSpell = ( newSpell: SpellForApp ) => {
     onAddSpell( newSpell )
-
     setIsAddingSpell( false )
   }
-
-  // const filterSpells = async (
-  //   query: string,
-  //   selectedComponents: ComponentEntry[],
-  //   filterLogic: 'AND' | 'OR'
-  // ) => {
-  //   let newFilteredSpells: SpellForApp[] = []
-
-  //   // spells can be filtered by components, query, or both
-  //   // if filter logic is AND, all components must be present for a spell to be included
-  //   // if filter logic is OR, at least one component must be present for a spell to be included
-
-  //   filterByComponents( allSpells, selectedComponents, filterLogic )
-
-  //   // await setFilteredSpells( newFilteredSpells )
-  //   // await setIsFilteringSpells( false )
-  // }
-
-  // const filterByComponents = (
-  //   listOfSpells: SpellForApp[],
-  //   componentsToFilterBy: ComponentEntry[],
-  //   filterLogic: 'AND' | 'OR'
-  // ) => {
-  //   // loop over the spells in the list 
-  //   return listOfSpells.filter(( spell ) => {
-  //     const { components } = spell
-  //     // if no components, don't keep spell in list
-  //     if ( !components ) {
-  //       console.log( 'returning false' )
-  //       return false
-  //     }
-
-  //     // and check if they contain any (or all, depending on
-  //     // filter logic) of the components to filter by
-  //     console.log( 'components', components )
-
-  //     return false
-  //   })
-  // }
 
   const updateRecentlyViewed = ( newSpell: SpellForApp ): SpellForApp[] => {
     const newRecentlyViewed = [
@@ -167,7 +122,7 @@ const CompendiumPage = () => {
 
     if ( isFilteringSpells ) {
       return (
-        <SearchSpellsForm2 setIsFilteringSpells={setIsFilteringSpells} />
+        <SearchSpellsForm setIsFilteringSpells={setIsFilteringSpells} />
       )
     }
 
@@ -195,31 +150,13 @@ const CompendiumPage = () => {
   return (
     <div style={{ padding: '1rem' }}>
       {/* Header Section */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1rem',
-          flexDirection: 'row-reverse',
-          position: 'absolute',
-          right: '0',
-          top: '5rem',
-          padding: '0 1rem',
-        }}
-      >
+      <div className='compendium-header'>
         <div>
           {/* render a SearchChip for each selected component */}
           <button
-            style={{
-              marginRight: '0.5rem',
-              padding: '0.5rem',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
+            className='compendium-search-button'
             onClick={( e ) => {
               e.preventDefault()
-
               setIsFilteringSpells( true )
             }}
           >
@@ -228,16 +165,7 @@ const CompendiumPage = () => {
 
           {/* add spell button */}
           <button
-            style={{
-              padding: '0.5rem',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              height: '30px',
-              width: '30px',
-            }}
+            className='compendium-add-spell-button'
             onClick={() => {
               return setIsAddingSpell( true )
             }}
@@ -248,36 +176,19 @@ const CompendiumPage = () => {
       </div>
 
       {/* Main Content */}
-      <div
-        style={{
-          border: '1px solid grey',
-          borderRadius: '8px',
-          display: 'flex',
-        }}
-      >
+      <div className='compendium-main-content'>
         {/* Left Sidebar */}
-        <div
-          style={{
-            borderRight: '1px solid grey',
-            padding: '0 1rem',
-            width: '30%',
-          }}
-        >
+        <div className='compendium-left-sidebar'>
           {/* Favorites Section */}
-          <section style={{ marginBottom: '1rem' }}>
+          <section>
             <h3>Favorites</h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className='sidebar-list'>
               {favorites.length > 0 ? (
                 favorites.map(( spell ) => {
                   return (
                     <div
                       key={spell.name}
-                      style={{
-                        padding: '0.5rem',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                      }}
+                      className='sidebar-list-item'
                       onClick={() => {
                         const newRecentlyViewed = updateRecentlyViewed( spell )
 
@@ -296,20 +207,15 @@ const CompendiumPage = () => {
           </section>
 
           {/* Recently Viewed Section */}
-          <section style={{ marginBottom: '1rem' }}>
+          <section>
             <h3>Recently Viewed</h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className='sidebar-list'>
               {recentlyViewed.length > 0 ? (
                 recentlyViewed.map(( spell ) => {
                   return (
                     <div
                       key={spell.name}
-                      style={{
-                        padding: '0.5rem',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                      }}
+                      className='sidebar-list-item'
                       onClick={() => {
                         const newRecentlyViewed = updateRecentlyViewed( spell )
 
@@ -329,7 +235,7 @@ const CompendiumPage = () => {
         </div>
 
         {/* Main Section */}
-        <section style={{ padding: '0 1rem', width: '70%' }}>
+        <section>
           { renderMainSection() }
         </section>
       </div>
