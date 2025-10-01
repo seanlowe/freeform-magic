@@ -104,3 +104,4 @@ ideas:
   - import updated spells from api
   - spells have an "updated at" field
   - add field "source" -> user or API
+- add a visual indicator for when a spell is user created vs imported
