@@ -1,4 +1,21 @@
-.chip-sequence-wrapper {
+// removes the up/down click buttons on numper inputs (necessary for styling of the level selector)
+
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+// ------------------------------
+
+.level-selector-chip-sequence-wrapper {
   display: flex;
   align-items: center;
   border: 1px solid rgb(204 204 204);
@@ -48,13 +65,13 @@
   width: 40px;
 }
 
-.options-wrapper {
+.level-selector-options-wrapper {
   display: flex;
   justify-content: space-around;
   margin-top: 1rem;
 }
 
-.options-button {
+.level-selector-options-button {
   padding: 5px;
   cursor: pointer;
   border-radius: 10px;
@@ -64,54 +81,8 @@
   user-select: none;
 }
 
-.search-title {
-  display: flex;
-  align-items: center;
-}
-
-.search-title-back-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-right: 1rem;
-  transform: scale(2.5);
-  position: relative;
-  top: -0.4rem;
-}
-
-.search-component-type-select-wrapper {
-  margin-bottom: 1rem;
-}
-
-.search-component-type-select-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.search-selected-components-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.search-form-buttons {
-  margin-bottom: 1rem;
-}
-
-// slightly different than just regular .compendium-search-button
-.search-form-button {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.search-form-button-search {
-  margin-right: 1rem;
-}
-
-.search-query-input {
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-  width: 90%;
-}
+// defined in select-box.scss:
+// - selection-box-selected-chip-body
+// - selection-box-selected-chip-x
+// - selection-box-selected-chips-wrapper
+// - selection-box-reset-chips-button

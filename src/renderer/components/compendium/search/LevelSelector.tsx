@@ -88,23 +88,17 @@ const LevelSelector: FC<LevelSelectorProps> = ({
   }
 
   const renderChipLabel = ( entry: string, isEqualityOption: boolean, isLogicOption: boolean ) => {
-    if ( isEqualityOption ) {
+    if ( isEqualityOption || isLogicOption ) {
+      const possibleValues = isEqualityOption
+        ? Object.values( EqualityOptions )
+        : Object.values( LogicOptions )
+    
       return (
-        <SelectionChipLabel
-          currentValue={entry}
-          possibleValues={Object.values( EqualityOptions )}
-        />
+        <SelectionChipLabel currentValue={entry} possibleValues={possibleValues} />
       )
-    } else if ( isLogicOption ) {
-      return (
-        <SelectionChipLabel
-          currentValue={entry}
-          possibleValues={Object.values( LogicOptions )}
-        />
-      )
-    } else {
-      return entry
     }
+
+    return entry
   }
 
   const renderSelectedChipsWithBorder = () => {
@@ -115,15 +109,15 @@ const LevelSelector: FC<LevelSelectorProps> = ({
       const logicOption    = selected[i + 2]
 
       toRender.push(
-        <div key={i} className='chip-sequence-wrapper'>
+        <div key={i} className='level-selector-chip-sequence-wrapper'>
           <div className='selection-box-selected-chip-body'>
-            {renderChipLabel( equalityOption, true, false )}
+            { renderChipLabel( equalityOption, true, false ) }
           </div>
           <div  className='selection-box-selected-chip-body'>
-            {renderChipLabel( value, false, false )}
+            { renderChipLabel( value, false, false ) }
           </div>
           <div className='selection-box-selected-chip-body'>
-            {renderChipLabel( logicOption, false, true )}
+            { renderChipLabel( logicOption, false, true ) }
           </div>
           <span
             className='selection-box-selected-chip-x'
@@ -148,10 +142,7 @@ const LevelSelector: FC<LevelSelectorProps> = ({
         style={{ marginBottom: selected.length > 0 ? '1rem' : '0' }}
       >
         {selected.length > 0 && (
-          <button
-            className='selection-box-reset-chips-button'
-            onClick={handleReset}
-          >
+          <button className='selection-box-reset-chips-button' onClick={handleReset}>
             ⟲
           </button>
         )}
@@ -205,18 +196,12 @@ const LevelSelector: FC<LevelSelectorProps> = ({
       <hr />
 
       <label> Level Selection Options: </label>
-      <div className='options-wrapper'>
-        <div
-          className='options-button'
-          onClick={toggleEqualityOption}
-        >
+      <div className='level-selector-options-wrapper'>
+        <div className='level-selector-options-button' onClick={toggleEqualityOption}>
           {equalityOption}
         </div>
 
-        <div
-          onClick={toggleLogicOption}
-          className='options-button'
-        >
+        <div className='level-selector-options-button' onClick={toggleLogicOption}>
           {logicOption}
         </div>
       </div>

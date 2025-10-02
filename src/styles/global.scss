@@ -1,26 +1,7 @@
 @use "./renderer.scss";
-@use "./SearchLogicSlider.scss";
 @use "./banner.scss";
 @use "./character-sheet.scss";
 @use "./characters-page.scss";
-@use "./compendium.scss";
-@use "./compendium-search.scss";
-@use "./select-box.scss";
 
-
-
-// remove the up/down click buttons on numper inputs (necessary for styling of the level selector)
-// move this into it's own file at some point
-
-/* Chrome, Safari, Edge, Opera */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
+// compendium styles
+@use "./compendium/index.scss";
