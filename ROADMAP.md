@@ -20,7 +20,7 @@
   - [x] Get user login / logout working
   - [x] add password check / hashing to login and user creation
   - [ ] add ability to select a role at user creation
-  - [ ] add a skip login feature for development
+  - [x] add a skip login feature for development
     - [x] add key to .env file
     - [x] import .env file into process.env in `main.ts`
       - [x] pass env keys to preload.ts as additional arguments (preload cannot access process.env on its own)
