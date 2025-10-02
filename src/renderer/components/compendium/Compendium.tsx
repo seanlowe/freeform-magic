@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './add/AddSpellForm'
 import AllSpells from './AllSpells'
+import CompendiumSpellDetailPage from './CompendiumSpellDetailPage'
 import SearchSpellsForm from './search/SearchSpellsForm'
-import SpellDetailsCompendium from './SpellDetailCompendium'
 import { SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
 import { useShortcut } from '../../utilities/hooks/useShortcut'
@@ -128,7 +128,7 @@ const CompendiumPage = () => {
 
     if ( selectedSpell ) {
       return (
-        <SpellDetailsCompendium
+        <CompendiumSpellDetailPage
           isFavorite={isFavorite}
           selectedSpell={selectedSpell}
           setSelectedSpell={setSelectedSpell}

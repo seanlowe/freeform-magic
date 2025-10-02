@@ -1,17 +1,22 @@
+import { FC } from 'react'
+
 import { SpellComponent, SpellForApp } from '../../../types/spells.types'
 
-const SpellDetailsCompendium = ({
+interface CompendiumSpellDetailPageProps {
+  isFavorite: ( spell: SpellForApp ) => boolean
+  selectedSpell: SpellForApp
+  setSelectedSpell: ( spell: SpellForApp | null ) => void
+  toggleFavorite: ( spell: SpellForApp ) => void
+}
+
+const CompendiumSpellDetailPage: FC<CompendiumSpellDetailPageProps> = ({
   isFavorite,
   selectedSpell,
   setSelectedSpell,
   toggleFavorite
-}: {
-  isFavorite: ( spell: SpellForApp ) => boolean,
-  selectedSpell: SpellForApp,
-  setSelectedSpell: ( spell: SpellForApp | null ) => void,
-  toggleFavorite: ( spell: SpellForApp ) => void
 }) => {
   const spellDescriptions = selectedSpell?.description.split( '|' )
+
   const renderComponents = ( components: SpellComponent[] ) => {
     if ( !components.length ) {
       return null
@@ -118,4 +123,4 @@ const SpellDetailsCompendium = ({
   )
 }
 
-export default SpellDetailsCompendium
+export default CompendiumSpellDetailPage
