@@ -1,5 +1,7 @@
 import { FC, useState } from 'react'
 
+import { LogicOptions } from '../constants'
+
 export enum SelectionBoxAction {
   Add = 'Add',
   Remove = 'Remove',
@@ -21,8 +23,7 @@ const SelectionBox: FC<SelectionBoxProps> = ({
 }) => {
   const [ selected, setSelected ] = useState<string[]>( [ ...prepopulatedOptions ] )
 
-  // TODO: replace with LogicOptions
-  const [ mode, setMode ] = useState<'AND' | 'OR'>( 'AND' )
+  const [ mode, setMode ] = useState<LogicOptions>( LogicOptions.AND )
 
   const handleSelect = ( option: string ) => {
     setSelected(( prev ) => {
@@ -42,13 +43,13 @@ const SelectionBox: FC<SelectionBoxProps> = ({
 
   const handleReset = () => {
     setSelected( [] )
-    setMode( 'AND' )
+    setMode( LogicOptions.AND )
     onOptionClick( '', SelectionBoxAction.Reset )
   }
 
   const toggleMode = () => {
     setMode(( prev ) => {
-      return ( prev === 'AND' ? 'OR' : 'AND' ) 
+      return ( prev === LogicOptions.AND ) ? LogicOptions.OR : LogicOptions.AND
     })
   }
 
