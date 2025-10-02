@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 
 import AddSpellForm from './add/AddSpellForm'
 import AllSpells from './AllSpells'
-import SearchSpellsForm from './search/searchform'
+import SearchSpellsForm from './search/SearchSpellsForm'
 import SpellDetailsCompendium from './SpellDetailCompendium'
 import { SpellForApp } from '../../../types/spells.types'
 import { ActionsContext } from '../../utilities/contexts/actions.context'
