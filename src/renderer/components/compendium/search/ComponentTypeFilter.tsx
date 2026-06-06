@@ -23,6 +23,7 @@ const ComponentTypeFilter: FC<ComponentTypeFilterProps> = ({
       style={{ padding: '0.5rem', marginBottom: '1rem', marginTop: '1rem' }}
     >
       <label
+        className='search-spells-form-component-label'
         style={{
           background: 'white',
           position: 'relative',

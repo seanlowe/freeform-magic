@@ -1,18 +1,22 @@
-import { useState } from 'react'
+import { FC, useState } from 'react'
 
 import { SpellForApp } from '../../../../types/spells.types'
 
-const AddSpellForm = ({
+interface AddSpellFormProps {
+  onSpellAdd: ( spell: SpellForApp ) => void
+  closeForm: () => void
+}
+
+const AddSpellForm: FC<AddSpellFormProps> = ({
   onSpellAdd,
   closeForm
-}: {
-  onSpellAdd: ( spell: SpellForApp ) => void,
-  closeForm: () => void
 }) => {
   const [ newSpellName, setNewSpellName ] = useState( '' )
   const [ newSpellDescription, setNewSpellDescription ] = useState( '' )
-  
-  const handleAddSpell = () => {
+
+  const handleAddSpell = ( e: React.FormEvent<HTMLFormElement> ) => {
+    e.preventDefault()
+
     const newSpell: SpellForApp = {
       name: newSpellName,
       description: newSpellDescription,
@@ -28,10 +32,7 @@ const AddSpellForm = ({
   return (
     <div>
       <h3>Add New Spell</h3>
-      <form onSubmit={( e ) => {
-        e.preventDefault()
-        handleAddSpell()
-      }}>
+      <form onSubmit={handleAddSpell}>
         <div style={{ marginBottom: '1rem' }}>
           <label style={{ display: 'flex' }}>
             Spell Name:
@@ -46,6 +47,7 @@ const AddSpellForm = ({
             />
           </label>
         </div>
+
         <div style={{ marginBottom: '1rem' }}>
           <label style={{ display: 'flex' }}>
               Description:
@@ -65,6 +67,7 @@ const AddSpellForm = ({
             />
           </label>
         </div>
+
         <div style={{
           marginBottom: '0.5rem',
           display: 'flex',
